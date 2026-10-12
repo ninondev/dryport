@@ -1,0 +1,78 @@
+{
+ "interface": "ISteamMatchmakingServers",
+ "version": "SteamMatchMakingServers002",
+ "family": "matchmakingservers",
+ "slot_count": 17,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "RequestInternetServerList"
+  },
+  {
+   "slot": 1,
+   "method": "RequestLANServerList"
+  },
+  {
+   "slot": 2,
+   "method": "RequestFriendsServerList"
+  },
+  {
+   "slot": 3,
+   "method": "RequestFavoritesServerList"
+  },
+  {
+   "slot": 4,
+   "method": "RequestHistoryServerList"
+  },
+  {
+   "slot": 5,
+   "method": "RequestSpectatorServerList"
+  },
+  {
+   "slot": 6,
+   "method": "ReleaseRequest"
+  },
+  {
+   "slot": 7,
+   "method": "GetServerDetails"
+  },
+  {
+   "slot": 8,
+   "method": "CancelQuery"
+  },
+  {
+   "slot": 9,
+   "method": "RefreshQuery"
+  },
+  {
+   "slot": 10,
+   "method": "IsRefreshing"
+  },
+  {
+   "slot": 11,
+   "method": "GetServerCount"
+  },
+  {
+   "slot": 12,
+   "method": "RefreshServer"
+  },
+  {
+   "slot": 13,
+   "method": "PingServer"
+  },
+  {
+   "slot": 14,
+   "method": "PlayerDetails"
+  },
+  {
+   "slot": 15,
+   "method": "ServerRules"
+  },
+  {
+   "slot": 16,
+   "method": "CancelServerQuery"
+  }
+ ]
+}

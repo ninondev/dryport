@@ -1,0 +1,230 @@
+{
+ "interface": "ISteamRemoteStorage",
+ "version": "STEAMREMOTESTORAGE_INTERFACE_VERSION014",
+ "family": "remotestorage",
+ "slot_count": 55,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on a 2017-era Steamworks SDK; the version string comes from the game's own Steamworks.NET assembly (Assembly-CSharp-firstpass.dll). Extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "FileWrite"
+  },
+  {
+   "slot": 1,
+   "method": "FileRead"
+  },
+  {
+   "slot": 2,
+   "method": "FileWriteAsync"
+  },
+  {
+   "slot": 3,
+   "method": "FileReadAsync"
+  },
+  {
+   "slot": 4,
+   "method": "FileReadAsyncComplete"
+  },
+  {
+   "slot": 5,
+   "method": "FileForget"
+  },
+  {
+   "slot": 6,
+   "method": "FileDelete"
+  },
+  {
+   "slot": 7,
+   "method": "FileShare"
+  },
+  {
+   "slot": 8,
+   "method": "SetSyncPlatforms"
+  },
+  {
+   "slot": 9,
+   "method": "FileWriteStreamOpen"
+  },
+  {
+   "slot": 10,
+   "method": "FileWriteStreamWriteChunk"
+  },
+  {
+   "slot": 11,
+   "method": "FileWriteStreamClose"
+  },
+  {
+   "slot": 12,
+   "method": "FileWriteStreamCancel"
+  },
+  {
+   "slot": 13,
+   "method": "FileExists"
+  },
+  {
+   "slot": 14,
+   "method": "FilePersisted"
+  },
+  {
+   "slot": 15,
+   "method": "GetFileSize"
+  },
+  {
+   "slot": 16,
+   "method": "GetFileTimestamp"
+  },
+  {
+   "slot": 17,
+   "method": "GetSyncPlatforms"
+  },
+  {
+   "slot": 18,
+   "method": "GetFileCount"
+  },
+  {
+   "slot": 19,
+   "method": "GetFileNameAndSize"
+  },
+  {
+   "slot": 20,
+   "method": "GetQuota"
+  },
+  {
+   "slot": 21,
+   "method": "IsCloudEnabledForAccount"
+  },
+  {
+   "slot": 22,
+   "method": "IsCloudEnabledForApp"
+  },
+  {
+   "slot": 23,
+   "method": "SetCloudEnabledForApp"
+  },
+  {
+   "slot": 24,
+   "method": "UGCDownload"
+  },
+  {
+   "slot": 25,
+   "method": "GetUGCDownloadProgress"
+  },
+  {
+   "slot": 26,
+   "method": "GetUGCDetails"
+  },
+  {
+   "slot": 27,
+   "method": "UGCRead"
+  },
+  {
+   "slot": 28,
+   "method": "GetCachedUGCCount"
+  },
+  {
+   "slot": 29,
+   "method": "GetCachedUGCHandle"
+  },
+  {
+   "slot": 30,
+   "method": "PublishWorkshopFile"
+  },
+  {
+   "slot": 31,
+   "method": "CreatePublishedFileUpdateRequest"
+  },
+  {
+   "slot": 32,
+   "method": "UpdatePublishedFileFile"
+  },
+  {
+   "slot": 33,
+   "method": "UpdatePublishedFilePreviewFile"
+  },
+  {
+   "slot": 34,
+   "method": "UpdatePublishedFileTitle"
+  },
+  {
+   "slot": 35,
+   "method": "UpdatePublishedFileDescription"
+  },
+  {
+   "slot": 36,
+   "method": "UpdatePublishedFileVisibility"
+  },
+  {
+   "slot": 37,
+   "method": "UpdatePublishedFileTags"
+  },
+  {
+   "slot": 38,
+   "method": "CommitPublishedFileUpdate"
+  },
+  {
+   "slot": 39,
+   "method": "GetPublishedFileDetails"
+  },
+  {
+   "slot": 40,
+   "method": "DeletePublishedFile"
+  },
+  {
+   "slot": 41,
+   "method": "EnumerateUserPublishedFiles"
+  },
+  {
+   "slot": 42,
+   "method": "SubscribePublishedFile"
+  },
+  {
+   "slot": 43,
+   "method": "EnumerateUserSubscribedFiles"
+  },
+  {
+   "slot": 44,
+   "method": "UnsubscribePublishedFile"
+  },
+  {
+   "slot": 45,
+   "method": "UpdatePublishedFileSetChangeDescription"
+  },
+  {
+   "slot": 46,
+   "method": "GetPublishedItemVoteDetails"
+  },
+  {
+   "slot": 47,
+   "method": "UpdateUserPublishedItemVote"
+  },
+  {
+   "slot": 48,
+   "method": "GetUserPublishedItemVoteDetails"
+  },
+  {
+   "slot": 49,
+   "method": "EnumerateUserSharedWorkshopFiles"
+  },
+  {
+   "slot": 50,
+   "method": "PublishVideo"
+  },
+  {
+   "slot": 51,
+   "method": "SetUserPublishedFileAction"
+  },
+  {
+   "slot": 52,
+   "method": "EnumeratePublishedFilesByUserAction"
+  },
+  {
+   "slot": 53,
+   "method": "EnumeratePublishedWorkshopFiles"
+  },
+  {
+   "slot": 54,
+   "method": "UGCDownloadToLocation"
+  }
+ ]
+}

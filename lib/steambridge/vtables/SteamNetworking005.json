@@ -1,0 +1,98 @@
+{
+ "interface": "ISteamNetworking",
+ "version": "SteamNetworking005",
+ "family": "networking",
+ "slot_count": 22,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "SendP2PPacket"
+  },
+  {
+   "slot": 1,
+   "method": "IsP2PPacketAvailable"
+  },
+  {
+   "slot": 2,
+   "method": "ReadP2PPacket"
+  },
+  {
+   "slot": 3,
+   "method": "AcceptP2PSessionWithUser"
+  },
+  {
+   "slot": 4,
+   "method": "CloseP2PSessionWithUser"
+  },
+  {
+   "slot": 5,
+   "method": "CloseP2PChannelWithUser"
+  },
+  {
+   "slot": 6,
+   "method": "GetP2PSessionState"
+  },
+  {
+   "slot": 7,
+   "method": "AllowP2PPacketRelay"
+  },
+  {
+   "slot": 8,
+   "method": "CreateListenSocket"
+  },
+  {
+   "slot": 9,
+   "method": "CreateP2PConnectionSocket"
+  },
+  {
+   "slot": 10,
+   "method": "CreateConnectionSocket"
+  },
+  {
+   "slot": 11,
+   "method": "DestroySocket"
+  },
+  {
+   "slot": 12,
+   "method": "DestroyListenSocket"
+  },
+  {
+   "slot": 13,
+   "method": "SendDataOnSocket"
+  },
+  {
+   "slot": 14,
+   "method": "IsDataAvailableOnSocket"
+  },
+  {
+   "slot": 15,
+   "method": "RetrieveDataFromSocket"
+  },
+  {
+   "slot": 16,
+   "method": "IsDataAvailable"
+  },
+  {
+   "slot": 17,
+   "method": "RetrieveData"
+  },
+  {
+   "slot": 18,
+   "method": "GetSocketInfo"
+  },
+  {
+   "slot": 19,
+   "method": "GetListenSocketInfo"
+  },
+  {
+   "slot": 20,
+   "method": "GetSocketConnectionType"
+  },
+  {
+   "slot": 21,
+   "method": "GetMaxPacketSize"
+  }
+ ]
+}

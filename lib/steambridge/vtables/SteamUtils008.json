@@ -1,0 +1,120 @@
+{
+ "interface": "ISteamUtils",
+ "version": "SteamUtils008",
+ "family": "utils",
+ "slot_count": 28,
+ "source": "MSVC vtable slots read from the flat-API wrappers of the steam_api64.dll shipped with 1 Steam game(s) used as a reference; extracted with tools/steam-vtable-map.py on 2026-09-13 and merged across those copies (no slot disagreed). slot_count is the highest slot that has a flat wrapper plus one; the real table may be longer, which the generator covers with padded stub slots. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [
+  14
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetSecondsSinceAppActive"
+  },
+  {
+   "slot": 1,
+   "method": "GetSecondsSinceComputerActive"
+  },
+  {
+   "slot": 2,
+   "method": "GetConnectedUniverse"
+  },
+  {
+   "slot": 3,
+   "method": "GetServerRealTime"
+  },
+  {
+   "slot": 4,
+   "method": "GetIPCountry"
+  },
+  {
+   "slot": 5,
+   "method": "GetImageSize"
+  },
+  {
+   "slot": 6,
+   "method": "GetImageRGBA"
+  },
+  {
+   "slot": 7,
+   "method": "GetCSERIPPort"
+  },
+  {
+   "slot": 8,
+   "method": "GetCurrentBatteryPower"
+  },
+  {
+   "slot": 9,
+   "method": "GetAppID"
+  },
+  {
+   "slot": 10,
+   "method": "SetOverlayNotificationPosition"
+  },
+  {
+   "slot": 11,
+   "method": "IsAPICallCompleted"
+  },
+  {
+   "slot": 12,
+   "method": "GetAPICallFailureReason"
+  },
+  {
+   "slot": 13,
+   "method": "GetAPICallResult"
+  },
+  {
+   "slot": 15,
+   "method": "GetIPCCallCount"
+  },
+  {
+   "slot": 16,
+   "method": "SetWarningMessageHook"
+  },
+  {
+   "slot": 17,
+   "method": "IsOverlayEnabled"
+  },
+  {
+   "slot": 18,
+   "method": "BOverlayNeedsPresent"
+  },
+  {
+   "slot": 19,
+   "method": "CheckFileSignature"
+  },
+  {
+   "slot": 20,
+   "method": "ShowGamepadTextInput"
+  },
+  {
+   "slot": 21,
+   "method": "GetEnteredGamepadTextLength"
+  },
+  {
+   "slot": 22,
+   "method": "GetEnteredGamepadTextInput"
+  },
+  {
+   "slot": 23,
+   "method": "GetSteamUILanguage"
+  },
+  {
+   "slot": 24,
+   "method": "IsSteamRunningInVR"
+  },
+  {
+   "slot": 25,
+   "method": "SetOverlayNotificationInset"
+  },
+  {
+   "slot": 26,
+   "method": "IsSteamInBigPictureMode"
+  },
+  {
+   "slot": 27,
+   "method": "StartVRDashboard"
+  }
+ ]
+}

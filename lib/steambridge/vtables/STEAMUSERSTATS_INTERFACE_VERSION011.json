@@ -1,0 +1,193 @@
+{
+ "interface": "ISteamUserStats",
+ "version": "STEAMUSERSTATS_INTERFACE_VERSION011",
+ "family": "userstats",
+ "slot_count": 43,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on a 2017-era Steamworks SDK; the version string comes from the game's own Steamworks.NET assembly (Assembly-CSharp-firstpass.dll). Extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes. Slots 39-42 renamed to the canonical overload names on 2026-09-13 after a newer DLL with the same version string exported them as GetGlobalStatDouble/Int64 and GetGlobalStatHistoryDouble/Int64 at the same slots (old names kept in renamed_from).",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "RequestCurrentStats"
+  },
+  {
+   "slot": 1,
+   "method": "GetStatFloat",
+   "renamed_from": "GetStat0"
+  },
+  {
+   "slot": 2,
+   "method": "GetStatInt32",
+   "renamed_from": "GetStat"
+  },
+  {
+   "slot": 3,
+   "method": "SetStatFloat",
+   "renamed_from": "SetStat0"
+  },
+  {
+   "slot": 4,
+   "method": "SetStatInt32",
+   "renamed_from": "SetStat"
+  },
+  {
+   "slot": 5,
+   "method": "UpdateAvgRateStat"
+  },
+  {
+   "slot": 6,
+   "method": "GetAchievement"
+  },
+  {
+   "slot": 7,
+   "method": "SetAchievement"
+  },
+  {
+   "slot": 8,
+   "method": "ClearAchievement"
+  },
+  {
+   "slot": 9,
+   "method": "GetAchievementAndUnlockTime"
+  },
+  {
+   "slot": 10,
+   "method": "StoreStats"
+  },
+  {
+   "slot": 11,
+   "method": "GetAchievementIcon"
+  },
+  {
+   "slot": 12,
+   "method": "GetAchievementDisplayAttribute"
+  },
+  {
+   "slot": 13,
+   "method": "IndicateAchievementProgress"
+  },
+  {
+   "slot": 14,
+   "method": "GetNumAchievements"
+  },
+  {
+   "slot": 15,
+   "method": "GetAchievementName"
+  },
+  {
+   "slot": 16,
+   "method": "RequestUserStats"
+  },
+  {
+   "slot": 17,
+   "method": "GetUserStatFloat",
+   "renamed_from": "GetUserStat0"
+  },
+  {
+   "slot": 18,
+   "method": "GetUserStatInt32",
+   "renamed_from": "GetUserStat"
+  },
+  {
+   "slot": 19,
+   "method": "GetUserAchievement"
+  },
+  {
+   "slot": 20,
+   "method": "GetUserAchievementAndUnlockTime"
+  },
+  {
+   "slot": 21,
+   "method": "ResetAllStats"
+  },
+  {
+   "slot": 22,
+   "method": "FindOrCreateLeaderboard"
+  },
+  {
+   "slot": 23,
+   "method": "FindLeaderboard"
+  },
+  {
+   "slot": 24,
+   "method": "GetLeaderboardName"
+  },
+  {
+   "slot": 25,
+   "method": "GetLeaderboardEntryCount"
+  },
+  {
+   "slot": 26,
+   "method": "GetLeaderboardSortMethod"
+  },
+  {
+   "slot": 27,
+   "method": "GetLeaderboardDisplayType"
+  },
+  {
+   "slot": 28,
+   "method": "DownloadLeaderboardEntries"
+  },
+  {
+   "slot": 29,
+   "method": "DownloadLeaderboardEntriesForUsers"
+  },
+  {
+   "slot": 30,
+   "method": "GetDownloadedLeaderboardEntry"
+  },
+  {
+   "slot": 31,
+   "method": "UploadLeaderboardScore"
+  },
+  {
+   "slot": 32,
+   "method": "AttachLeaderboardUGC"
+  },
+  {
+   "slot": 33,
+   "method": "GetNumberOfCurrentPlayers"
+  },
+  {
+   "slot": 34,
+   "method": "RequestGlobalAchievementPercentages"
+  },
+  {
+   "slot": 35,
+   "method": "GetMostAchievedAchievementInfo"
+  },
+  {
+   "slot": 36,
+   "method": "GetNextMostAchievedAchievementInfo"
+  },
+  {
+   "slot": 37,
+   "method": "GetAchievementAchievedPercent"
+  },
+  {
+   "slot": 38,
+   "method": "RequestGlobalStats"
+  },
+  {
+   "slot": 39,
+   "method": "GetGlobalStatDouble",
+   "renamed_from": "GetGlobalStat0"
+  },
+  {
+   "slot": 40,
+   "method": "GetGlobalStatInt64",
+   "renamed_from": "GetGlobalStat"
+  },
+  {
+   "slot": 41,
+   "method": "GetGlobalStatHistoryDouble",
+   "renamed_from": "GetGlobalStatHistory0"
+  },
+  {
+   "slot": 42,
+   "method": "GetGlobalStatHistoryInt64",
+   "renamed_from": "GetGlobalStatHistory"
+  }
+ ],
+ "note": "Old flat exports named overloads GetStat0/GetStat; renamed to the modern GetStatFloat/GetStatInt32 by slot correspondence with STEAMUSERSTATS_INTERFACE_VERSION012 so the vtable can forward them."
+}

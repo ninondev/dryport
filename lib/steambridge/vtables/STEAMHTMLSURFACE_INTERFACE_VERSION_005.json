@@ -1,0 +1,160 @@
+{
+ "interface": "ISteamHTMLSurface",
+ "version": "STEAMHTMLSURFACE_INTERFACE_VERSION_005",
+ "family": "htmlsurface",
+ "slot_count": 38,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [
+  0
+ ],
+ "slots": [
+  {
+   "slot": 1,
+   "method": "Init"
+  },
+  {
+   "slot": 2,
+   "method": "Shutdown"
+  },
+  {
+   "slot": 3,
+   "method": "CreateBrowser"
+  },
+  {
+   "slot": 4,
+   "method": "RemoveBrowser"
+  },
+  {
+   "slot": 5,
+   "method": "LoadURL"
+  },
+  {
+   "slot": 6,
+   "method": "SetSize"
+  },
+  {
+   "slot": 7,
+   "method": "StopLoad"
+  },
+  {
+   "slot": 8,
+   "method": "Reload"
+  },
+  {
+   "slot": 9,
+   "method": "GoBack"
+  },
+  {
+   "slot": 10,
+   "method": "GoForward"
+  },
+  {
+   "slot": 11,
+   "method": "AddHeader"
+  },
+  {
+   "slot": 12,
+   "method": "ExecuteJavascript"
+  },
+  {
+   "slot": 13,
+   "method": "MouseUp"
+  },
+  {
+   "slot": 14,
+   "method": "MouseDown"
+  },
+  {
+   "slot": 15,
+   "method": "MouseDoubleClick"
+  },
+  {
+   "slot": 16,
+   "method": "MouseMove"
+  },
+  {
+   "slot": 17,
+   "method": "MouseWheel"
+  },
+  {
+   "slot": 18,
+   "method": "KeyDown"
+  },
+  {
+   "slot": 19,
+   "method": "KeyUp"
+  },
+  {
+   "slot": 20,
+   "method": "KeyChar"
+  },
+  {
+   "slot": 21,
+   "method": "SetHorizontalScroll"
+  },
+  {
+   "slot": 22,
+   "method": "SetVerticalScroll"
+  },
+  {
+   "slot": 23,
+   "method": "SetKeyFocus"
+  },
+  {
+   "slot": 24,
+   "method": "ViewSource"
+  },
+  {
+   "slot": 25,
+   "method": "CopyToClipboard"
+  },
+  {
+   "slot": 26,
+   "method": "PasteFromClipboard"
+  },
+  {
+   "slot": 27,
+   "method": "Find"
+  },
+  {
+   "slot": 28,
+   "method": "StopFind"
+  },
+  {
+   "slot": 29,
+   "method": "GetLinkAtPosition"
+  },
+  {
+   "slot": 30,
+   "method": "SetCookie"
+  },
+  {
+   "slot": 31,
+   "method": "SetPageScaleFactor"
+  },
+  {
+   "slot": 32,
+   "method": "SetBackgroundMode"
+  },
+  {
+   "slot": 33,
+   "method": "SetDPIScalingFactor"
+  },
+  {
+   "slot": 34,
+   "method": "OpenDeveloperTools"
+  },
+  {
+   "slot": 35,
+   "method": "AllowStartRequest"
+  },
+  {
+   "slot": 36,
+   "method": "JSDialogResponse"
+  },
+  {
+   "slot": 37,
+   "method": "FileLoadDialogResponse"
+  }
+ ]
+}

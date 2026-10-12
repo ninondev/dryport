@@ -1,0 +1,63 @@
+name: Game report
+description: Report how a game behaves on its matched runtime
+labels: ["game-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never attach game assets, account identifiers, library exports or saves. Describe them in words instead.
+  - type: input
+    id: title
+    attributes:
+      label: Game title
+      placeholder: "e.g. Some Game (Steam)"
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Game build / version
+      description: The version shown in the game's files or its store page.
+    validations:
+      required: true
+  - type: input
+    id: engine
+    attributes:
+      label: Engine and version
+      description: If you know it (for example RPG Maker VX Ace, Unity 2021.3, NW.js).
+  - type: dropdown
+    id: arch
+    attributes:
+      label: Player architecture
+      options:
+        - "x86 (32-bit)"
+        - "x64 (64-bit)"
+        - "arm64"
+        - "Not sure"
+    validations:
+      required: true
+  - type: input
+    id: mac
+    attributes:
+      label: Mac model and macOS version
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Route the installer chose
+      description: For example mkxp-z, NW.js, Unity retarget, Ren'Py, Wine + DXMT.
+  - type: textarea
+    id: saw
+    attributes:
+      label: What you saw
+      description: Window (or none), error text, frame rate, where it stopped.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: From launching the app to what went wrong.
+    validations:
+      required: true

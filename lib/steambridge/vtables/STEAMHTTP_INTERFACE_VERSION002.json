@@ -1,0 +1,110 @@
+{
+ "interface": "ISteamHTTP",
+ "version": "STEAMHTTP_INTERFACE_VERSION002",
+ "family": "http",
+ "slot_count": 25,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateHTTPRequest"
+  },
+  {
+   "slot": 1,
+   "method": "SetHTTPRequestContextValue"
+  },
+  {
+   "slot": 2,
+   "method": "SetHTTPRequestNetworkActivityTimeout"
+  },
+  {
+   "slot": 3,
+   "method": "SetHTTPRequestHeaderValue"
+  },
+  {
+   "slot": 4,
+   "method": "SetHTTPRequestGetOrPostParameter"
+  },
+  {
+   "slot": 5,
+   "method": "SendHTTPRequest"
+  },
+  {
+   "slot": 6,
+   "method": "SendHTTPRequestAndStreamResponse"
+  },
+  {
+   "slot": 7,
+   "method": "DeferHTTPRequest"
+  },
+  {
+   "slot": 8,
+   "method": "PrioritizeHTTPRequest"
+  },
+  {
+   "slot": 9,
+   "method": "GetHTTPResponseHeaderSize"
+  },
+  {
+   "slot": 10,
+   "method": "GetHTTPResponseHeaderValue"
+  },
+  {
+   "slot": 11,
+   "method": "GetHTTPResponseBodySize"
+  },
+  {
+   "slot": 12,
+   "method": "GetHTTPResponseBodyData"
+  },
+  {
+   "slot": 13,
+   "method": "GetHTTPStreamingResponseBodyData"
+  },
+  {
+   "slot": 14,
+   "method": "ReleaseHTTPRequest"
+  },
+  {
+   "slot": 15,
+   "method": "GetHTTPDownloadProgressPct"
+  },
+  {
+   "slot": 16,
+   "method": "SetHTTPRequestRawPostBody"
+  },
+  {
+   "slot": 17,
+   "method": "CreateCookieContainer"
+  },
+  {
+   "slot": 18,
+   "method": "ReleaseCookieContainer"
+  },
+  {
+   "slot": 19,
+   "method": "SetCookie"
+  },
+  {
+   "slot": 20,
+   "method": "SetHTTPRequestCookieContainer"
+  },
+  {
+   "slot": 21,
+   "method": "SetHTTPRequestUserAgentInfo"
+  },
+  {
+   "slot": 22,
+   "method": "SetHTTPRequestRequiresVerifiedCertificate"
+  },
+  {
+   "slot": 23,
+   "method": "SetHTTPRequestAbsoluteTimeoutMS"
+  },
+  {
+   "slot": 24,
+   "method": "GetHTTPRequestWasTimedOut"
+  }
+ ]
+}

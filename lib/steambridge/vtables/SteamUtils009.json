@@ -1,0 +1,144 @@
+{
+ "interface": "ISteamUtils",
+ "version": "SteamUtils009",
+ "family": "utils",
+ "slot_count": 34,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on a 2017-era Steamworks SDK (SteamUser019 / SteamUtils009 / SteamClient017 strings in the DLL); extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes. Extended on 2026-09-13: newer DLLs keep this version string but append slots 30..33 (read from 4 more owner-owned DLL copies; slots left unresolved where copies disagreed or none had a wrapper).",
+ "unresolved_slots": [
+  14
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetSecondsSinceAppActive"
+  },
+  {
+   "slot": 1,
+   "method": "GetSecondsSinceComputerActive"
+  },
+  {
+   "slot": 2,
+   "method": "GetConnectedUniverse"
+  },
+  {
+   "slot": 3,
+   "method": "GetServerRealTime"
+  },
+  {
+   "slot": 4,
+   "method": "GetIPCountry"
+  },
+  {
+   "slot": 5,
+   "method": "GetImageSize"
+  },
+  {
+   "slot": 6,
+   "method": "GetImageRGBA"
+  },
+  {
+   "slot": 7,
+   "method": "GetCSERIPPort"
+  },
+  {
+   "slot": 8,
+   "method": "GetCurrentBatteryPower"
+  },
+  {
+   "slot": 9,
+   "method": "GetAppID"
+  },
+  {
+   "slot": 10,
+   "method": "SetOverlayNotificationPosition"
+  },
+  {
+   "slot": 11,
+   "method": "IsAPICallCompleted"
+  },
+  {
+   "slot": 12,
+   "method": "GetAPICallFailureReason"
+  },
+  {
+   "slot": 13,
+   "method": "GetAPICallResult"
+  },
+  {
+   "slot": 15,
+   "method": "GetIPCCallCount"
+  },
+  {
+   "slot": 16,
+   "method": "SetWarningMessageHook"
+  },
+  {
+   "slot": 17,
+   "method": "IsOverlayEnabled"
+  },
+  {
+   "slot": 18,
+   "method": "BOverlayNeedsPresent"
+  },
+  {
+   "slot": 19,
+   "method": "CheckFileSignature"
+  },
+  {
+   "slot": 20,
+   "method": "ShowGamepadTextInput"
+  },
+  {
+   "slot": 21,
+   "method": "GetEnteredGamepadTextLength"
+  },
+  {
+   "slot": 22,
+   "method": "GetEnteredGamepadTextInput"
+  },
+  {
+   "slot": 23,
+   "method": "GetSteamUILanguage"
+  },
+  {
+   "slot": 24,
+   "method": "IsSteamRunningInVR"
+  },
+  {
+   "slot": 25,
+   "method": "SetOverlayNotificationInset"
+  },
+  {
+   "slot": 26,
+   "method": "IsSteamInBigPictureMode"
+  },
+  {
+   "slot": 27,
+   "method": "StartVRDashboard"
+  },
+  {
+   "slot": 28,
+   "method": "IsVRHeadsetStreamingEnabled"
+  },
+  {
+   "slot": 29,
+   "method": "SetVRHeadsetStreamingEnabled"
+  },
+  {
+   "slot": 30,
+   "method": "IsSteamChinaLauncher"
+  },
+  {
+   "slot": 31,
+   "method": "InitFilterText"
+  },
+  {
+   "slot": 32,
+   "method": "FilterText"
+  },
+  {
+   "slot": 33,
+   "method": "GetIPv6ConnectivityState"
+  }
+ ]
+}

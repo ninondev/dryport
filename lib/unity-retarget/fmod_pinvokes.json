@@ -1,0 +1,4414 @@
+{
+"FMOD5_System_Create": {
+"ret": "valuetype",
+"params": [
+"byref(I)",
+"u4"
+]
+},
+"FMOD5_Memory_Initialize": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"class",
+"class",
+"class",
+"valuetype"
+]
+},
+"FMOD5_Memory_GetStats": {
+"ret": "valuetype",
+"params": [
+"byref(i4)",
+"byref(i4)",
+"bool"
+]
+},
+"FMOD5_Debug_Initialize": {
+"ret": "valuetype",
+"params": [
+"valuetype",
+"valuetype",
+"class",
+"szarray(u1)"
+]
+},
+"FMOD5_Thread_SetAttributes": {
+"ret": "valuetype",
+"params": [
+"valuetype",
+"valuetype",
+"valuetype",
+"valuetype"
+]
+},
+"FMOD5_System_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_SetOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD5_System_GetOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_GetNumDrivers": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetDriverInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I",
+"i4",
+"byref(valuetype)",
+"byref(i4)",
+"byref(valuetype)",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetDriver": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_System_GetDriver": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetSoftwareChannels": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_System_GetSoftwareChannels": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetSoftwareFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"valuetype",
+"i4"
+]
+},
+"FMOD5_System_GetSoftwareFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(valuetype)",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetDSPBufferSize": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"i4"
+]
+},
+"FMOD5_System_GetDSPBufferSize": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetFileSystem": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"class",
+"class",
+"class",
+"class",
+"class",
+"i4"
+]
+},
+"FMOD5_System_AttachFileSystem": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"class",
+"class",
+"class"
+]
+},
+"FMOD5_System_SetAdvancedSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_GetAdvancedSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"valuetype"
+]
+},
+"FMOD5_System_SetPluginPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)"
+]
+},
+"FMOD5_System_LoadPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(u4)",
+"u4"
+]
+},
+"FMOD5_System_UnloadPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4"
+]
+},
+"FMOD5_System_GetNumNestedPlugins": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetNestedPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"i4",
+"byref(u4)"
+]
+},
+"FMOD5_System_GetNumPlugins": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetPluginHandle": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"i4",
+"byref(u4)"
+]
+},
+"FMOD5_System_GetPluginInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"byref(valuetype)",
+"I",
+"i4",
+"byref(u4)"
+]
+},
+"FMOD5_System_SetOutputByPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4"
+]
+},
+"FMOD5_System_GetOutputByPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)"
+]
+},
+"FMOD5_System_CreateDSPByPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"byref(I)"
+]
+},
+"FMOD5_System_GetDSPInfoByPlugin": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"byref(I)"
+]
+},
+"FMOD5_System_RegisterDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(u4)"
+]
+},
+"FMOD5_System_Init": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"valuetype",
+"I"
+]
+},
+"FMOD5_System_Close": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_Update": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_SetSpeakerPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"r4",
+"r4",
+"bool"
+]
+},
+"FMOD5_System_GetSpeakerPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(r4)",
+"byref(r4)",
+"byref(bool)"
+]
+},
+"FMOD5_System_SetStreamBufferSize": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"valuetype"
+]
+},
+"FMOD5_System_GetStreamBufferSize": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_Set3DSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_System_Get3DSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_System_Set3DNumListeners": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_System_Get3DNumListeners": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_System_Set3DListenerAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_Get3DListenerAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_Set3DRolloffCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD5_System_MixerSuspend": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_MixerResume": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_GetDefaultMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"valuetype",
+"szarray(r4)",
+"i4"
+]
+},
+"FMOD5_System_GetSpeakerModeChannels": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetVersion": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)"
+]
+},
+"FMOD5_System_GetOutputHandle": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_System_GetChannelsPlaying": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetCPUUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_GetFileUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i8)",
+"byref(i8)",
+"byref(i8)"
+]
+},
+"FMOD5_System_CreateSound": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"valuetype",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateStream": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"valuetype",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateDSPByType": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateSoundGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD5_System_CreateReverb3D": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_System_PlaySound": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"I",
+"bool",
+"byref(I)"
+]
+},
+"FMOD5_System_PlayDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"I",
+"bool",
+"byref(I)"
+]
+},
+"FMOD5_System_GetChannel": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_System_GetDSPInfoByType": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD5_System_GetMasterChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_System_GetMasterSoundGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_System_AttachChannelGroupToPort": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"u8",
+"I",
+"bool"
+]
+},
+"FMOD5_System_DetachChannelGroupFromPort": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_System_SetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_GetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_LockDSP": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_UnlockDSP": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_System_GetRecordNumDrivers": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_System_GetRecordDriverInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I",
+"i4",
+"byref(valuetype)",
+"byref(i4)",
+"byref(valuetype)",
+"byref(i4)",
+"byref(valuetype)"
+]
+},
+"FMOD5_System_GetRecordPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(u4)"
+]
+},
+"FMOD5_System_RecordStart": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I",
+"bool"
+]
+},
+"FMOD5_System_RecordStop": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_System_IsRecording": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(bool)"
+]
+},
+"FMOD5_System_CreateGeometry": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_System_SetGeometrySettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_System_GetGeometrySettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_System_LoadGeometry": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_System_GetGeometryOcclusion": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_System_SetNetworkProxy": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)"
+]
+},
+"FMOD5_System_GetNetworkProxy": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_System_SetNetworkTimeout": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_System_GetNetworkTimeout": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_System_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_System_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Sound_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_Sound_GetSystemObject": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Sound_Lock": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"u4",
+"byref(I)",
+"byref(I)",
+"byref(u4)",
+"byref(u4)"
+]
+},
+"FMOD5_Sound_Unlock": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"I",
+"u4",
+"u4"
+]
+},
+"FMOD5_Sound_SetDefaults": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"i4"
+]
+},
+"FMOD5_Sound_GetDefaults": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_Set3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4"
+]
+},
+"FMOD5_Sound_Get3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Sound_Set3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_Sound_Get3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Sound_Set3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"i4"
+]
+},
+"FMOD5_Sound_Get3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_GetSubSound": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_Sound_GetSubSoundParent": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Sound_GetName": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_Sound_GetLength": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"valuetype"
+]
+},
+"FMOD5_Sound_GetFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_GetNumSubSounds": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_GetNumTags": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_GetTag": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD5_Sound_GetOpenState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(u4)",
+"byref(bool)",
+"byref(bool)"
+]
+},
+"FMOD5_Sound_ReadData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"u4",
+"byref(u4)"
+]
+},
+"FMOD5_Sound_SeekData": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4"
+]
+},
+"FMOD5_Sound_SetSoundGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Sound_GetSoundGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Sound_GetNumSyncPoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_GetSyncPoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_Sound_GetSyncPointInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"I",
+"i4",
+"byref(u4)",
+"valuetype"
+]
+},
+"FMOD5_Sound_AddSyncPoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"valuetype",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD5_Sound_DeleteSyncPoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Sound_SetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD5_Sound_GetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Sound_SetLoopCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_Sound_GetLoopCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_SetLoopPoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"valuetype",
+"u4",
+"valuetype"
+]
+},
+"FMOD5_Sound_GetLoopPoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"valuetype",
+"byref(u4)",
+"valuetype"
+]
+},
+"FMOD5_Sound_GetMusicNumChannels": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Sound_SetMusicChannelVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD5_Sound_GetMusicChannelVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)"
+]
+},
+"FMOD5_Sound_SetMusicSpeed": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Sound_GetMusicSpeed": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Sound_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Sound_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Channel_SetFrequency": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_GetFrequency": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetPriority": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_Channel_GetPriority": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_SetPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"valuetype"
+]
+},
+"FMOD5_Channel_GetPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"valuetype"
+]
+},
+"FMOD5_Channel_SetChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Channel_GetChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Channel_SetLoopCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_Channel_GetLoopCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_SetLoopPoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4",
+"valuetype",
+"u4",
+"valuetype"
+]
+},
+"FMOD5_Channel_GetLoopPoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"valuetype",
+"byref(u4)",
+"valuetype"
+]
+},
+"FMOD5_Channel_IsVirtual": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_GetCurrentSound": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Channel_GetIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_GetSystemObject": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Channel_Stop": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_Channel_SetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_Channel_GetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetVolumeRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_Channel_GetVolumeRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_GetAudibility": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_GetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_Channel_GetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_SetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD5_Channel_GetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetLowPassGain": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_GetLowPassGain": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD5_Channel_GetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Channel_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD5_Channel_IsPlaying": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_SetPan": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_SetMixLevelsOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_Channel_SetMixLevelsInput": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"i4"
+]
+},
+"FMOD5_Channel_SetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"i4",
+"i4",
+"i4"
+]
+},
+"FMOD5_Channel_GetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"byref(i4)",
+"byref(i4)",
+"i4"
+]
+},
+"FMOD5_Channel_GetDSPClock": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u8)",
+"byref(u8)"
+]
+},
+"FMOD5_Channel_SetDelay": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"u8",
+"bool"
+]
+},
+"FMOD5_Channel_GetDelay": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u8)",
+"byref(u8)",
+"byref(bool)"
+]
+},
+"FMOD5_Channel_AddFadePoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"r4"
+]
+},
+"FMOD5_Channel_SetFadePointRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"r4"
+]
+},
+"FMOD5_Channel_RemoveFadePoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"u8"
+]
+},
+"FMOD5_Channel_GetFadePoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"szarray(u8)",
+"szarray(r4)"
+]
+},
+"FMOD5_Channel_GetDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_Channel_AddDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I"
+]
+},
+"FMOD5_Channel_RemoveDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Channel_GetNumDSPs": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_SetDSPIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_Channel_GetDSPIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_Set3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_Channel_Get3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_Channel_Set3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DConeOrientation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Channel_Get3DConeOrientation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Channel_Set3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"i4"
+]
+},
+"FMOD5_Channel_Get3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)",
+"byref(i4)"
+]
+},
+"FMOD5_Channel_Set3DOcclusion": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DOcclusion": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DSpread": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DSpread": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DDopplerLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DDopplerLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_Set3DDistanceFilter": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool",
+"r4",
+"r4"
+]
+},
+"FMOD5_Channel_Get3DDistanceFilter": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Channel_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Channel_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_ChannelGroup_AddGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"bool",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_GetNumGroups": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_ChannelGroup_GetGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_GetParentGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_GetName": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_GetNumChannels": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_ChannelGroup_GetChannel": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_GetSystemObject": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_Stop": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_ChannelGroup_SetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_ChannelGroup_GetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_ChannelGroup_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetVolumeRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_ChannelGroup_GetVolumeRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_ChannelGroup_GetAudibility": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_GetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_ChannelGroup_GetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_ChannelGroup_SetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_GetReverbProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetLowPassGain": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_GetLowPassGain": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD5_ChannelGroup_GetMode": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_ChannelGroup_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD5_ChannelGroup_IsPlaying": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_ChannelGroup_SetPan": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_SetMixLevelsOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_SetMixLevelsInput": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_SetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"i4",
+"i4",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_GetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"byref(i4)",
+"byref(i4)",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_GetDSPClock": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u8)",
+"byref(u8)"
+]
+},
+"FMOD5_ChannelGroup_SetDelay": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"u8",
+"bool"
+]
+},
+"FMOD5_ChannelGroup_GetDelay": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u8)",
+"byref(u8)",
+"byref(bool)"
+]
+},
+"FMOD5_ChannelGroup_AddFadePoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_SetFadePointRamp": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_RemoveFadePoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8",
+"u8"
+]
+},
+"FMOD5_ChannelGroup_GetFadePoints": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"szarray(u8)",
+"szarray(r4)"
+]
+},
+"FMOD5_ChannelGroup_GetDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_ChannelGroup_AddDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I"
+]
+},
+"FMOD5_ChannelGroup_RemoveDSP": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_ChannelGroup_GetNumDSPs": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_ChannelGroup_SetDSPIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_GetDSPIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_ChannelGroup_Get3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_ChannelGroup_Set3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DConeSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DConeOrientation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_ChannelGroup_Get3DConeOrientation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_ChannelGroup_Set3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"i4"
+]
+},
+"FMOD5_ChannelGroup_Get3DCustomRolloff": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)",
+"byref(i4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DOcclusion": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DOcclusion": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DSpread": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DSpread": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DDopplerLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DDopplerLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_Set3DDistanceFilter": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool",
+"r4",
+"r4"
+]
+},
+"FMOD5_ChannelGroup_Get3DDistanceFilter": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_ChannelGroup_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_ChannelGroup_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_SoundGroup_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_SoundGroup_GetSystemObject": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_SoundGroup_SetMaxAudible": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD5_SoundGroup_GetMaxAudible": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_SoundGroup_SetMaxAudibleBehavior": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD5_SoundGroup_GetMaxAudibleBehavior": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_SoundGroup_SetMuteFadeSpeed": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_SoundGroup_GetMuteFadeSpeed": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_SoundGroup_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_SoundGroup_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_SoundGroup_Stop": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_SoundGroup_GetName": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4"
+]
+},
+"FMOD5_SoundGroup_GetNumSounds": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_SoundGroup_GetSound": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_SoundGroup_GetNumPlaying": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_SoundGroup_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_SoundGroup_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_DSP_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_DSP_GetSystemObject": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_DSP_AddInput": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"byref(I)",
+"valuetype"
+]
+},
+"FMOD5_DSP_DisconnectFrom": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"I"
+]
+},
+"FMOD5_DSP_DisconnectAll": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool",
+"bool"
+]
+},
+"FMOD5_DSP_GetNumInputs": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_DSP_GetNumOutputs": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_DSP_GetInput": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)",
+"byref(I)"
+]
+},
+"FMOD5_DSP_GetOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)",
+"byref(I)"
+]
+},
+"FMOD5_DSP_SetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_DSP_GetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_DSP_SetBypass": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_DSP_GetBypass": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_DSP_SetWetDryMix": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"r4"
+]
+},
+"FMOD5_DSP_GetWetDryMix": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_DSP_SetChannelFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"i4",
+"valuetype"
+]
+},
+"FMOD5_DSP_GetChannelFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(i4)",
+"byref(valuetype)"
+]
+},
+"FMOD5_DSP_GetOutputChannelFormat": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"i4",
+"valuetype",
+"byref(valuetype)",
+"byref(i4)",
+"byref(valuetype)"
+]
+},
+"FMOD5_DSP_Reset": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_DSP_SetParameterFloat": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD5_DSP_SetParameterInt": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"i4"
+]
+},
+"FMOD5_DSP_SetParameterBool": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"bool"
+]
+},
+"FMOD5_DSP_SetParameterData": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I",
+"u4"
+]
+},
+"FMOD5_DSP_GetParameterFloat": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)",
+"I",
+"i4"
+]
+},
+"FMOD5_DSP_GetParameterInt": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(i4)",
+"I",
+"i4"
+]
+},
+"FMOD5_DSP_GetParameterBool": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(bool)",
+"I",
+"i4"
+]
+},
+"FMOD5_DSP_GetParameterData": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)",
+"byref(u4)",
+"I",
+"i4"
+]
+},
+"FMOD5_DSP_GetNumParameters": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_DSP_GetParameterInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(I)"
+]
+},
+"FMOD5_DSP_GetDataParameterIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD5_DSP_ShowConfigDialog": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"bool"
+]
+},
+"FMOD5_DSP_GetInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"byref(u4)",
+"byref(i4)",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_DSP_GetType": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_DSP_GetIdle": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_DSP_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_DSP_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_DSP_SetMeteringEnabled": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool",
+"bool"
+]
+},
+"FMOD5_DSP_GetMeteringEnabled": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)",
+"byref(bool)"
+]
+},
+"FMOD5_DSP_GetMeteringInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_DSP_GetCPUUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"byref(u4)"
+]
+},
+"FMOD5_DSPConnection_GetInput": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_DSPConnection_GetOutput": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_DSPConnection_SetMix": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD5_DSPConnection_GetMix": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD5_DSPConnection_SetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"i4",
+"i4",
+"i4"
+]
+},
+"FMOD5_DSPConnection_GetMixMatrix": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(r4)",
+"byref(i4)",
+"byref(i4)",
+"i4"
+]
+},
+"FMOD5_DSPConnection_GetType": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_DSPConnection_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_DSPConnection_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Geometry_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_Geometry_AddPolygon": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"r4",
+"bool",
+"i4",
+"szarray(valuetype)",
+"byref(i4)"
+]
+},
+"FMOD5_Geometry_GetNumPolygons": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Geometry_GetMaxPolygons": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(i4)"
+]
+},
+"FMOD5_Geometry_GetPolygonNumVertices": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD5_Geometry_SetPolygonVertex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_GetPolygonVertex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_SetPolygonAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4",
+"r4",
+"bool"
+]
+},
+"FMOD5_Geometry_GetPolygonAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)",
+"byref(r4)",
+"byref(bool)"
+]
+},
+"FMOD5_Geometry_SetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_Geometry_GetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Geometry_SetRotation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_GetRotation": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_SetPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_GetPosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_SetScale": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_GetScale": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Geometry_Save": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"byref(i4)"
+]
+},
+"FMOD5_Geometry_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Geometry_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD5_Reverb3D_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD5_Reverb3D_Set3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"r4",
+"r4"
+]
+},
+"FMOD5_Reverb3D_Get3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD5_Reverb3D_SetProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Reverb3D_GetProperties": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD5_Reverb3D_SetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD5_Reverb3D_GetActive": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD5_Reverb3D_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD5_Reverb3D_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_ParseID": {
+"ret": "valuetype",
+"params": [
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_Create": {
+"ret": "valuetype",
+"params": [
+"byref(I)",
+"u4"
+]
+},
+"FMOD_Studio_System_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_SetAdvancedSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetAdvancedSettings": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_Initialize": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"valuetype",
+"valuetype",
+"I"
+]
+},
+"FMOD_Studio_System_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_Update": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_GetCoreSystem": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetEvent": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetBus": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetVCA": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetBank": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetEventByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetBusByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetVCAByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetBankByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetSoundInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetParameterDescriptionByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetParameterDescriptionByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetParameterLabelByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"i4",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetParameterLabelByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"i4",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetParameterByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_System_SetParameterByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"r4",
+"bool"
+]
+},
+"FMOD_Studio_System_SetParameterByIDWithLabel": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"szarray(u1)",
+"bool"
+]
+},
+"FMOD_Studio_System_SetParametersByIDs": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(valuetype)",
+"szarray(r4)",
+"i4",
+"bool"
+]
+},
+"FMOD_Studio_System_GetParameterByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_System_SetParameterByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"r4",
+"bool"
+]
+},
+"FMOD_Studio_System_SetParameterByNameWithLabel": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"szarray(u1)",
+"bool"
+]
+},
+"FMOD_Studio_System_LookupID": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_LookupPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetNumListeners": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_SetNumListeners": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD_Studio_System_GetListenerAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_SetListenerAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetListenerWeight": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)"
+]
+},
+"FMOD_Studio_System_SetListenerWeight": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD_Studio_System_LoadBankFile": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_LoadBankMemory": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"valuetype",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_LoadBankCustom": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_UnloadAll": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_FlushCommands": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_FlushSampleLoading": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_StartCommandCapture": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"valuetype"
+]
+},
+"FMOD_Studio_System_StopCommandCapture": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_LoadCommandReplay": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"valuetype",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_GetBankCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetBankList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(I)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetParameterDescriptionCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetParameterDescriptionList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(valuetype)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_System_GetCPUUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_GetBufferUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_System_ResetBufferUsage": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_System_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"valuetype"
+]
+},
+"FMOD_Studio_System_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_System_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD_Studio_System_GetMemoryUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventDescription_GetID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterDescriptionCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterDescriptionByIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterDescriptionByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterDescriptionByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterLabelByIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"i4",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterLabelByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"i4",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetParameterLabelByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"i4",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetUserPropertyCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetUserPropertyByIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetUserProperty": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_GetLength": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventDescription_GetSoundSize": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventDescription_IsSnapshot": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_IsOneshot": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_IsStream": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_Is3D": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_IsDopplerEnabled": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_HasSustainPoint": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventDescription_CreateInstance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_EventDescription_GetInstanceCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_GetInstanceList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(I)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventDescription_LoadSampleData": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventDescription_UnloadSampleData": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventDescription_GetSampleLoadingState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventDescription_ReleaseAllInstances": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventDescription_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"valuetype"
+]
+},
+"FMOD_Studio_EventDescription_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_EventDescription_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD_Studio_EventInstance_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventInstance_GetDescription": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_EventInstance_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD_Studio_EventInstance_GetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetPitch": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD_Studio_EventInstance_Get3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventInstance_Set3DAttributes": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventInstance_GetListenerMask": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)"
+]
+},
+"FMOD_Studio_EventInstance_SetListenerMask": {
+"ret": "valuetype",
+"params": [
+"I",
+"u4"
+]
+},
+"FMOD_Studio_EventInstance_GetProperty": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetProperty": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"r4"
+]
+},
+"FMOD_Studio_EventInstance_GetReverbLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetReverbLevel": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"r4"
+]
+},
+"FMOD_Studio_EventInstance_GetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventInstance_SetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_Start": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventInstance_Stop": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD_Studio_EventInstance_GetTimelinePosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_EventInstance_SetTimelinePosition": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD_Studio_EventInstance_GetPlaybackState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_EventInstance_GetChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_EventInstance_GetMinMaxDistance": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventInstance_IsVirtual": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_EventInstance_GetParameterByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetParameterByName": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"r4",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_SetParameterByNameWithLabel": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)",
+"szarray(u1)",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_GetParameterByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_EventInstance_SetParameterByID": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"r4",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_SetParameterByIDWithLabel": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype",
+"szarray(u1)",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_SetParametersByIDs": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(valuetype)",
+"szarray(r4)",
+"i4",
+"bool"
+]
+},
+"FMOD_Studio_EventInstance_KeyOff": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_EventInstance_SetCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class",
+"valuetype"
+]
+},
+"FMOD_Studio_EventInstance_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_EventInstance_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD_Studio_EventInstance_GetCPUUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"byref(u4)"
+]
+},
+"FMOD_Studio_EventInstance_GetMemoryUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bus_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bus_GetID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bus_GetPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bus_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_Bus_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD_Studio_Bus_GetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_Bus_SetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD_Studio_Bus_GetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_Bus_SetMute": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD_Studio_Bus_StopAllEvents": {
+"ret": "valuetype",
+"params": [
+"I",
+"valuetype"
+]
+},
+"FMOD_Studio_Bus_LockChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bus_UnlockChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bus_GetChannelGroup": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_Bus_GetCPUUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u4)",
+"byref(u4)"
+]
+},
+"FMOD_Studio_Bus_GetMemoryUsage": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bus_GetPortIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(u8)"
+]
+},
+"FMOD_Studio_Bus_SetPortIndex": {
+"ret": "valuetype",
+"params": [
+"I",
+"u8"
+]
+},
+"FMOD_Studio_VCA_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_VCA_GetID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_VCA_GetPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_VCA_GetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_VCA_SetVolume": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD_Studio_Bank_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bank_GetID": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bank_GetPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_Unload": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bank_LoadSampleData": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bank_UnloadSampleData": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_Bank_GetLoadingState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bank_GetSampleLoadingState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_Bank_GetStringCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetStringInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)",
+"I",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetEventCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetEventList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(I)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetBusCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetBusList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(I)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetVCACount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetVCAList": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(I)",
+"i4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_Bank_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_Bank_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+},
+"FMOD_Studio_CommandReplay_IsValid": {
+"ret": "bool",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_CommandReplay_GetSystem": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_CommandReplay_GetLength": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(r4)"
+]
+},
+"FMOD_Studio_CommandReplay_GetCommandCount": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)"
+]
+},
+"FMOD_Studio_CommandReplay_GetCommandInfo": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_CommandReplay_GetCommandString": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4",
+"I",
+"i4"
+]
+},
+"FMOD_Studio_CommandReplay_GetCommandAtTime": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4",
+"byref(i4)"
+]
+},
+"FMOD_Studio_CommandReplay_SetBankPath": {
+"ret": "valuetype",
+"params": [
+"I",
+"szarray(u1)"
+]
+},
+"FMOD_Studio_CommandReplay_Start": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_CommandReplay_Stop": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_CommandReplay_SeekToTime": {
+"ret": "valuetype",
+"params": [
+"I",
+"r4"
+]
+},
+"FMOD_Studio_CommandReplay_SeekToCommand": {
+"ret": "valuetype",
+"params": [
+"I",
+"i4"
+]
+},
+"FMOD_Studio_CommandReplay_GetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(bool)"
+]
+},
+"FMOD_Studio_CommandReplay_SetPaused": {
+"ret": "valuetype",
+"params": [
+"I",
+"bool"
+]
+},
+"FMOD_Studio_CommandReplay_GetPlaybackState": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(valuetype)"
+]
+},
+"FMOD_Studio_CommandReplay_GetCurrentCommand": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(i4)",
+"byref(r4)"
+]
+},
+"FMOD_Studio_CommandReplay_Release": {
+"ret": "valuetype",
+"params": [
+"I"
+]
+},
+"FMOD_Studio_CommandReplay_SetFrameCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD_Studio_CommandReplay_SetLoadBankCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD_Studio_CommandReplay_SetCreateInstanceCallback": {
+"ret": "valuetype",
+"params": [
+"I",
+"class"
+]
+},
+"FMOD_Studio_CommandReplay_GetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"byref(I)"
+]
+},
+"FMOD_Studio_CommandReplay_SetUserData": {
+"ret": "valuetype",
+"params": [
+"I",
+"I"
+]
+}
+}

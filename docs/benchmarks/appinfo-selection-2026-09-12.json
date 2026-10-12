@@ -1,0 +1,137 @@
+{
+  "date": "2026-09-12",
+  "scope": "Steam appinfo parser calls, not game runtime performance",
+  "method": {
+    "python_version": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "hardware": {
+      "hw.model": "Mac17,3",
+      "hw.memsize": "17179869184",
+      "hw.logicalcpu": "10",
+      "machdep.cpu.brand_string": "Apple M5"
+    },
+    "process": "All 12 timed loads in one Python process; gc.collect() before each, outside timer; reference full tree retained for comparisons outside timer.",
+    "order": "3 rounds, each before_full -> after_full -> after_single -> after_catalog. File snapshot read on every call; no deliberate filesystem-cache flush. Untimed decode counting afterwards."
+  },
+  "input": {
+    "bytes": 43265623,
+    "sha256": "18291db0710409bd193190f75dda1f69694a11050b251bf301ce49874dc64bd4",
+    "full_records": 19398,
+    "catalog_requested": 7342,
+    "single_appid": 733110
+  },
+  "timings_seconds": {
+    "before_full": [
+      2.976603499992052,
+      3.584941084001912,
+      2.339522249996662
+    ],
+    "after_full": [
+      2.9115469999960624,
+      3.311593416990945,
+      2.778905416984344
+    ],
+    "after_single": [
+      0.037993458012351766,
+      0.06139983297907747,
+      0.0453376249934081
+    ],
+    "after_catalog": [
+      2.1315823330078274,
+      1.512274457985768,
+      2.747969791991636
+    ]
+  },
+  "median_seconds": {
+    "before_full": 2.976603499992052,
+    "after_full": 2.9115469999960624,
+    "after_single": 0.0453376249934081,
+    "after_catalog": 2.1315823330078274
+  },
+  "comparisons": [
+    {
+      "condition": "before_full",
+      "repeat": 0,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_full",
+      "repeat": 0,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_single",
+      "repeat": 0,
+      "apps": 1,
+      "equal": true
+    },
+    {
+      "condition": "after_catalog",
+      "repeat": 0,
+      "apps": 7342,
+      "equal": true
+    },
+    {
+      "condition": "before_full",
+      "repeat": 1,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_full",
+      "repeat": 1,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_single",
+      "repeat": 1,
+      "apps": 1,
+      "equal": true
+    },
+    {
+      "condition": "after_catalog",
+      "repeat": 1,
+      "apps": 7342,
+      "equal": true
+    },
+    {
+      "condition": "before_full",
+      "repeat": 2,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_full",
+      "repeat": 2,
+      "apps": 19398,
+      "equal": true
+    },
+    {
+      "condition": "after_single",
+      "repeat": 2,
+      "apps": 1,
+      "equal": true
+    },
+    {
+      "condition": "after_catalog",
+      "repeat": 2,
+      "apps": 7342,
+      "equal": true
+    }
+  ],
+  "actual_top_level_decodes": {
+    "full": 19398,
+    "single": 1,
+    "catalog": 7342
+  },
+  "before_source_sha256": "8238f1ee0512a927931a3ac746186c7441ade886033d3aecc22695959f8dd583",
+  "after_source_sha256": "eb04328ad43aed220195be4866e2fde16d2db41c0ea1686fcaf2ebe2b4c49253",
+  "limitations": [
+    "One M5 with 16 GiB; no low-end hardware acceptance.",
+    "Warm filesystem, fixed condition order, reference tree retained.",
+    "Catalog samples vary; do not predict speedup from decode counts."
+  ]
+}

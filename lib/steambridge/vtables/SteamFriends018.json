@@ -1,0 +1,321 @@
+{
+ "interface": "ISteamFriends",
+ "version": "SteamFriends018",
+ "family": "friends",
+ "slot_count": 78,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll (SHA-1 8c6388f77a7a...) shipped with a Steam game used as a reference, built on a 2025-era Steamworks SDK (1.62: SteamClient023, SteamFriends018). Extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [
+  21,
+  57,
+  64
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetPersonaName"
+  },
+  {
+   "slot": 1,
+   "method": "GetPersonaState"
+  },
+  {
+   "slot": 2,
+   "method": "GetFriendCount"
+  },
+  {
+   "slot": 3,
+   "method": "GetFriendByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 4,
+   "method": "GetFriendRelationship"
+  },
+  {
+   "slot": 5,
+   "method": "GetFriendPersonaState"
+  },
+  {
+   "slot": 6,
+   "method": "GetFriendPersonaName"
+  },
+  {
+   "slot": 7,
+   "method": "GetFriendGamePlayed"
+  },
+  {
+   "slot": 8,
+   "method": "GetFriendPersonaNameHistory"
+  },
+  {
+   "slot": 9,
+   "method": "GetFriendSteamLevel"
+  },
+  {
+   "slot": 10,
+   "method": "GetPlayerNickname"
+  },
+  {
+   "slot": 11,
+   "method": "GetFriendsGroupCount"
+  },
+  {
+   "slot": 12,
+   "method": "GetFriendsGroupIDByIndex"
+  },
+  {
+   "slot": 13,
+   "method": "GetFriendsGroupName"
+  },
+  {
+   "slot": 14,
+   "method": "GetFriendsGroupMembersCount"
+  },
+  {
+   "slot": 15,
+   "method": "GetFriendsGroupMembersList"
+  },
+  {
+   "slot": 16,
+   "method": "HasFriend"
+  },
+  {
+   "slot": 17,
+   "method": "GetClanCount"
+  },
+  {
+   "slot": 18,
+   "method": "GetClanByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 19,
+   "method": "GetClanName"
+  },
+  {
+   "slot": 20,
+   "method": "GetClanTag"
+  },
+  {
+   "slot": 22,
+   "method": "DownloadClanActivityCounts"
+  },
+  {
+   "slot": 23,
+   "method": "GetFriendCountFromSource"
+  },
+  {
+   "slot": 24,
+   "method": "GetFriendFromSourceByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 25,
+   "method": "IsUserInSource"
+  },
+  {
+   "slot": 26,
+   "method": "SetInGameVoiceSpeaking"
+  },
+  {
+   "slot": 27,
+   "method": "ActivateGameOverlay"
+  },
+  {
+   "slot": 28,
+   "method": "ActivateGameOverlayToUser"
+  },
+  {
+   "slot": 29,
+   "method": "ActivateGameOverlayToWebPage"
+  },
+  {
+   "slot": 30,
+   "method": "ActivateGameOverlayToStore"
+  },
+  {
+   "slot": 31,
+   "method": "SetPlayedWith"
+  },
+  {
+   "slot": 32,
+   "method": "ActivateGameOverlayInviteDialog"
+  },
+  {
+   "slot": 33,
+   "method": "GetSmallFriendAvatar"
+  },
+  {
+   "slot": 34,
+   "method": "GetMediumFriendAvatar"
+  },
+  {
+   "slot": 35,
+   "method": "GetLargeFriendAvatar"
+  },
+  {
+   "slot": 36,
+   "method": "RequestUserInformation"
+  },
+  {
+   "slot": 37,
+   "method": "RequestClanOfficerList"
+  },
+  {
+   "slot": 38,
+   "method": "GetClanOwner",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 39,
+   "method": "GetClanOfficerCount"
+  },
+  {
+   "slot": 40,
+   "method": "GetClanOfficerByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 41,
+   "method": "SetRichPresence"
+  },
+  {
+   "slot": 42,
+   "method": "ClearRichPresence"
+  },
+  {
+   "slot": 43,
+   "method": "GetFriendRichPresence"
+  },
+  {
+   "slot": 44,
+   "method": "GetFriendRichPresenceKeyCount"
+  },
+  {
+   "slot": 45,
+   "method": "GetFriendRichPresenceKeyByIndex"
+  },
+  {
+   "slot": 46,
+   "method": "RequestFriendRichPresence"
+  },
+  {
+   "slot": 47,
+   "method": "InviteUserToGame"
+  },
+  {
+   "slot": 48,
+   "method": "GetCoplayFriendCount"
+  },
+  {
+   "slot": 49,
+   "method": "GetCoplayFriend",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 50,
+   "method": "GetFriendCoplayTime"
+  },
+  {
+   "slot": 51,
+   "method": "GetFriendCoplayGame"
+  },
+  {
+   "slot": 52,
+   "method": "JoinClanChatRoom"
+  },
+  {
+   "slot": 53,
+   "method": "LeaveClanChatRoom"
+  },
+  {
+   "slot": 54,
+   "method": "GetClanChatMemberCount"
+  },
+  {
+   "slot": 55,
+   "method": "GetChatMemberByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 56,
+   "method": "SendClanChatMessage"
+  },
+  {
+   "slot": 58,
+   "method": "IsClanChatAdmin"
+  },
+  {
+   "slot": 59,
+   "method": "IsClanChatWindowOpenInSteam"
+  },
+  {
+   "slot": 60,
+   "method": "OpenClanChatWindowInSteam"
+  },
+  {
+   "slot": 61,
+   "method": "CloseClanChatWindowInSteam"
+  },
+  {
+   "slot": 62,
+   "method": "SetListenForFriendsMessages"
+  },
+  {
+   "slot": 63,
+   "method": "ReplyToFriendMessage"
+  },
+  {
+   "slot": 65,
+   "method": "GetFollowerCount"
+  },
+  {
+   "slot": 66,
+   "method": "IsFollowing"
+  },
+  {
+   "slot": 67,
+   "method": "EnumerateFollowingList"
+  },
+  {
+   "slot": 68,
+   "method": "IsClanPublic"
+  },
+  {
+   "slot": 69,
+   "method": "IsClanOfficialGameGroup"
+  },
+  {
+   "slot": 70,
+   "method": "GetNumChatsWithUnreadPriorityMessages"
+  },
+  {
+   "slot": 71,
+   "method": "ActivateGameOverlayRemotePlayTogetherInviteDialog"
+  },
+  {
+   "slot": 72,
+   "method": "RegisterProtocolInOverlayBrowser"
+  },
+  {
+   "slot": 73,
+   "method": "ActivateGameOverlayInviteDialogConnectString"
+  },
+  {
+   "slot": 74,
+   "method": "RequestEquippedProfileItems"
+  },
+  {
+   "slot": 75,
+   "method": "BHasEquippedProfileItem"
+  },
+  {
+   "slot": 76,
+   "method": "GetProfileItemPropertyString"
+  },
+  {
+   "slot": 77,
+   "method": "GetProfileItemPropertyUint"
+  }
+ ]
+}

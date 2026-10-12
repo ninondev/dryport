@@ -1,0 +1,155 @@
+{
+ "interface": "ISteamClient",
+ "version": "SteamClient021",
+ "family": "client",
+ "slot_count": 39,
+ "source": "MSVC vtable slots read from the flat-API wrappers of the steam_api64.dll shipped with 2 Steam game(s) used as a reference; extracted with tools/steam-vtable-map.py on 2026-09-13 and merged across those copies (no slot disagreed). slot_count is the highest slot that has a flat wrapper plus one; the real table may be longer, which the generator covers with padded stub slots. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [
+  20,
+  30,
+  31,
+  32
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateSteamPipe"
+  },
+  {
+   "slot": 1,
+   "method": "BReleaseSteamPipe"
+  },
+  {
+   "slot": 2,
+   "method": "ConnectToGlobalUser"
+  },
+  {
+   "slot": 3,
+   "method": "CreateLocalUser"
+  },
+  {
+   "slot": 4,
+   "method": "ReleaseUser"
+  },
+  {
+   "slot": 5,
+   "method": "GetISteamUser"
+  },
+  {
+   "slot": 6,
+   "method": "GetISteamGameServer"
+  },
+  {
+   "slot": 7,
+   "method": "SetLocalIPBinding"
+  },
+  {
+   "slot": 8,
+   "method": "GetISteamFriends"
+  },
+  {
+   "slot": 9,
+   "method": "GetISteamUtils"
+  },
+  {
+   "slot": 10,
+   "method": "GetISteamMatchmaking"
+  },
+  {
+   "slot": 11,
+   "method": "GetISteamMatchmakingServers"
+  },
+  {
+   "slot": 12,
+   "method": "GetISteamGenericInterface"
+  },
+  {
+   "slot": 13,
+   "method": "GetISteamUserStats"
+  },
+  {
+   "slot": 14,
+   "method": "GetISteamGameServerStats"
+  },
+  {
+   "slot": 15,
+   "method": "GetISteamApps"
+  },
+  {
+   "slot": 16,
+   "method": "GetISteamNetworking"
+  },
+  {
+   "slot": 17,
+   "method": "GetISteamRemoteStorage"
+  },
+  {
+   "slot": 18,
+   "method": "GetISteamScreenshots"
+  },
+  {
+   "slot": 19,
+   "method": "GetISteamGameSearch"
+  },
+  {
+   "slot": 21,
+   "method": "GetIPCCallCount"
+  },
+  {
+   "slot": 22,
+   "method": "SetWarningMessageHook"
+  },
+  {
+   "slot": 23,
+   "method": "BShutdownIfAllPipesClosed"
+  },
+  {
+   "slot": 24,
+   "method": "GetISteamHTTP"
+  },
+  {
+   "slot": 25,
+   "method": "GetISteamController"
+  },
+  {
+   "slot": 26,
+   "method": "GetISteamUGC"
+  },
+  {
+   "slot": 27,
+   "method": "GetISteamMusic"
+  },
+  {
+   "slot": 28,
+   "method": "GetISteamMusicRemote"
+  },
+  {
+   "slot": 29,
+   "method": "GetISteamHTMLSurface"
+  },
+  {
+   "slot": 33,
+   "method": "GetISteamInventory"
+  },
+  {
+   "slot": 34,
+   "method": "GetISteamVideo"
+  },
+  {
+   "slot": 35,
+   "method": "GetISteamParentalSettings"
+  },
+  {
+   "slot": 36,
+   "method": "GetISteamInput"
+  },
+  {
+   "slot": 37,
+   "method": "GetISteamParties"
+  },
+  {
+   "slot": 38,
+   "method": "GetISteamRemotePlay"
+  }
+ ]
+}

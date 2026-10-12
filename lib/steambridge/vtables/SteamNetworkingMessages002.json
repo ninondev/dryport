@@ -1,0 +1,34 @@
+{
+ "interface": "ISteamNetworkingMessages",
+ "version": "SteamNetworkingMessages002",
+ "family": "networkingmessages",
+ "slot_count": 6,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "SendMessageToUser"
+  },
+  {
+   "slot": 1,
+   "method": "ReceiveMessagesOnChannel"
+  },
+  {
+   "slot": 2,
+   "method": "AcceptSessionWithUser"
+  },
+  {
+   "slot": 3,
+   "method": "CloseSessionWithUser"
+  },
+  {
+   "slot": 4,
+   "method": "CloseChannelWithUser"
+  },
+  {
+   "slot": 5,
+   "method": "GetSessionConnectionInfo"
+  }
+ ]
+}

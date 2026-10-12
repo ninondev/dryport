@@ -1,0 +1,102 @@
+{
+ "interface": "ISteamNetworkingUtils",
+ "version": "SteamNetworkingUtils004",
+ "family": "networkingutils",
+ "slot_count": 25,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 1ac139ebad2a...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes. Ambiguous slots (several wrappers call the same slot): {7: ['CheckPingDataUpToDate', 'InitRelayNetworkAccess'], 14: ['GetIPv4FakeIPType', 'IsFakeIPv4'], 16: ['SetConfigValue', 'SetConfigValueStruct', 'SetConnectionConfigValueFloat', 'SetConnectionConfigValueInt32', 'SetConnectionConfigValueString', 'SetGlobalCallback_FakeIPResult', 'SetGlobalCallback_MessagesSessionFailed', 'SetGlobalCallback_MessagesSessionRequest', 'SetGlobalCallback_SteamNetAuthenticationStatusChanged', 'SetGlobalCallback_SteamNetConnectionStatusChanged', 'SetGlobalCallback_SteamRelayNetworkStatusChanged', 'SetGlobalConfigValueFloat', 'SetGlobalConfigValueInt32', 'SetGlobalConfigValuePtr', 'SetGlobalConfigValueString']}.",
+ "unresolved_slots": [
+  7,
+  14,
+  16
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "AllocateMessage"
+  },
+  {
+   "slot": 1,
+   "method": "GetRelayNetworkStatus"
+  },
+  {
+   "slot": 2,
+   "method": "GetLocalPingLocation"
+  },
+  {
+   "slot": 3,
+   "method": "EstimatePingTimeBetweenTwoLocations"
+  },
+  {
+   "slot": 4,
+   "method": "EstimatePingTimeFromLocalHost"
+  },
+  {
+   "slot": 5,
+   "method": "ConvertPingLocationToString"
+  },
+  {
+   "slot": 6,
+   "method": "ParsePingLocationString"
+  },
+  {
+   "slot": 8,
+   "method": "GetPingToDataCenter"
+  },
+  {
+   "slot": 9,
+   "method": "GetDirectPingToPOP"
+  },
+  {
+   "slot": 10,
+   "method": "GetPOPCount"
+  },
+  {
+   "slot": 11,
+   "method": "GetPOPList"
+  },
+  {
+   "slot": 12,
+   "method": "GetLocalTimestamp"
+  },
+  {
+   "slot": 13,
+   "method": "SetDebugOutputFunction"
+  },
+  {
+   "slot": 15,
+   "method": "GetRealIdentityForFakeIP"
+  },
+  {
+   "slot": 17,
+   "method": "GetConfigValue"
+  },
+  {
+   "slot": 18,
+   "method": "GetConfigValueInfo"
+  },
+  {
+   "slot": 19,
+   "method": "IterateGenericEditableConfigValues"
+  },
+  {
+   "slot": 20,
+   "method": "SteamNetworkingIPAddr_ToString"
+  },
+  {
+   "slot": 21,
+   "method": "SteamNetworkingIPAddr_ParseString"
+  },
+  {
+   "slot": 22,
+   "method": "SteamNetworkingIPAddr_GetFakeIPType"
+  },
+  {
+   "slot": 23,
+   "method": "SteamNetworkingIdentity_ToString"
+  },
+  {
+   "slot": 24,
+   "method": "SteamNetworkingIdentity_ParseString"
+  }
+ ]
+}

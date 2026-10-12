@@ -1,0 +1,117 @@
+{
+ "interface": "ISteamController",
+ "version": "SteamController005",
+ "family": "controller",
+ "slot_count": 26,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 5b6ef90f8222...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "Init"
+  },
+  {
+   "slot": 1,
+   "method": "Shutdown"
+  },
+  {
+   "slot": 2,
+   "method": "RunFrame"
+  },
+  {
+   "slot": 3,
+   "method": "GetConnectedControllers"
+  },
+  {
+   "slot": 4,
+   "method": "ShowBindingPanel"
+  },
+  {
+   "slot": 5,
+   "method": "GetActionSetHandle"
+  },
+  {
+   "slot": 6,
+   "method": "ActivateActionSet"
+  },
+  {
+   "slot": 7,
+   "method": "GetCurrentActionSet"
+  },
+  {
+   "slot": 8,
+   "method": "GetDigitalActionHandle"
+  },
+  {
+   "slot": 9,
+   "method": "GetDigitalActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 10,
+   "method": "GetDigitalActionOrigins"
+  },
+  {
+   "slot": 11,
+   "method": "GetAnalogActionHandle"
+  },
+  {
+   "slot": 12,
+   "method": "GetAnalogActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 13,
+   "method": "GetAnalogActionOrigins"
+  },
+  {
+   "slot": 14,
+   "method": "StopAnalogActionMomentum"
+  },
+  {
+   "slot": 15,
+   "method": "TriggerHapticPulse"
+  },
+  {
+   "slot": 16,
+   "method": "TriggerRepeatedHapticPulse"
+  },
+  {
+   "slot": 17,
+   "method": "TriggerVibration"
+  },
+  {
+   "slot": 18,
+   "method": "SetLEDColor"
+  },
+  {
+   "slot": 19,
+   "method": "GetGamepadIndexForController"
+  },
+  {
+   "slot": 20,
+   "method": "GetControllerForGamepadIndex"
+  },
+  {
+   "slot": 21,
+   "method": "GetMotionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 22,
+   "method": "ShowDigitalActionOrigins"
+  },
+  {
+   "slot": 23,
+   "method": "ShowAnalogActionOrigins"
+  },
+  {
+   "slot": 24,
+   "method": "GetStringForActionOrigin"
+  },
+  {
+   "slot": 25,
+   "method": "GetGlyphForActionOrigin"
+  }
+ ]
+}

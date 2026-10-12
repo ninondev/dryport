@@ -1,0 +1,110 @@
+{
+ "interface": "ISteamUtils",
+ "version": "SteamUtils007",
+ "family": "utils",
+ "slot_count": 25,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetSecondsSinceAppActive"
+  },
+  {
+   "slot": 1,
+   "method": "GetSecondsSinceComputerActive"
+  },
+  {
+   "slot": 2,
+   "method": "GetConnectedUniverse"
+  },
+  {
+   "slot": 3,
+   "method": "GetServerRealTime"
+  },
+  {
+   "slot": 4,
+   "method": "GetIPCountry"
+  },
+  {
+   "slot": 5,
+   "method": "GetImageSize"
+  },
+  {
+   "slot": 6,
+   "method": "GetImageRGBA"
+  },
+  {
+   "slot": 7,
+   "method": "GetCSERIPPort"
+  },
+  {
+   "slot": 8,
+   "method": "GetCurrentBatteryPower"
+  },
+  {
+   "slot": 9,
+   "method": "GetAppID"
+  },
+  {
+   "slot": 10,
+   "method": "SetOverlayNotificationPosition"
+  },
+  {
+   "slot": 11,
+   "method": "IsAPICallCompleted"
+  },
+  {
+   "slot": 12,
+   "method": "GetAPICallFailureReason"
+  },
+  {
+   "slot": 13,
+   "method": "GetAPICallResult"
+  },
+  {
+   "slot": 14,
+   "method": "RunFrame"
+  },
+  {
+   "slot": 15,
+   "method": "GetIPCCallCount"
+  },
+  {
+   "slot": 16,
+   "method": "SetWarningMessageHook"
+  },
+  {
+   "slot": 17,
+   "method": "IsOverlayEnabled"
+  },
+  {
+   "slot": 18,
+   "method": "BOverlayNeedsPresent"
+  },
+  {
+   "slot": 19,
+   "method": "CheckFileSignature"
+  },
+  {
+   "slot": 20,
+   "method": "ShowGamepadTextInput"
+  },
+  {
+   "slot": 21,
+   "method": "GetEnteredGamepadTextLength"
+  },
+  {
+   "slot": 22,
+   "method": "GetEnteredGamepadTextInput"
+  },
+  {
+   "slot": 23,
+   "method": "GetSteamUILanguage"
+  },
+  {
+   "slot": 24,
+   "method": "IsSteamRunningInVR"
+  }
+ ]
+}

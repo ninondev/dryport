@@ -1,0 +1,93 @@
+{
+ "interface": "ISteamNetworkingUtils",
+ "version": "SteamNetworkingUtils003",
+ "family": "networkingutils",
+ "slot_count": 22,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes. Ambiguous slots (several wrappers call the same slot): {7: ['CheckPingDataUpToDate', 'InitRelayNetworkAccess'], 14: ['SetConfigValue', 'SetConfigValueStruct', 'SetConnectionConfigValueFloat', 'SetConnectionConfigValueInt32', 'SetConnectionConfigValueString', 'SetGlobalCallback_MessagesSessionFailed', 'SetGlobalCallback_MessagesSessionRequest', 'SetGlobalCallback_SteamNetAuthenticationStatusChanged', 'SetGlobalCallback_SteamNetConnectionStatusChanged', 'SetGlobalCallback_SteamRelayNetworkStatusChanged', 'SetGlobalConfigValueFloat', 'SetGlobalConfigValueInt32', 'SetGlobalConfigValuePtr', 'SetGlobalConfigValueString']}.",
+ "unresolved_slots": [
+  7,
+  14
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "AllocateMessage"
+  },
+  {
+   "slot": 1,
+   "method": "GetRelayNetworkStatus"
+  },
+  {
+   "slot": 2,
+   "method": "GetLocalPingLocation"
+  },
+  {
+   "slot": 3,
+   "method": "EstimatePingTimeBetweenTwoLocations"
+  },
+  {
+   "slot": 4,
+   "method": "EstimatePingTimeFromLocalHost"
+  },
+  {
+   "slot": 5,
+   "method": "ConvertPingLocationToString"
+  },
+  {
+   "slot": 6,
+   "method": "ParsePingLocationString"
+  },
+  {
+   "slot": 8,
+   "method": "GetPingToDataCenter"
+  },
+  {
+   "slot": 9,
+   "method": "GetDirectPingToPOP"
+  },
+  {
+   "slot": 10,
+   "method": "GetPOPCount"
+  },
+  {
+   "slot": 11,
+   "method": "GetPOPList"
+  },
+  {
+   "slot": 12,
+   "method": "GetLocalTimestamp"
+  },
+  {
+   "slot": 13,
+   "method": "SetDebugOutputFunction"
+  },
+  {
+   "slot": 15,
+   "method": "GetConfigValue"
+  },
+  {
+   "slot": 16,
+   "method": "GetConfigValueInfo"
+  },
+  {
+   "slot": 17,
+   "method": "GetFirstConfigValue"
+  },
+  {
+   "slot": 18,
+   "method": "SteamNetworkingIPAddr_ToString"
+  },
+  {
+   "slot": 19,
+   "method": "SteamNetworkingIPAddr_ParseString"
+  },
+  {
+   "slot": 20,
+   "method": "SteamNetworkingIdentity_ToString"
+  },
+  {
+   "slot": 21,
+   "method": "SteamNetworkingIdentity_ParseString"
+  }
+ ]
+}

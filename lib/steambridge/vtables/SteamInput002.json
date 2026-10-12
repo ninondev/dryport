@@ -1,0 +1,153 @@
+{
+ "interface": "ISteamInput",
+ "version": "SteamInput002",
+ "family": "input",
+ "slot_count": 35,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "Init"
+  },
+  {
+   "slot": 1,
+   "method": "Shutdown"
+  },
+  {
+   "slot": 2,
+   "method": "RunFrame"
+  },
+  {
+   "slot": 3,
+   "method": "GetConnectedControllers"
+  },
+  {
+   "slot": 4,
+   "method": "GetActionSetHandle"
+  },
+  {
+   "slot": 5,
+   "method": "ActivateActionSet"
+  },
+  {
+   "slot": 6,
+   "method": "GetCurrentActionSet"
+  },
+  {
+   "slot": 7,
+   "method": "ActivateActionSetLayer"
+  },
+  {
+   "slot": 8,
+   "method": "DeactivateActionSetLayer"
+  },
+  {
+   "slot": 9,
+   "method": "DeactivateAllActionSetLayers"
+  },
+  {
+   "slot": 10,
+   "method": "GetActiveActionSetLayers"
+  },
+  {
+   "slot": 11,
+   "method": "GetDigitalActionHandle"
+  },
+  {
+   "slot": 12,
+   "method": "GetDigitalActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 13,
+   "method": "GetDigitalActionOrigins"
+  },
+  {
+   "slot": 14,
+   "method": "GetAnalogActionHandle"
+  },
+  {
+   "slot": 15,
+   "method": "GetAnalogActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 16,
+   "method": "GetAnalogActionOrigins"
+  },
+  {
+   "slot": 17,
+   "method": "GetGlyphForActionOrigin"
+  },
+  {
+   "slot": 18,
+   "method": "GetStringForActionOrigin"
+  },
+  {
+   "slot": 19,
+   "method": "StopAnalogActionMomentum"
+  },
+  {
+   "slot": 20,
+   "method": "GetMotionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 21,
+   "method": "TriggerVibration"
+  },
+  {
+   "slot": 22,
+   "method": "SetLEDColor"
+  },
+  {
+   "slot": 23,
+   "method": "TriggerHapticPulse"
+  },
+  {
+   "slot": 24,
+   "method": "TriggerRepeatedHapticPulse"
+  },
+  {
+   "slot": 25,
+   "method": "ShowBindingPanel"
+  },
+  {
+   "slot": 26,
+   "method": "GetInputTypeForHandle"
+  },
+  {
+   "slot": 27,
+   "method": "GetControllerForGamepadIndex"
+  },
+  {
+   "slot": 28,
+   "method": "GetGamepadIndexForController"
+  },
+  {
+   "slot": 29,
+   "method": "GetStringForXboxOrigin"
+  },
+  {
+   "slot": 30,
+   "method": "GetGlyphForXboxOrigin"
+  },
+  {
+   "slot": 31,
+   "method": "GetActionOriginFromXboxOrigin"
+  },
+  {
+   "slot": 32,
+   "method": "TranslateActionOrigin"
+  },
+  {
+   "slot": 33,
+   "method": "GetDeviceBindingRevision"
+  },
+  {
+   "slot": 34,
+   "method": "GetRemotePlaySessionID"
+  }
+ ]
+}

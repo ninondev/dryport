@@ -1,0 +1,141 @@
+{
+ "interface": "ISteamApps",
+ "version": "STEAMAPPS_INTERFACE_VERSION008",
+ "family": "apps",
+ "slot_count": 33,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on Steamworks SDK 1.57; extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes. Extended on 2026-09-13: newer DLLs keep this version string but append slots 29..32 (read from 7 more owner-owned DLL copies; slots left unresolved where copies disagreed or none had a wrapper).",
+ "unresolved_slots": [
+  31
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "BIsSubscribed"
+  },
+  {
+   "slot": 1,
+   "method": "BIsLowViolence"
+  },
+  {
+   "slot": 2,
+   "method": "BIsCybercafe"
+  },
+  {
+   "slot": 3,
+   "method": "BIsVACBanned"
+  },
+  {
+   "slot": 4,
+   "method": "GetCurrentGameLanguage"
+  },
+  {
+   "slot": 5,
+   "method": "GetAvailableGameLanguages"
+  },
+  {
+   "slot": 6,
+   "method": "BIsSubscribedApp"
+  },
+  {
+   "slot": 7,
+   "method": "BIsDlcInstalled"
+  },
+  {
+   "slot": 8,
+   "method": "GetEarliestPurchaseUnixTime"
+  },
+  {
+   "slot": 9,
+   "method": "BIsSubscribedFromFreeWeekend"
+  },
+  {
+   "slot": 10,
+   "method": "GetDLCCount"
+  },
+  {
+   "slot": 11,
+   "method": "BGetDLCDataByIndex"
+  },
+  {
+   "slot": 12,
+   "method": "InstallDLC"
+  },
+  {
+   "slot": 13,
+   "method": "UninstallDLC"
+  },
+  {
+   "slot": 14,
+   "method": "RequestAppProofOfPurchaseKey"
+  },
+  {
+   "slot": 15,
+   "method": "GetCurrentBetaName"
+  },
+  {
+   "slot": 16,
+   "method": "MarkContentCorrupt"
+  },
+  {
+   "slot": 17,
+   "method": "GetInstalledDepots"
+  },
+  {
+   "slot": 18,
+   "method": "GetAppInstallDir"
+  },
+  {
+   "slot": 19,
+   "method": "BIsAppInstalled"
+  },
+  {
+   "slot": 20,
+   "method": "GetAppOwner",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 21,
+   "method": "GetLaunchQueryParam"
+  },
+  {
+   "slot": 22,
+   "method": "GetDlcDownloadProgress"
+  },
+  {
+   "slot": 23,
+   "method": "GetAppBuildId"
+  },
+  {
+   "slot": 24,
+   "method": "RequestAllProofOfPurchaseKeys"
+  },
+  {
+   "slot": 25,
+   "method": "GetFileDetails"
+  },
+  {
+   "slot": 26,
+   "method": "GetLaunchCommandLine"
+  },
+  {
+   "slot": 27,
+   "method": "BIsSubscribedFromFamilySharing"
+  },
+  {
+   "slot": 28,
+   "method": "BIsTimedTrial"
+  },
+  {
+   "slot": 29,
+   "method": "SetDlcContext"
+  },
+  {
+   "slot": 30,
+   "method": "GetNumBetas"
+  },
+  {
+   "slot": 32,
+   "method": "SetActiveBeta"
+  }
+ ]
+}

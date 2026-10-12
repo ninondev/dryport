@@ -1,0 +1,188 @@
+{
+ "interface": "ISteamGameServer",
+ "version": "SteamGameServer012",
+ "family": "gameserver",
+ "slot_count": 44,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "InitGameServer"
+  },
+  {
+   "slot": 1,
+   "method": "SetProduct"
+  },
+  {
+   "slot": 2,
+   "method": "SetGameDescription"
+  },
+  {
+   "slot": 3,
+   "method": "SetModDir"
+  },
+  {
+   "slot": 4,
+   "method": "SetDedicatedServer"
+  },
+  {
+   "slot": 5,
+   "method": "LogOn"
+  },
+  {
+   "slot": 6,
+   "method": "LogOnAnonymous"
+  },
+  {
+   "slot": 7,
+   "method": "LogOff"
+  },
+  {
+   "slot": 8,
+   "method": "BLoggedOn"
+  },
+  {
+   "slot": 9,
+   "method": "BSecure"
+  },
+  {
+   "slot": 10,
+   "method": "GetSteamID",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 11,
+   "method": "WasRestartRequested"
+  },
+  {
+   "slot": 12,
+   "method": "SetMaxPlayerCount"
+  },
+  {
+   "slot": 13,
+   "method": "SetBotPlayerCount"
+  },
+  {
+   "slot": 14,
+   "method": "SetServerName"
+  },
+  {
+   "slot": 15,
+   "method": "SetMapName"
+  },
+  {
+   "slot": 16,
+   "method": "SetPasswordProtected"
+  },
+  {
+   "slot": 17,
+   "method": "SetSpectatorPort"
+  },
+  {
+   "slot": 18,
+   "method": "SetSpectatorServerName"
+  },
+  {
+   "slot": 19,
+   "method": "ClearAllKeyValues"
+  },
+  {
+   "slot": 20,
+   "method": "SetKeyValue"
+  },
+  {
+   "slot": 21,
+   "method": "SetGameTags"
+  },
+  {
+   "slot": 22,
+   "method": "SetGameData"
+  },
+  {
+   "slot": 23,
+   "method": "SetRegion"
+  },
+  {
+   "slot": 24,
+   "method": "SendUserConnectAndAuthenticate"
+  },
+  {
+   "slot": 25,
+   "method": "CreateUnauthenticatedUserConnection",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 26,
+   "method": "SendUserDisconnect"
+  },
+  {
+   "slot": 27,
+   "method": "BUpdateUserData"
+  },
+  {
+   "slot": 28,
+   "method": "GetAuthSessionTicket"
+  },
+  {
+   "slot": 29,
+   "method": "BeginAuthSession"
+  },
+  {
+   "slot": 30,
+   "method": "EndAuthSession"
+  },
+  {
+   "slot": 31,
+   "method": "CancelAuthTicket"
+  },
+  {
+   "slot": 32,
+   "method": "UserHasLicenseForApp"
+  },
+  {
+   "slot": 33,
+   "method": "RequestUserGroupStatus"
+  },
+  {
+   "slot": 34,
+   "method": "GetGameplayStats"
+  },
+  {
+   "slot": 35,
+   "method": "GetServerReputation"
+  },
+  {
+   "slot": 36,
+   "method": "GetPublicIP"
+  },
+  {
+   "slot": 37,
+   "method": "HandleIncomingPacket"
+  },
+  {
+   "slot": 38,
+   "method": "GetNextOutgoingPacket"
+  },
+  {
+   "slot": 39,
+   "method": "EnableHeartbeats"
+  },
+  {
+   "slot": 40,
+   "method": "SetHeartbeatInterval"
+  },
+  {
+   "slot": 41,
+   "method": "ForceHeartbeat"
+  },
+  {
+   "slot": 42,
+   "method": "AssociateWithClan"
+  },
+  {
+   "slot": 43,
+   "method": "ComputeNewPlayerCompatibility"
+  }
+ ]
+}

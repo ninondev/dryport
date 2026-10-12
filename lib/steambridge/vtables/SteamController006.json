@@ -1,0 +1,137 @@
+{
+ "interface": "ISteamController",
+ "version": "SteamController006",
+ "family": "controller",
+ "slot_count": 31,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 d99d425793f5...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "Init"
+  },
+  {
+   "slot": 1,
+   "method": "Shutdown"
+  },
+  {
+   "slot": 2,
+   "method": "RunFrame"
+  },
+  {
+   "slot": 3,
+   "method": "GetConnectedControllers"
+  },
+  {
+   "slot": 4,
+   "method": "ShowBindingPanel"
+  },
+  {
+   "slot": 5,
+   "method": "GetActionSetHandle"
+  },
+  {
+   "slot": 6,
+   "method": "ActivateActionSet"
+  },
+  {
+   "slot": 7,
+   "method": "GetCurrentActionSet"
+  },
+  {
+   "slot": 8,
+   "method": "ActivateActionSetLayer"
+  },
+  {
+   "slot": 9,
+   "method": "DeactivateActionSetLayer"
+  },
+  {
+   "slot": 10,
+   "method": "DeactivateAllActionSetLayers"
+  },
+  {
+   "slot": 11,
+   "method": "GetActiveActionSetLayers"
+  },
+  {
+   "slot": 12,
+   "method": "GetDigitalActionHandle"
+  },
+  {
+   "slot": 13,
+   "method": "GetDigitalActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 14,
+   "method": "GetDigitalActionOrigins"
+  },
+  {
+   "slot": 15,
+   "method": "GetAnalogActionHandle"
+  },
+  {
+   "slot": 16,
+   "method": "GetAnalogActionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 17,
+   "method": "GetAnalogActionOrigins"
+  },
+  {
+   "slot": 18,
+   "method": "StopAnalogActionMomentum"
+  },
+  {
+   "slot": 19,
+   "method": "TriggerHapticPulse"
+  },
+  {
+   "slot": 20,
+   "method": "TriggerRepeatedHapticPulse"
+  },
+  {
+   "slot": 21,
+   "method": "TriggerVibration"
+  },
+  {
+   "slot": 22,
+   "method": "SetLEDColor"
+  },
+  {
+   "slot": 23,
+   "method": "GetGamepadIndexForController"
+  },
+  {
+   "slot": 24,
+   "method": "GetControllerForGamepadIndex"
+  },
+  {
+   "slot": 25,
+   "method": "GetMotionData",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 26,
+   "method": "ShowDigitalActionOrigins"
+  },
+  {
+   "slot": 27,
+   "method": "ShowAnalogActionOrigins"
+  },
+  {
+   "slot": 28,
+   "method": "GetStringForActionOrigin"
+  },
+  {
+   "slot": 29,
+   "method": "GetGlyphForActionOrigin"
+  },
+  {
+   "slot": 30,
+   "method": "GetInputTypeForHandle"
+  }
+ ]
+}

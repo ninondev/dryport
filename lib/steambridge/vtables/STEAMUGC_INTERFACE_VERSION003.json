@@ -1,0 +1,134 @@
+{
+ "interface": "ISteamUGC",
+ "version": "STEAMUGC_INTERFACE_VERSION003",
+ "family": "ugc",
+ "slot_count": 31,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateQueryUserUGCRequest"
+  },
+  {
+   "slot": 1,
+   "method": "CreateQueryAllUGCRequest"
+  },
+  {
+   "slot": 2,
+   "method": "SendQueryUGCRequest"
+  },
+  {
+   "slot": 3,
+   "method": "GetQueryUGCResult"
+  },
+  {
+   "slot": 4,
+   "method": "ReleaseQueryUGCRequest"
+  },
+  {
+   "slot": 5,
+   "method": "AddRequiredTag"
+  },
+  {
+   "slot": 6,
+   "method": "AddExcludedTag"
+  },
+  {
+   "slot": 7,
+   "method": "SetReturnLongDescription"
+  },
+  {
+   "slot": 8,
+   "method": "SetReturnTotalOnly"
+  },
+  {
+   "slot": 9,
+   "method": "SetAllowCachedResponse"
+  },
+  {
+   "slot": 10,
+   "method": "SetCloudFileNameFilter"
+  },
+  {
+   "slot": 11,
+   "method": "SetMatchAnyTag"
+  },
+  {
+   "slot": 12,
+   "method": "SetSearchText"
+  },
+  {
+   "slot": 13,
+   "method": "SetRankedByTrendDays"
+  },
+  {
+   "slot": 14,
+   "method": "RequestUGCDetails"
+  },
+  {
+   "slot": 15,
+   "method": "CreateItem"
+  },
+  {
+   "slot": 16,
+   "method": "StartItemUpdate"
+  },
+  {
+   "slot": 17,
+   "method": "SetItemTitle"
+  },
+  {
+   "slot": 18,
+   "method": "SetItemDescription"
+  },
+  {
+   "slot": 19,
+   "method": "SetItemVisibility"
+  },
+  {
+   "slot": 20,
+   "method": "SetItemTags"
+  },
+  {
+   "slot": 21,
+   "method": "SetItemContent"
+  },
+  {
+   "slot": 22,
+   "method": "SetItemPreview"
+  },
+  {
+   "slot": 23,
+   "method": "SubmitItemUpdate"
+  },
+  {
+   "slot": 24,
+   "method": "GetItemUpdateProgress"
+  },
+  {
+   "slot": 25,
+   "method": "SubscribeItem"
+  },
+  {
+   "slot": 26,
+   "method": "UnsubscribeItem"
+  },
+  {
+   "slot": 27,
+   "method": "GetNumSubscribedItems"
+  },
+  {
+   "slot": 28,
+   "method": "GetSubscribedItems"
+  },
+  {
+   "slot": 29,
+   "method": "GetItemInstallInfo"
+  },
+  {
+   "slot": 30,
+   "method": "GetItemUpdateInfo"
+  }
+ ]
+}

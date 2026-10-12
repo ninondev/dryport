@@ -1,0 +1,80 @@
+--- src/filesystem/filesystemImplApple.mm.orig	2026-09-10 12:17:29
++++ src/filesystem/filesystemImplApple.mm	2026-09-10 12:17:29
+@@ -49,7 +49,12 @@
+         nspath = [nspath stringByReplacingOccurrencesOfString:pwd withString:@""];
+     }
+     nspath = [nspath stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
+-    return std::string(NSTOPATH(nspath));
++    /* NSTOPATH (fileSystemRepresentationWithPath:) 在 macOS 上产出 NFD 分解形式,
++     * 而 PhysicsFS 的索引是在 cacheEnumCB 里经 toNFC 转成 NFC 存下的。
++     * 两者只在含浊音假名一类字符时才不同, 结果是日文资源全部 ENOENT
++     * (实测 ダンジョンA1 / A5_おばけ改変③ / ウィンターベル 等)。
++     * 这里统一返回 NFC, 与索引侧对齐。 */
++    return std::string([nspath precomposedStringWithCanonicalMapping].UTF8String);
+ }
+ 
+ std::string filesystemImpl::getDefaultGameRoot() {
+--- src/filesystem/filesystem.cpp.orig	2026-09-10 12:08:34
++++ src/filesystem/filesystem.cpp	2026-09-10 12:08:34
+@@ -358,21 +358,39 @@
+ 
+ #ifdef __APPLE__
+   iconv_t nfd2nfc;
++  iconv_t nfc2nfd;
+   char buf[512];
+ #endif
+ 
+   CacheEnumData(FileSystemPrivate *p) : p(p) {
+ #ifdef __APPLE__
+     nfd2nfc = iconv_open("utf-8", "utf-8-mac");
++    nfc2nfd = iconv_open("utf-8-mac", "utf-8");
+ #endif
+   }
+ 
+   ~CacheEnumData() {
+ #ifdef __APPLE__
+     iconv_close(nfd2nfc);
++    iconv_close(nfc2nfd);
+ #endif
+   }
+ 
++  /* NFC -> NFD, 写入 out (不改动输入) */
++  void toNFD(const char *in, char *out, size_t outCap) {
++#ifdef __APPLE__
++    size_t srcSize = strlen(in);
++    size_t bufSize = outCap - 1;
++    char *bufPtr = out;
++    char *inPtr = (char *)in;
++    iconv(nfc2nfd, &inPtr, &srcSize, &bufPtr, &bufSize);
++    *bufPtr = 0;
++#else
++    strncpy(out, in, outCap - 1);
++    out[outCap - 1] = 0;
++#endif
++  }
++
+   /* Converts in-place */
+   void toNFC(char *inout) {
+ #ifdef __APPLE__
+@@ -433,6 +451,21 @@
+ 
+     /* Add the lower -> mixed mapping of the file's full path */
+     data.p->pathCache.insert(lowerCase, mixedCase);
++
++    /* macOS: 归档内的文件名是 NFC, 而查询路径可能是 NFD (或反过来)。
++     * 两者只在含浊音假名之类的字符时才不同, 会导致日文资源找不到。
++     * 这里额外用 NFD 形式再索引一次, 让两种形式都能命中同一个真实路径。 */
++#ifdef __APPLE__
++    {
++      char nfdBuf[512];
++      data.toNFD(fullPath, nfdBuf, sizeof(nfdBuf));
++      if (strcmp(nfdBuf, fullPath) != 0) {
++        std::string nfdLower(nfdBuf);
++        strTolower(nfdLower);
++        data.p->pathCache.insert(nfdLower, mixedCase);
++      }
++    }
++#endif
+   }
+ 
+   return PHYSFS_ENUM_OK;

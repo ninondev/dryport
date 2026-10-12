@@ -1,0 +1,198 @@
+{
+ "interface": "ISteamNetworkingSockets",
+ "version": "SteamNetworkingSockets012",
+ "family": "networkingsockets",
+ "slot_count": 47,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 1ac139ebad2a...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateListenSocketIP"
+  },
+  {
+   "slot": 1,
+   "method": "ConnectByIPAddress"
+  },
+  {
+   "slot": 2,
+   "method": "CreateListenSocketP2P"
+  },
+  {
+   "slot": 3,
+   "method": "ConnectP2P"
+  },
+  {
+   "slot": 4,
+   "method": "AcceptConnection"
+  },
+  {
+   "slot": 5,
+   "method": "CloseConnection"
+  },
+  {
+   "slot": 6,
+   "method": "CloseListenSocket"
+  },
+  {
+   "slot": 7,
+   "method": "SetConnectionUserData"
+  },
+  {
+   "slot": 8,
+   "method": "GetConnectionUserData"
+  },
+  {
+   "slot": 9,
+   "method": "SetConnectionName"
+  },
+  {
+   "slot": 10,
+   "method": "GetConnectionName"
+  },
+  {
+   "slot": 11,
+   "method": "SendMessageToConnection"
+  },
+  {
+   "slot": 12,
+   "method": "SendMessages"
+  },
+  {
+   "slot": 13,
+   "method": "FlushMessagesOnConnection"
+  },
+  {
+   "slot": 14,
+   "method": "ReceiveMessagesOnConnection"
+  },
+  {
+   "slot": 15,
+   "method": "GetConnectionInfo"
+  },
+  {
+   "slot": 16,
+   "method": "GetConnectionRealTimeStatus"
+  },
+  {
+   "slot": 17,
+   "method": "GetDetailedConnectionStatus"
+  },
+  {
+   "slot": 18,
+   "method": "GetListenSocketAddress"
+  },
+  {
+   "slot": 19,
+   "method": "CreateSocketPair"
+  },
+  {
+   "slot": 20,
+   "method": "ConfigureConnectionLanes"
+  },
+  {
+   "slot": 21,
+   "method": "GetIdentity"
+  },
+  {
+   "slot": 22,
+   "method": "InitAuthentication"
+  },
+  {
+   "slot": 23,
+   "method": "GetAuthenticationStatus"
+  },
+  {
+   "slot": 24,
+   "method": "CreatePollGroup"
+  },
+  {
+   "slot": 25,
+   "method": "DestroyPollGroup"
+  },
+  {
+   "slot": 26,
+   "method": "SetConnectionPollGroup"
+  },
+  {
+   "slot": 27,
+   "method": "ReceiveMessagesOnPollGroup"
+  },
+  {
+   "slot": 28,
+   "method": "ReceivedRelayAuthTicket"
+  },
+  {
+   "slot": 29,
+   "method": "FindRelayAuthTicketForServer"
+  },
+  {
+   "slot": 30,
+   "method": "ConnectToHostedDedicatedServer"
+  },
+  {
+   "slot": 31,
+   "method": "GetHostedDedicatedServerPort"
+  },
+  {
+   "slot": 32,
+   "method": "GetHostedDedicatedServerPOPID"
+  },
+  {
+   "slot": 33,
+   "method": "GetHostedDedicatedServerAddress"
+  },
+  {
+   "slot": 34,
+   "method": "CreateHostedDedicatedServerListenSocket"
+  },
+  {
+   "slot": 35,
+   "method": "GetGameCoordinatorServerLogin"
+  },
+  {
+   "slot": 36,
+   "method": "ConnectP2PCustomSignaling"
+  },
+  {
+   "slot": 37,
+   "method": "ReceivedP2PCustomSignal"
+  },
+  {
+   "slot": 38,
+   "method": "GetCertificateRequest"
+  },
+  {
+   "slot": 39,
+   "method": "SetCertificate"
+  },
+  {
+   "slot": 40,
+   "method": "ResetIdentity"
+  },
+  {
+   "slot": 41,
+   "method": "RunCallbacks"
+  },
+  {
+   "slot": 42,
+   "method": "BeginAsyncRequestFakeIP"
+  },
+  {
+   "slot": 43,
+   "method": "GetFakeIP"
+  },
+  {
+   "slot": 44,
+   "method": "CreateListenSocketP2PFakeIP"
+  },
+  {
+   "slot": 45,
+   "method": "GetRemoteFakeIPForConnection"
+  },
+  {
+   "slot": 46,
+   "method": "CreateFakeUDPPort"
+  }
+ ]
+}

@@ -1,0 +1,354 @@
+{
+ "interface": "ISteamUGC",
+ "version": "STEAMUGC_INTERFACE_VERSION016",
+ "family": "ugc",
+ "slot_count": 86,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 1ac139ebad2a...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateQueryUserUGCRequest"
+  },
+  {
+   "slot": 1,
+   "method": "CreateQueryAllUGCRequestCursor"
+  },
+  {
+   "slot": 2,
+   "method": "CreateQueryAllUGCRequestPage"
+  },
+  {
+   "slot": 3,
+   "method": "CreateQueryUGCDetailsRequest"
+  },
+  {
+   "slot": 4,
+   "method": "SendQueryUGCRequest"
+  },
+  {
+   "slot": 5,
+   "method": "GetQueryUGCResult"
+  },
+  {
+   "slot": 6,
+   "method": "GetQueryUGCNumTags"
+  },
+  {
+   "slot": 7,
+   "method": "GetQueryUGCTag"
+  },
+  {
+   "slot": 8,
+   "method": "GetQueryUGCTagDisplayName"
+  },
+  {
+   "slot": 9,
+   "method": "GetQueryUGCPreviewURL"
+  },
+  {
+   "slot": 10,
+   "method": "GetQueryUGCMetadata"
+  },
+  {
+   "slot": 11,
+   "method": "GetQueryUGCChildren"
+  },
+  {
+   "slot": 12,
+   "method": "GetQueryUGCStatistic"
+  },
+  {
+   "slot": 13,
+   "method": "GetQueryUGCNumAdditionalPreviews"
+  },
+  {
+   "slot": 14,
+   "method": "GetQueryUGCAdditionalPreview"
+  },
+  {
+   "slot": 15,
+   "method": "GetQueryUGCNumKeyValueTags"
+  },
+  {
+   "slot": 16,
+   "method": "GetQueryFirstUGCKeyValueTag"
+  },
+  {
+   "slot": 17,
+   "method": "GetQueryUGCKeyValueTag"
+  },
+  {
+   "slot": 18,
+   "method": "ReleaseQueryUGCRequest"
+  },
+  {
+   "slot": 19,
+   "method": "AddRequiredTag"
+  },
+  {
+   "slot": 20,
+   "method": "AddRequiredTagGroup"
+  },
+  {
+   "slot": 21,
+   "method": "AddExcludedTag"
+  },
+  {
+   "slot": 22,
+   "method": "SetReturnOnlyIDs"
+  },
+  {
+   "slot": 23,
+   "method": "SetReturnKeyValueTags"
+  },
+  {
+   "slot": 24,
+   "method": "SetReturnLongDescription"
+  },
+  {
+   "slot": 25,
+   "method": "SetReturnMetadata"
+  },
+  {
+   "slot": 26,
+   "method": "SetReturnChildren"
+  },
+  {
+   "slot": 27,
+   "method": "SetReturnAdditionalPreviews"
+  },
+  {
+   "slot": 28,
+   "method": "SetReturnTotalOnly"
+  },
+  {
+   "slot": 29,
+   "method": "SetReturnPlaytimeStats"
+  },
+  {
+   "slot": 30,
+   "method": "SetLanguage"
+  },
+  {
+   "slot": 31,
+   "method": "SetAllowCachedResponse"
+  },
+  {
+   "slot": 32,
+   "method": "SetCloudFileNameFilter"
+  },
+  {
+   "slot": 33,
+   "method": "SetMatchAnyTag"
+  },
+  {
+   "slot": 34,
+   "method": "SetSearchText"
+  },
+  {
+   "slot": 35,
+   "method": "SetRankedByTrendDays"
+  },
+  {
+   "slot": 36,
+   "method": "SetTimeCreatedDateRange"
+  },
+  {
+   "slot": 37,
+   "method": "SetTimeUpdatedDateRange"
+  },
+  {
+   "slot": 38,
+   "method": "AddRequiredKeyValueTag"
+  },
+  {
+   "slot": 39,
+   "method": "RequestUGCDetails"
+  },
+  {
+   "slot": 40,
+   "method": "CreateItem"
+  },
+  {
+   "slot": 41,
+   "method": "StartItemUpdate"
+  },
+  {
+   "slot": 42,
+   "method": "SetItemTitle"
+  },
+  {
+   "slot": 43,
+   "method": "SetItemDescription"
+  },
+  {
+   "slot": 44,
+   "method": "SetItemUpdateLanguage"
+  },
+  {
+   "slot": 45,
+   "method": "SetItemMetadata"
+  },
+  {
+   "slot": 46,
+   "method": "SetItemVisibility"
+  },
+  {
+   "slot": 47,
+   "method": "SetItemTags"
+  },
+  {
+   "slot": 48,
+   "method": "SetItemContent"
+  },
+  {
+   "slot": 49,
+   "method": "SetItemPreview"
+  },
+  {
+   "slot": 50,
+   "method": "SetAllowLegacyUpload"
+  },
+  {
+   "slot": 51,
+   "method": "RemoveAllItemKeyValueTags"
+  },
+  {
+   "slot": 52,
+   "method": "RemoveItemKeyValueTags"
+  },
+  {
+   "slot": 53,
+   "method": "AddItemKeyValueTag"
+  },
+  {
+   "slot": 54,
+   "method": "AddItemPreviewFile"
+  },
+  {
+   "slot": 55,
+   "method": "AddItemPreviewVideo"
+  },
+  {
+   "slot": 56,
+   "method": "UpdateItemPreviewFile"
+  },
+  {
+   "slot": 57,
+   "method": "UpdateItemPreviewVideo"
+  },
+  {
+   "slot": 58,
+   "method": "RemoveItemPreview"
+  },
+  {
+   "slot": 59,
+   "method": "SubmitItemUpdate"
+  },
+  {
+   "slot": 60,
+   "method": "GetItemUpdateProgress"
+  },
+  {
+   "slot": 61,
+   "method": "SetUserItemVote"
+  },
+  {
+   "slot": 62,
+   "method": "GetUserItemVote"
+  },
+  {
+   "slot": 63,
+   "method": "AddItemToFavorites"
+  },
+  {
+   "slot": 64,
+   "method": "RemoveItemFromFavorites"
+  },
+  {
+   "slot": 65,
+   "method": "SubscribeItem"
+  },
+  {
+   "slot": 66,
+   "method": "UnsubscribeItem"
+  },
+  {
+   "slot": 67,
+   "method": "GetNumSubscribedItems"
+  },
+  {
+   "slot": 68,
+   "method": "GetSubscribedItems"
+  },
+  {
+   "slot": 69,
+   "method": "GetItemState"
+  },
+  {
+   "slot": 70,
+   "method": "GetItemInstallInfo"
+  },
+  {
+   "slot": 71,
+   "method": "GetItemDownloadInfo"
+  },
+  {
+   "slot": 72,
+   "method": "DownloadItem"
+  },
+  {
+   "slot": 73,
+   "method": "BInitWorkshopForGameServer"
+  },
+  {
+   "slot": 74,
+   "method": "SuspendDownloads"
+  },
+  {
+   "slot": 75,
+   "method": "StartPlaytimeTracking"
+  },
+  {
+   "slot": 76,
+   "method": "StopPlaytimeTracking"
+  },
+  {
+   "slot": 77,
+   "method": "StopPlaytimeTrackingForAllItems"
+  },
+  {
+   "slot": 78,
+   "method": "AddDependency"
+  },
+  {
+   "slot": 79,
+   "method": "RemoveDependency"
+  },
+  {
+   "slot": 80,
+   "method": "AddAppDependency"
+  },
+  {
+   "slot": 81,
+   "method": "RemoveAppDependency"
+  },
+  {
+   "slot": 82,
+   "method": "GetAppDependencies"
+  },
+  {
+   "slot": 83,
+   "method": "DeleteItem"
+  },
+  {
+   "slot": 84,
+   "method": "ShowWorkshopEULA"
+  },
+  {
+   "slot": 85,
+   "method": "GetWorkshopEULAStatus"
+  }
+ ]
+}

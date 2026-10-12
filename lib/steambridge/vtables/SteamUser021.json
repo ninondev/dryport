@@ -1,0 +1,140 @@
+{
+ "interface": "ISteamUser",
+ "version": "SteamUser021",
+ "family": "user",
+ "slot_count": 32,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on Steamworks SDK 1.57; extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetHSteamUser"
+  },
+  {
+   "slot": 1,
+   "method": "BLoggedOn"
+  },
+  {
+   "slot": 2,
+   "method": "GetSteamID",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 3,
+   "method": "InitiateGameConnection_DEPRECATED"
+  },
+  {
+   "slot": 4,
+   "method": "TerminateGameConnection_DEPRECATED"
+  },
+  {
+   "slot": 5,
+   "method": "TrackAppUsageEvent",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 6,
+   "method": "GetUserDataFolder"
+  },
+  {
+   "slot": 7,
+   "method": "StartVoiceRecording"
+  },
+  {
+   "slot": 8,
+   "method": "StopVoiceRecording"
+  },
+  {
+   "slot": 9,
+   "method": "GetAvailableVoice"
+  },
+  {
+   "slot": 10,
+   "method": "GetVoice"
+  },
+  {
+   "slot": 11,
+   "method": "DecompressVoice"
+  },
+  {
+   "slot": 12,
+   "method": "GetVoiceOptimalSampleRate"
+  },
+  {
+   "slot": 13,
+   "method": "GetAuthSessionTicket"
+  },
+  {
+   "slot": 14,
+   "method": "BeginAuthSession"
+  },
+  {
+   "slot": 15,
+   "method": "EndAuthSession"
+  },
+  {
+   "slot": 16,
+   "method": "CancelAuthTicket"
+  },
+  {
+   "slot": 17,
+   "method": "UserHasLicenseForApp"
+  },
+  {
+   "slot": 18,
+   "method": "BIsBehindNAT"
+  },
+  {
+   "slot": 19,
+   "method": "AdvertiseGame"
+  },
+  {
+   "slot": 20,
+   "method": "RequestEncryptedAppTicket"
+  },
+  {
+   "slot": 21,
+   "method": "GetEncryptedAppTicket"
+  },
+  {
+   "slot": 22,
+   "method": "GetGameBadgeLevel"
+  },
+  {
+   "slot": 23,
+   "method": "GetPlayerSteamLevel"
+  },
+  {
+   "slot": 24,
+   "method": "RequestStoreAuthURL"
+  },
+  {
+   "slot": 25,
+   "method": "BIsPhoneVerified"
+  },
+  {
+   "slot": 26,
+   "method": "BIsTwoFactorEnabled"
+  },
+  {
+   "slot": 27,
+   "method": "BIsPhoneIdentifying"
+  },
+  {
+   "slot": 28,
+   "method": "BIsPhoneRequiringVerification"
+  },
+  {
+   "slot": 29,
+   "method": "GetMarketEligibility"
+  },
+  {
+   "slot": 30,
+   "method": "GetDurationControl"
+  },
+  {
+   "slot": 31,
+   "method": "BSetDurationControlOnlineState"
+  }
+ ]
+}

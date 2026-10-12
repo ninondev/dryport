@@ -1,0 +1,191 @@
+{
+  "measured_at": "2026-09-12T09:32:34.171231-07:00",
+  "python": "3.14.5",
+  "system": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "cpu": "Apple M5",
+  "memory_bytes": 17179869184,
+  "implementation_sha256": {
+    "retarget.py": "8a62e02182ec06b8127412a258befa9355246e43e6cd13956c61c4089e631c9a",
+    "shader_cache.py": "8ba2a85649f7c98174c2bf40a77bcaac3384a59fa410277fc09f55aed8dbf455"
+  },
+  "requests": 128,
+  "jobs": 2,
+  "profile": [
+    {
+      "source": "game-2020.3",
+      "unity_version": "2020.3f1",
+      "resource_sha256": "458713a9e0aca9b787f40e355055a9e8f8193d0a203058b21164035fc573ad4a",
+      "requests": 204,
+      "unique_compiler_inputs": 52,
+      "duplicates": 152,
+      "shaders_walked": 6,
+      "extraction_seconds": 0.4536617920093704,
+      "extraction_errors": [],
+      "source_unchanged": true
+    },
+    {
+      "source": "official-2019.4",
+      "unity_version": "2019.4f1",
+      "resource_sha256": "7b4ec48745b3a28232f7598738754255c9536f00ae3dfb0279f564a0bac55241",
+      "requests": 188,
+      "unique_compiler_inputs": 48,
+      "duplicates": 140,
+      "shaders_walked": 5,
+      "extraction_seconds": 0.0610127910040319,
+      "extraction_errors": [],
+      "source_unchanged": true
+    }
+  ],
+  "compiler_sha256": "04d93ebe4ec257bceb3ff791e451e325ff9aa5d930891f61eec8c5fde7158646",
+  "compiler_and_libraries_fingerprint": "0c4ec8bfe112ef537b217891d7a009ed979bf56c9d4210ce6ad313823fc0ec44",
+  "trials": [
+    {
+      "trial": 1,
+      "mode": "disabled",
+      "seconds": 0.7530124580080155,
+      "stats": {
+        "requests": 128,
+        "bypasses": 128,
+        "compiles": 128
+      },
+      "actual_compiler_processes": 128,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 1,
+      "mode": "cold",
+      "seconds": 0.49084804201265797,
+      "stats": {
+        "requests": 128,
+        "compiles": 20,
+        "writes": 20,
+        "hits": 106,
+        "waits": 2
+      },
+      "actual_compiler_processes": 20,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 1,
+      "mode": "hot",
+      "seconds": 0.1765026249922812,
+      "stats": {
+        "requests": 128,
+        "hits": 128
+      },
+      "actual_compiler_processes": 0,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 2,
+      "mode": "disabled",
+      "seconds": 0.702044208010193,
+      "stats": {
+        "requests": 128,
+        "bypasses": 128,
+        "compiles": 128
+      },
+      "actual_compiler_processes": 128,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 2,
+      "mode": "cold",
+      "seconds": 0.25901483302004635,
+      "stats": {
+        "requests": 128,
+        "compiles": 20,
+        "writes": 20,
+        "hits": 106,
+        "waits": 2
+      },
+      "actual_compiler_processes": 20,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 2,
+      "mode": "hot",
+      "seconds": 0.1753678340173792,
+      "stats": {
+        "requests": 128,
+        "hits": 128
+      },
+      "actual_compiler_processes": 0,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 3,
+      "mode": "disabled",
+      "seconds": 0.7172095830028411,
+      "stats": {
+        "requests": 128,
+        "bypasses": 128,
+        "compiles": 128
+      },
+      "actual_compiler_processes": 128,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 3,
+      "mode": "cold",
+      "seconds": 0.17718570900615305,
+      "stats": {
+        "requests": 128,
+        "compiles": 20,
+        "writes": 20,
+        "hits": 105,
+        "waits": 3
+      },
+      "actual_compiler_processes": 20,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    },
+    {
+      "trial": 3,
+      "mode": "hot",
+      "seconds": 0.16126791600254364,
+      "stats": {
+        "requests": 128,
+        "hits": 128
+      },
+      "actual_compiler_processes": 0,
+      "successes": 128,
+      "result_sha256": "aca55f4ab415bb5753c3660481bb14a10b16017f9c00fadbce2f09228d66a1be"
+    }
+  ],
+  "summary": {
+    "disabled": {
+      "median_seconds": 0.7172095830028411,
+      "compiler_processes": [
+        128,
+        128,
+        128
+      ]
+    },
+    "cold": {
+      "median_seconds": 0.25901483302004635,
+      "compiler_processes": [
+        20,
+        20,
+        20
+      ]
+    },
+    "hot": {
+      "median_seconds": 0.1753678340173792,
+      "compiler_processes": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "output_identical": true,
+  "scope": "HLSLcc 纯计算；不含资源解析、重新打包或游戏运行"
+}

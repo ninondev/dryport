@@ -1,0 +1,107 @@
+{
+ "interface": "ISteamApps",
+ "version": "STEAMAPPS_INTERFACE_VERSION007",
+ "family": "apps",
+ "slot_count": 24,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "BIsSubscribed"
+  },
+  {
+   "slot": 1,
+   "method": "BIsLowViolence"
+  },
+  {
+   "slot": 2,
+   "method": "BIsCybercafe"
+  },
+  {
+   "slot": 3,
+   "method": "BIsVACBanned"
+  },
+  {
+   "slot": 4,
+   "method": "GetCurrentGameLanguage"
+  },
+  {
+   "slot": 5,
+   "method": "GetAvailableGameLanguages"
+  },
+  {
+   "slot": 6,
+   "method": "BIsSubscribedApp"
+  },
+  {
+   "slot": 7,
+   "method": "BIsDlcInstalled"
+  },
+  {
+   "slot": 8,
+   "method": "GetEarliestPurchaseUnixTime"
+  },
+  {
+   "slot": 9,
+   "method": "BIsSubscribedFromFreeWeekend"
+  },
+  {
+   "slot": 10,
+   "method": "GetDLCCount"
+  },
+  {
+   "slot": 11,
+   "method": "BGetDLCDataByIndex"
+  },
+  {
+   "slot": 12,
+   "method": "InstallDLC"
+  },
+  {
+   "slot": 13,
+   "method": "UninstallDLC"
+  },
+  {
+   "slot": 14,
+   "method": "RequestAppProofOfPurchaseKey"
+  },
+  {
+   "slot": 15,
+   "method": "GetCurrentBetaName"
+  },
+  {
+   "slot": 16,
+   "method": "MarkContentCorrupt"
+  },
+  {
+   "slot": 17,
+   "method": "GetInstalledDepots"
+  },
+  {
+   "slot": 18,
+   "method": "GetAppInstallDir"
+  },
+  {
+   "slot": 19,
+   "method": "BIsAppInstalled"
+  },
+  {
+   "slot": 20,
+   "method": "GetAppOwner",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 21,
+   "method": "GetLaunchQueryParam"
+  },
+  {
+   "slot": 22,
+   "method": "GetDlcDownloadProgress"
+  },
+  {
+   "slot": 23,
+   "method": "GetAppBuildId"
+  }
+ ]
+}

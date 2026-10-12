@@ -1,0 +1,165 @@
+{
+ "interface": "ISteamMatchmaking",
+ "version": "SteamMatchMaking009",
+ "family": "matchmaking",
+ "slot_count": 38,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetFavoriteGameCount"
+  },
+  {
+   "slot": 1,
+   "method": "GetFavoriteGame"
+  },
+  {
+   "slot": 2,
+   "method": "AddFavoriteGame"
+  },
+  {
+   "slot": 3,
+   "method": "RemoveFavoriteGame"
+  },
+  {
+   "slot": 4,
+   "method": "RequestLobbyList"
+  },
+  {
+   "slot": 5,
+   "method": "AddRequestLobbyListStringFilter"
+  },
+  {
+   "slot": 6,
+   "method": "AddRequestLobbyListNumericalFilter"
+  },
+  {
+   "slot": 7,
+   "method": "AddRequestLobbyListNearValueFilter"
+  },
+  {
+   "slot": 8,
+   "method": "AddRequestLobbyListFilterSlotsAvailable"
+  },
+  {
+   "slot": 9,
+   "method": "AddRequestLobbyListDistanceFilter"
+  },
+  {
+   "slot": 10,
+   "method": "AddRequestLobbyListResultCountFilter"
+  },
+  {
+   "slot": 11,
+   "method": "AddRequestLobbyListCompatibleMembersFilter"
+  },
+  {
+   "slot": 12,
+   "method": "GetLobbyByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 13,
+   "method": "CreateLobby"
+  },
+  {
+   "slot": 14,
+   "method": "JoinLobby"
+  },
+  {
+   "slot": 15,
+   "method": "LeaveLobby"
+  },
+  {
+   "slot": 16,
+   "method": "InviteUserToLobby"
+  },
+  {
+   "slot": 17,
+   "method": "GetNumLobbyMembers"
+  },
+  {
+   "slot": 18,
+   "method": "GetLobbyMemberByIndex",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 19,
+   "method": "GetLobbyData"
+  },
+  {
+   "slot": 20,
+   "method": "SetLobbyData"
+  },
+  {
+   "slot": 21,
+   "method": "GetLobbyDataCount"
+  },
+  {
+   "slot": 22,
+   "method": "GetLobbyDataByIndex"
+  },
+  {
+   "slot": 23,
+   "method": "DeleteLobbyData"
+  },
+  {
+   "slot": 24,
+   "method": "GetLobbyMemberData"
+  },
+  {
+   "slot": 25,
+   "method": "SetLobbyMemberData"
+  },
+  {
+   "slot": 26,
+   "method": "SendLobbyChatMsg"
+  },
+  {
+   "slot": 27,
+   "method": "GetLobbyChatEntry"
+  },
+  {
+   "slot": 28,
+   "method": "RequestLobbyData"
+  },
+  {
+   "slot": 29,
+   "method": "SetLobbyGameServer"
+  },
+  {
+   "slot": 30,
+   "method": "GetLobbyGameServer"
+  },
+  {
+   "slot": 31,
+   "method": "SetLobbyMemberLimit"
+  },
+  {
+   "slot": 32,
+   "method": "GetLobbyMemberLimit"
+  },
+  {
+   "slot": 33,
+   "method": "SetLobbyType"
+  },
+  {
+   "slot": 34,
+   "method": "SetLobbyJoinable"
+  },
+  {
+   "slot": 35,
+   "method": "GetLobbyOwner",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 36,
+   "method": "SetLobbyOwner"
+  },
+  {
+   "slot": 37,
+   "method": "SetLinkedLobby"
+  }
+ ]
+}

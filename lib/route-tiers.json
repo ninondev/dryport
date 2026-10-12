@@ -1,0 +1,15 @@
+{
+  "protocol": 1,
+  "labels": {"open": "预览版承诺", "experimental": "实验：照样能装，不承诺"},
+  "routes": {
+    "unity": {"tier": "experimental", "note": "2026-10-01：历史记录全链验证 1/2，未凑齐两款；2020.2 以前通过 Rosetta"},
+    "wine": {"tier": "experimental", "note": "2026-10-01：历史记录全链验证 0/2"},
+    "mkxp": {"tier": "experimental", "note": "2026-10-01：历史记录全链验证 1/2"},
+    "nwjs": {"tier": "experimental", "note": "2026-10-01：历史记录全链验证 0/2"},
+    "webkit": {"tier": "experimental"},
+    "renpy-native": {"tier": "experimental"},
+    "godot": {"tier": "experimental"},
+    "love": {"tier": "experimental"},
+    "krkr": {"tier": "experimental"}
+  }
+}

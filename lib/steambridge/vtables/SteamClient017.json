@@ -1,0 +1,147 @@
+{
+ "interface": "ISteamClient",
+ "version": "SteamClient017",
+ "family": "client",
+ "slot_count": 37,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on a 2017-era Steamworks SDK (SteamUser019 / SteamUtils009 / SteamClient017 strings in the DLL); extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [
+  19,
+  31,
+  32,
+  33
+ ],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateSteamPipe"
+  },
+  {
+   "slot": 1,
+   "method": "BReleaseSteamPipe"
+  },
+  {
+   "slot": 2,
+   "method": "ConnectToGlobalUser"
+  },
+  {
+   "slot": 3,
+   "method": "CreateLocalUser"
+  },
+  {
+   "slot": 4,
+   "method": "ReleaseUser"
+  },
+  {
+   "slot": 5,
+   "method": "GetISteamUser"
+  },
+  {
+   "slot": 6,
+   "method": "GetISteamGameServer"
+  },
+  {
+   "slot": 7,
+   "method": "SetLocalIPBinding"
+  },
+  {
+   "slot": 8,
+   "method": "GetISteamFriends"
+  },
+  {
+   "slot": 9,
+   "method": "GetISteamUtils"
+  },
+  {
+   "slot": 10,
+   "method": "GetISteamMatchmaking"
+  },
+  {
+   "slot": 11,
+   "method": "GetISteamMatchmakingServers"
+  },
+  {
+   "slot": 12,
+   "method": "GetISteamGenericInterface"
+  },
+  {
+   "slot": 13,
+   "method": "GetISteamUserStats"
+  },
+  {
+   "slot": 14,
+   "method": "GetISteamGameServerStats"
+  },
+  {
+   "slot": 15,
+   "method": "GetISteamApps"
+  },
+  {
+   "slot": 16,
+   "method": "GetISteamNetworking"
+  },
+  {
+   "slot": 17,
+   "method": "GetISteamRemoteStorage"
+  },
+  {
+   "slot": 18,
+   "method": "GetISteamScreenshots"
+  },
+  {
+   "slot": 20,
+   "method": "GetIPCCallCount"
+  },
+  {
+   "slot": 21,
+   "method": "SetWarningMessageHook"
+  },
+  {
+   "slot": 22,
+   "method": "BShutdownIfAllPipesClosed"
+  },
+  {
+   "slot": 23,
+   "method": "GetISteamHTTP"
+  },
+  {
+   "slot": 24,
+   "method": "GetISteamUnifiedMessages"
+  },
+  {
+   "slot": 25,
+   "method": "GetISteamController"
+  },
+  {
+   "slot": 26,
+   "method": "GetISteamUGC"
+  },
+  {
+   "slot": 27,
+   "method": "GetISteamAppList"
+  },
+  {
+   "slot": 28,
+   "method": "GetISteamMusic"
+  },
+  {
+   "slot": 29,
+   "method": "GetISteamMusicRemote"
+  },
+  {
+   "slot": 30,
+   "method": "GetISteamHTMLSurface"
+  },
+  {
+   "slot": 34,
+   "method": "GetISteamInventory"
+  },
+  {
+   "slot": 35,
+   "method": "GetISteamVideo"
+  },
+  {
+   "slot": 36,
+   "method": "GetISteamParentalSettings"
+  }
+ ]
+}

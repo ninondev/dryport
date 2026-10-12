@@ -1,0 +1,190 @@
+{
+ "interface": "ISteamUserStats",
+ "version": "STEAMUSERSTATS_INTERFACE_VERSION012",
+ "family": "userstats",
+ "slot_count": 45,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a steam_api64.dll shipped with a Steam game used as a reference, built on Steamworks SDK 1.57; extracted with tools/steam-vtable-map.py on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "RequestCurrentStats"
+  },
+  {
+   "slot": 1,
+   "method": "GetStatFloat"
+  },
+  {
+   "slot": 2,
+   "method": "GetStatInt32"
+  },
+  {
+   "slot": 3,
+   "method": "SetStatFloat"
+  },
+  {
+   "slot": 4,
+   "method": "SetStatInt32"
+  },
+  {
+   "slot": 5,
+   "method": "UpdateAvgRateStat"
+  },
+  {
+   "slot": 6,
+   "method": "GetAchievement"
+  },
+  {
+   "slot": 7,
+   "method": "SetAchievement"
+  },
+  {
+   "slot": 8,
+   "method": "ClearAchievement"
+  },
+  {
+   "slot": 9,
+   "method": "GetAchievementAndUnlockTime"
+  },
+  {
+   "slot": 10,
+   "method": "StoreStats"
+  },
+  {
+   "slot": 11,
+   "method": "GetAchievementIcon"
+  },
+  {
+   "slot": 12,
+   "method": "GetAchievementDisplayAttribute"
+  },
+  {
+   "slot": 13,
+   "method": "IndicateAchievementProgress"
+  },
+  {
+   "slot": 14,
+   "method": "GetNumAchievements"
+  },
+  {
+   "slot": 15,
+   "method": "GetAchievementName"
+  },
+  {
+   "slot": 16,
+   "method": "RequestUserStats"
+  },
+  {
+   "slot": 17,
+   "method": "GetUserStatFloat"
+  },
+  {
+   "slot": 18,
+   "method": "GetUserStatInt32"
+  },
+  {
+   "slot": 19,
+   "method": "GetUserAchievement"
+  },
+  {
+   "slot": 20,
+   "method": "GetUserAchievementAndUnlockTime"
+  },
+  {
+   "slot": 21,
+   "method": "ResetAllStats"
+  },
+  {
+   "slot": 22,
+   "method": "FindOrCreateLeaderboard"
+  },
+  {
+   "slot": 23,
+   "method": "FindLeaderboard"
+  },
+  {
+   "slot": 24,
+   "method": "GetLeaderboardName"
+  },
+  {
+   "slot": 25,
+   "method": "GetLeaderboardEntryCount"
+  },
+  {
+   "slot": 26,
+   "method": "GetLeaderboardSortMethod"
+  },
+  {
+   "slot": 27,
+   "method": "GetLeaderboardDisplayType"
+  },
+  {
+   "slot": 28,
+   "method": "DownloadLeaderboardEntries"
+  },
+  {
+   "slot": 29,
+   "method": "DownloadLeaderboardEntriesForUsers"
+  },
+  {
+   "slot": 30,
+   "method": "GetDownloadedLeaderboardEntry"
+  },
+  {
+   "slot": 31,
+   "method": "UploadLeaderboardScore"
+  },
+  {
+   "slot": 32,
+   "method": "AttachLeaderboardUGC"
+  },
+  {
+   "slot": 33,
+   "method": "GetNumberOfCurrentPlayers"
+  },
+  {
+   "slot": 34,
+   "method": "RequestGlobalAchievementPercentages"
+  },
+  {
+   "slot": 35,
+   "method": "GetMostAchievedAchievementInfo"
+  },
+  {
+   "slot": 36,
+   "method": "GetNextMostAchievedAchievementInfo"
+  },
+  {
+   "slot": 37,
+   "method": "GetAchievementAchievedPercent"
+  },
+  {
+   "slot": 38,
+   "method": "RequestGlobalStats"
+  },
+  {
+   "slot": 39,
+   "method": "GetGlobalStatDouble"
+  },
+  {
+   "slot": 40,
+   "method": "GetGlobalStatInt64"
+  },
+  {
+   "slot": 41,
+   "method": "GetGlobalStatHistoryDouble"
+  },
+  {
+   "slot": 42,
+   "method": "GetGlobalStatHistoryInt64"
+  },
+  {
+   "slot": 43,
+   "method": "GetAchievementProgressLimitsFloat"
+  },
+  {
+   "slot": 44,
+   "method": "GetAchievementProgressLimitsInt32"
+  }
+ ]
+}

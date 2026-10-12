@@ -1,0 +1,39 @@
+{
+ "interface": "ISteamRemotePlay",
+ "version": "STEAMREMOTEPLAY_INTERFACE_VERSION001",
+ "family": "remoteplay",
+ "slot_count": 7,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetSessionCount"
+  },
+  {
+   "slot": 1,
+   "method": "GetSessionID"
+  },
+  {
+   "slot": 2,
+   "method": "GetSessionSteamID",
+   "hidden_result_pointer": true
+  },
+  {
+   "slot": 3,
+   "method": "GetSessionClientName"
+  },
+  {
+   "slot": 4,
+   "method": "GetSessionClientFormFactor"
+  },
+  {
+   "slot": 5,
+   "method": "BGetSessionClientResolution"
+  },
+  {
+   "slot": 6,
+   "method": "BSendRemotePlayTogetherInvite"
+  }
+ ]
+}

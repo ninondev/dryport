@@ -1,0 +1,234 @@
+{
+ "interface": "ISteamUGC",
+ "version": "STEAMUGC_INTERFACE_VERSION007",
+ "family": "ugc",
+ "slot_count": 56,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 0bdba265a140...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "CreateQueryUserUGCRequest"
+  },
+  {
+   "slot": 1,
+   "method": "CreateQueryAllUGCRequest"
+  },
+  {
+   "slot": 2,
+   "method": "CreateQueryUGCDetailsRequest"
+  },
+  {
+   "slot": 3,
+   "method": "SendQueryUGCRequest"
+  },
+  {
+   "slot": 4,
+   "method": "GetQueryUGCResult"
+  },
+  {
+   "slot": 5,
+   "method": "GetQueryUGCPreviewURL"
+  },
+  {
+   "slot": 6,
+   "method": "GetQueryUGCMetadata"
+  },
+  {
+   "slot": 7,
+   "method": "GetQueryUGCChildren"
+  },
+  {
+   "slot": 8,
+   "method": "GetQueryUGCStatistic"
+  },
+  {
+   "slot": 9,
+   "method": "GetQueryUGCNumAdditionalPreviews"
+  },
+  {
+   "slot": 10,
+   "method": "GetQueryUGCAdditionalPreview"
+  },
+  {
+   "slot": 11,
+   "method": "GetQueryUGCNumKeyValueTags"
+  },
+  {
+   "slot": 12,
+   "method": "GetQueryUGCKeyValueTag"
+  },
+  {
+   "slot": 13,
+   "method": "ReleaseQueryUGCRequest"
+  },
+  {
+   "slot": 14,
+   "method": "AddRequiredTag"
+  },
+  {
+   "slot": 15,
+   "method": "AddExcludedTag"
+  },
+  {
+   "slot": 16,
+   "method": "SetReturnKeyValueTags"
+  },
+  {
+   "slot": 17,
+   "method": "SetReturnLongDescription"
+  },
+  {
+   "slot": 18,
+   "method": "SetReturnMetadata"
+  },
+  {
+   "slot": 19,
+   "method": "SetReturnChildren"
+  },
+  {
+   "slot": 20,
+   "method": "SetReturnAdditionalPreviews"
+  },
+  {
+   "slot": 21,
+   "method": "SetReturnTotalOnly"
+  },
+  {
+   "slot": 22,
+   "method": "SetLanguage"
+  },
+  {
+   "slot": 23,
+   "method": "SetAllowCachedResponse"
+  },
+  {
+   "slot": 24,
+   "method": "SetCloudFileNameFilter"
+  },
+  {
+   "slot": 25,
+   "method": "SetMatchAnyTag"
+  },
+  {
+   "slot": 26,
+   "method": "SetSearchText"
+  },
+  {
+   "slot": 27,
+   "method": "SetRankedByTrendDays"
+  },
+  {
+   "slot": 28,
+   "method": "AddRequiredKeyValueTag"
+  },
+  {
+   "slot": 29,
+   "method": "RequestUGCDetails"
+  },
+  {
+   "slot": 30,
+   "method": "CreateItem"
+  },
+  {
+   "slot": 31,
+   "method": "StartItemUpdate"
+  },
+  {
+   "slot": 32,
+   "method": "SetItemTitle"
+  },
+  {
+   "slot": 33,
+   "method": "SetItemDescription"
+  },
+  {
+   "slot": 34,
+   "method": "SetItemUpdateLanguage"
+  },
+  {
+   "slot": 35,
+   "method": "SetItemMetadata"
+  },
+  {
+   "slot": 36,
+   "method": "SetItemVisibility"
+  },
+  {
+   "slot": 37,
+   "method": "SetItemTags"
+  },
+  {
+   "slot": 38,
+   "method": "SetItemContent"
+  },
+  {
+   "slot": 39,
+   "method": "SetItemPreview"
+  },
+  {
+   "slot": 40,
+   "method": "RemoveItemKeyValueTags"
+  },
+  {
+   "slot": 41,
+   "method": "AddItemKeyValueTag"
+  },
+  {
+   "slot": 42,
+   "method": "SubmitItemUpdate"
+  },
+  {
+   "slot": 43,
+   "method": "GetItemUpdateProgress"
+  },
+  {
+   "slot": 44,
+   "method": "SetUserItemVote"
+  },
+  {
+   "slot": 45,
+   "method": "GetUserItemVote"
+  },
+  {
+   "slot": 46,
+   "method": "AddItemToFavorites"
+  },
+  {
+   "slot": 47,
+   "method": "RemoveItemFromFavorites"
+  },
+  {
+   "slot": 48,
+   "method": "SubscribeItem"
+  },
+  {
+   "slot": 49,
+   "method": "UnsubscribeItem"
+  },
+  {
+   "slot": 50,
+   "method": "GetNumSubscribedItems"
+  },
+  {
+   "slot": 51,
+   "method": "GetSubscribedItems"
+  },
+  {
+   "slot": 52,
+   "method": "GetItemState"
+  },
+  {
+   "slot": 53,
+   "method": "GetItemInstallInfo"
+  },
+  {
+   "slot": 54,
+   "method": "GetItemDownloadInfo"
+  },
+  {
+   "slot": 55,
+   "method": "DownloadItem"
+  }
+ ]
+}

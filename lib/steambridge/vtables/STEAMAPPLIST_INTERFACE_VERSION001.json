@@ -1,0 +1,30 @@
+{
+ "interface": "ISteamAppList",
+ "version": "STEAMAPPLIST_INTERFACE_VERSION001",
+ "family": "applist",
+ "slot_count": 5,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetNumInstalledApps"
+  },
+  {
+   "slot": 1,
+   "method": "GetInstalledApps"
+  },
+  {
+   "slot": 2,
+   "method": "GetAppName"
+  },
+  {
+   "slot": 3,
+   "method": "GetAppInstallDir"
+  },
+  {
+   "slot": 4,
+   "method": "GetAppBuildId"
+  }
+ ]
+}

@@ -1,0 +1,218 @@
+{
+ "interface": "ISteamRemoteStorage",
+ "version": "STEAMREMOTESTORAGE_INTERFACE_VERSION012",
+ "family": "remotestorage",
+ "slot_count": 52,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "FileWrite"
+  },
+  {
+   "slot": 1,
+   "method": "FileRead"
+  },
+  {
+   "slot": 2,
+   "method": "FileForget"
+  },
+  {
+   "slot": 3,
+   "method": "FileDelete"
+  },
+  {
+   "slot": 4,
+   "method": "FileShare"
+  },
+  {
+   "slot": 5,
+   "method": "SetSyncPlatforms"
+  },
+  {
+   "slot": 6,
+   "method": "FileWriteStreamOpen"
+  },
+  {
+   "slot": 7,
+   "method": "FileWriteStreamWriteChunk"
+  },
+  {
+   "slot": 8,
+   "method": "FileWriteStreamClose"
+  },
+  {
+   "slot": 9,
+   "method": "FileWriteStreamCancel"
+  },
+  {
+   "slot": 10,
+   "method": "FileExists"
+  },
+  {
+   "slot": 11,
+   "method": "FilePersisted"
+  },
+  {
+   "slot": 12,
+   "method": "GetFileSize"
+  },
+  {
+   "slot": 13,
+   "method": "GetFileTimestamp"
+  },
+  {
+   "slot": 14,
+   "method": "GetSyncPlatforms"
+  },
+  {
+   "slot": 15,
+   "method": "GetFileCount"
+  },
+  {
+   "slot": 16,
+   "method": "GetFileNameAndSize"
+  },
+  {
+   "slot": 17,
+   "method": "GetQuota"
+  },
+  {
+   "slot": 18,
+   "method": "IsCloudEnabledForAccount"
+  },
+  {
+   "slot": 19,
+   "method": "IsCloudEnabledForApp"
+  },
+  {
+   "slot": 20,
+   "method": "SetCloudEnabledForApp"
+  },
+  {
+   "slot": 21,
+   "method": "UGCDownload"
+  },
+  {
+   "slot": 22,
+   "method": "GetUGCDownloadProgress"
+  },
+  {
+   "slot": 23,
+   "method": "GetUGCDetails"
+  },
+  {
+   "slot": 24,
+   "method": "UGCRead"
+  },
+  {
+   "slot": 25,
+   "method": "GetCachedUGCCount"
+  },
+  {
+   "slot": 26,
+   "method": "GetCachedUGCHandle"
+  },
+  {
+   "slot": 27,
+   "method": "PublishWorkshopFile"
+  },
+  {
+   "slot": 28,
+   "method": "CreatePublishedFileUpdateRequest"
+  },
+  {
+   "slot": 29,
+   "method": "UpdatePublishedFileFile"
+  },
+  {
+   "slot": 30,
+   "method": "UpdatePublishedFilePreviewFile"
+  },
+  {
+   "slot": 31,
+   "method": "UpdatePublishedFileTitle"
+  },
+  {
+   "slot": 32,
+   "method": "UpdatePublishedFileDescription"
+  },
+  {
+   "slot": 33,
+   "method": "UpdatePublishedFileVisibility"
+  },
+  {
+   "slot": 34,
+   "method": "UpdatePublishedFileTags"
+  },
+  {
+   "slot": 35,
+   "method": "CommitPublishedFileUpdate"
+  },
+  {
+   "slot": 36,
+   "method": "GetPublishedFileDetails"
+  },
+  {
+   "slot": 37,
+   "method": "DeletePublishedFile"
+  },
+  {
+   "slot": 38,
+   "method": "EnumerateUserPublishedFiles"
+  },
+  {
+   "slot": 39,
+   "method": "SubscribePublishedFile"
+  },
+  {
+   "slot": 40,
+   "method": "EnumerateUserSubscribedFiles"
+  },
+  {
+   "slot": 41,
+   "method": "UnsubscribePublishedFile"
+  },
+  {
+   "slot": 42,
+   "method": "UpdatePublishedFileSetChangeDescription"
+  },
+  {
+   "slot": 43,
+   "method": "GetPublishedItemVoteDetails"
+  },
+  {
+   "slot": 44,
+   "method": "UpdateUserPublishedItemVote"
+  },
+  {
+   "slot": 45,
+   "method": "GetUserPublishedItemVoteDetails"
+  },
+  {
+   "slot": 46,
+   "method": "EnumerateUserSharedWorkshopFiles"
+  },
+  {
+   "slot": 47,
+   "method": "PublishVideo"
+  },
+  {
+   "slot": 48,
+   "method": "SetUserPublishedFileAction"
+  },
+  {
+   "slot": 49,
+   "method": "EnumeratePublishedFilesByUserAction"
+  },
+  {
+   "slot": 50,
+   "method": "EnumeratePublishedWorkshopFiles"
+  },
+  {
+   "slot": 51,
+   "method": "UGCDownloadToLocation"
+  }
+ ]
+}

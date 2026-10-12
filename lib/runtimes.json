@@ -1,0 +1,68 @@
+{
+ "_comment": "运行时注册表。product、check.path 与 include 相对 SN_RUNTIMES；check.arch 要求主程序架构。Unity 播放器、Steam 组件与游戏不打包。license_files 登记法律原文（可用 @SN_HOME/ 引用仓库），新打包缺原文时整个运行时跳过；notice 随许可证保存。manifest_hashes 登记可信发布清单的 SHA256；未登记清单仅允许本地目录加 --untrusted-local 显式信任。受影响二进制在精确源码、许可证和完整 notices 核验前不发布。",
+ "manifest_hashes": {},
+ "runtimes": {
+  "wine-cx": {
+   "product": "wine-cx",
+   "check": {"path": "wine-cx/bin/wine", "arch": "x86_64"},
+   "also_required": ["wine-cx/lib/wine/x86_64-unix/winemac.so", "wine-cx/lib/wine/x86_64-unix/winemetal.so", "wine-cx/lib/wine/x86_64-windows/winemetal.dll"],
+   "license": "Wine core LGPL-2.1-or-later（CodeWeavers 公开源码 crossover-sources-26.3.0）；DXMT winemetal LGPL-2.1-or-later（v0.80）；随包组件各保留自身声明",
+   "license_files": ["cx-src/sources/wine/LICENSE", "cx-src/sources/wine/COPYING.LIB"],
+   "notice": [
+    "Wine: Copyright (c) 1993-2026 the Wine project authors (see AUTHORS in the Wine source). LGPL-2.1-or-later.",
+    "Built from CodeWeavers' public sources crossover-sources-26.3.0 with this project's tools/build-wine.sh.",
+    "DXMT v0.80: Copyright (c) 2023-2026 Feifan He for CodeWeavers. LGPL-2.1-or-later; license text is COPYING.LIB."
+   ],
+   "source": "https://www.codeweavers.com/crossover/source + tools/build-wine.sh；DXMT https://github.com/3Shain/dxmt/releases + tools/install-dxmt.sh",
+   "version_from": ["file:wine-cx/share/wine/VERSION", "const:crossover-sources-26.3.0+dxmt-0.80"]
+  },
+  "mkxp-z": {
+   "product": "mkxp-build/Build/Products/Release/Z-universal.app",
+   "check": {"path": "mkxp-build/Build/Products/Release/Z-universal.app/Contents/MacOS/Z-universal", "arch": "arm64"},
+   "license": "GPL-2.0（mkxp-z）；依赖各保留自身声明",
+   "license_files": ["mkxp-z/COPYING", "mkxp-z/steamshim/LICENSE.txt", "mkxp-z/src/theoraplay/LICENSE.txt"],
+   "notice": [
+    "mkxp-z: GPL-2.0. Corresponding source: https://github.com/mkxp-z/mkxp-z plus tools/patch-mkxp-deps.sh and tools/mkxp-nfc-path-fix.patch from the source tarball of the same release.",
+    "steamshim: Copyright (c) 2013-2015 Ryan C. Gordon. theoraplay: Copyright (c) 2011-2021 Ryan C. Gordon.",
+    "Other bundled libraries keep their own licenses; their notices are not collected yet."
+   ],
+   "source": "https://github.com/mkxp-z/mkxp-z + tools/patch-mkxp-deps.sh + tools/mkxp-nfc-path-fix.patch",
+   "version_from": ["git:mkxp-z"]
+  },
+  "krkrsdl2": {
+   "product": "krkrsdl2/build/krkrsdl2.app",
+   "check": {"path": "krkrsdl2/build/krkrsdl2.app/Contents/MacOS/krkrsdl2", "arch": "arm64"},
+   "license": "MIT（krkrsdl2）；依赖各保留自身声明",
+   "license_files": ["krkrsdl2/LICENSE"],
+   "notice": [
+    "krkrsdl2: Copyright (C) Kirikiri SDL2 Developers. MIT."
+   ],
+   "source": "https://github.com/krkrsdl2/krkrsdl2",
+   "version_from": ["git:krkrsdl2"]
+  },
+  "steambridge": {
+   "product": "steambridge",
+   "include": ["steam_api64.dll", "steam_api.dll", "steambridge-helper", "sbtest.exe", "sbtest32.exe"],
+   "check": {"path": "steambridge/steambridge-helper", "arch": "arm64"},
+   "license": "GPL-3.0-only（本项目）",
+   "license_files": ["@SN_HOME/LICENSE"],
+   "notice": [
+    "steambridge: Copyright (c) 2026 Ninon. GPL-3.0-only."
+   ],
+   "source": "lib/steambridge/build.sh",
+   "version_from": ["git:SN_HOME"]
+  },
+  "hlslcc": {
+   "product": "unity-retarget/hlslcc-cli",
+   "check": {"path": "unity-retarget/hlslcc-cli", "arch": "arm64"},
+   "license": "HLSLcc MIT 式授权 + bstring BSD 式条款",
+   "license_files": ["hlslcc/license.txt", "hlslcc/src/cbstring/license.txt"],
+   "notice": [
+    "HLSLcc: Copyright (c) 2012 James Jones; 2014-2016 Unity Technologies. MIT-style.",
+    "bstring: BSD-style."
+   ],
+   "source": "https://github.com/Unity-Technologies/HLSLcc + lib/unity-retarget/hlslcc-cli.cpp（bin/install.sh 本地编译）",
+   "version_from": ["file:unity-retarget/hlslcc-source.txt"]
+  }
+ }
+}

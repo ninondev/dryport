@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-09-12T18:22:05.315662+00:00",
+  "scope": "same cached filenames; classify only; shared workstation, no game launched",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "chip": "Apple M5",
+  "memory_bytes": 17179869184,
+  "baseline_sha256": "3626f7e3865835b64a02179d7e8f2d3a08987dc606c3e545ca4f034256c3868c",
+  "current_sha256": "5d77035c5bdf1f89d57033740e3d2c751f93d3e0d65429d9bb6211bc8f8d69e9",
+  "samples_per_size": 5,
+  "sizes": [
+    {
+      "appid": "395170",
+      "files": 50,
+      "input_sha256": "76db80821284ec61fca4191d8972ae3a0583e6f11fba17deeafa5343aedea0cb",
+      "before_median_seconds": 0.003927415999999795,
+      "after_median_seconds": 0.000833292000000263,
+      "faster_pairs": 5,
+      "pairs": [
+        {
+          "before": 0.005323083000000395,
+          "after": 0.000833292000000263
+        },
+        {
+          "after": 0.0005440830000003061,
+          "before": 0.002287332999999947
+        },
+        {
+          "before": 0.00349979200000039,
+          "after": 0.0013992920000003295
+        },
+        {
+          "after": 0.00300208399999935,
+          "before": 0.006932207999999385
+        },
+        {
+          "before": 0.003927415999999795,
+          "after": 0.0005022920000001818
+        }
+      ]
+    },
+    {
+      "appid": "464070",
+      "files": 4983,
+      "input_sha256": "73200cf59d1f6277e3fe2d92db3eccd876186eca12b130e05958a3f22a90fba8",
+      "before_median_seconds": 0.23900445900000022,
+      "after_median_seconds": 0.07014687499999983,
+      "faster_pairs": 5,
+      "pairs": [
+        {
+          "before": 0.2517798329999996,
+          "after": 0.08224091700000002
+        },
+        {
+          "after": 0.07014687499999983,
+          "before": 0.27601954200000023
+        },
+        {
+          "before": 0.1418390829999998,
+          "after": 0.0288226250000001
+        },
+        {
+          "after": 0.03428087500000032,
+          "before": 0.22943612499999944
+        },
+        {
+          "before": 0.23900445900000022,
+          "after": 0.09881204200000049
+        }
+      ]
+    },
+    {
+      "appid": "1811950",
+      "files": 61716,
+      "input_sha256": "ddbad6a26ffa7da32c05bef3cabf8b44f5ca411693856c8e20cbd5af149f1a34",
+      "before_median_seconds": 2.4157304160000006,
+      "after_median_seconds": 0.21467362499999965,
+      "faster_pairs": 5,
+      "pairs": [
+        {
+          "before": 2.483649374999999,
+          "after": 0.2759093339999996
+        },
+        {
+          "after": 0.34065862499999966,
+          "before": 2.4157304160000006
+        },
+        {
+          "before": 2.001198125000002,
+          "after": 0.21467362499999965
+        },
+        {
+          "after": 0.10833929100000006,
+          "before": 2.738592334
+        },
+        {
+          "before": 2.375601500000002,
+          "after": 0.2013436249999998
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Only filename classification is timed; no filesystem parsing or game FPS.",
+    "M5 / 16 GiB shared workstation; 5 alternating pairs per size.",
+    "Not low-end hardware acceptance."
+  ]
+}

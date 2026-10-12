@@ -1,0 +1,50 @@
+{
+ "interface": "ISteamGameServerStats",
+ "version": "SteamGameServerStats001",
+ "family": "gameserverstats",
+ "slot_count": 10,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "RequestUserStats"
+  },
+  {
+   "slot": 1,
+   "method": "GetUserStat0"
+  },
+  {
+   "slot": 2,
+   "method": "GetUserStat"
+  },
+  {
+   "slot": 3,
+   "method": "GetUserAchievement"
+  },
+  {
+   "slot": 4,
+   "method": "SetUserStat0"
+  },
+  {
+   "slot": 5,
+   "method": "SetUserStat"
+  },
+  {
+   "slot": 6,
+   "method": "UpdateUserAvgRateStat"
+  },
+  {
+   "slot": 7,
+   "method": "SetUserAchievement"
+  },
+  {
+   "slot": 8,
+   "method": "ClearUserAchievement"
+  },
+  {
+   "slot": 9,
+   "method": "StoreUserStats"
+  }
+ ]
+}

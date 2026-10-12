@@ -1,0 +1,14 @@
+(version 1)
+(allow default)
+(deny file-write*)
+; 防止把只读原文件硬链接进可写目录后通过同一 inode 的别名改写。
+(deny file-link)
+; Chromium 的进程间套接字使用系统临时目录；游戏与 app 即使位于临时目录也被排除。
+(allow file-write*
+  (require-all
+    (require-any
+      (subpath (param "STATE"))
+      (subpath (param "TEMP"))
+      (literal "/dev/null"))
+    (require-not (subpath (param "BUNDLE")))
+    (require-not (subpath (param "SOURCE")))))

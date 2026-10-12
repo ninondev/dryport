@@ -1,0 +1,138 @@
+{
+ "interface": "ISteamMusicRemote",
+ "version": "STEAMMUSICREMOTE_INTERFACE_VERSION001",
+ "family": "musicremote",
+ "slot_count": 32,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "RegisterSteamMusicRemote"
+  },
+  {
+   "slot": 1,
+   "method": "DeregisterSteamMusicRemote"
+  },
+  {
+   "slot": 2,
+   "method": "BIsCurrentMusicRemote"
+  },
+  {
+   "slot": 3,
+   "method": "BActivationSuccess"
+  },
+  {
+   "slot": 4,
+   "method": "SetDisplayName"
+  },
+  {
+   "slot": 5,
+   "method": "SetPNGIcon_64x64"
+  },
+  {
+   "slot": 6,
+   "method": "EnablePlayPrevious"
+  },
+  {
+   "slot": 7,
+   "method": "EnablePlayNext"
+  },
+  {
+   "slot": 8,
+   "method": "EnableShuffled"
+  },
+  {
+   "slot": 9,
+   "method": "EnableLooped"
+  },
+  {
+   "slot": 10,
+   "method": "EnableQueue"
+  },
+  {
+   "slot": 11,
+   "method": "EnablePlaylists"
+  },
+  {
+   "slot": 12,
+   "method": "UpdatePlaybackStatus"
+  },
+  {
+   "slot": 13,
+   "method": "UpdateShuffled"
+  },
+  {
+   "slot": 14,
+   "method": "UpdateLooped"
+  },
+  {
+   "slot": 15,
+   "method": "UpdateVolume"
+  },
+  {
+   "slot": 16,
+   "method": "CurrentEntryWillChange"
+  },
+  {
+   "slot": 17,
+   "method": "CurrentEntryIsAvailable"
+  },
+  {
+   "slot": 18,
+   "method": "UpdateCurrentEntryText"
+  },
+  {
+   "slot": 19,
+   "method": "UpdateCurrentEntryElapsedSeconds"
+  },
+  {
+   "slot": 20,
+   "method": "UpdateCurrentEntryCoverArt"
+  },
+  {
+   "slot": 21,
+   "method": "CurrentEntryDidChange"
+  },
+  {
+   "slot": 22,
+   "method": "QueueWillChange"
+  },
+  {
+   "slot": 23,
+   "method": "ResetQueueEntries"
+  },
+  {
+   "slot": 24,
+   "method": "SetQueueEntry"
+  },
+  {
+   "slot": 25,
+   "method": "SetCurrentQueueEntry"
+  },
+  {
+   "slot": 26,
+   "method": "QueueDidChange"
+  },
+  {
+   "slot": 27,
+   "method": "PlaylistWillChange"
+  },
+  {
+   "slot": 28,
+   "method": "ResetPlaylistEntries"
+  },
+  {
+   "slot": 29,
+   "method": "SetPlaylistEntry"
+  },
+  {
+   "slot": 30,
+   "method": "SetCurrentPlaylistEntry"
+  },
+  {
+   "slot": 31,
+   "method": "PlaylistDidChange"
+  }
+ ]
+}

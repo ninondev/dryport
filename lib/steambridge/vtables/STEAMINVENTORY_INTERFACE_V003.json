@@ -1,0 +1,162 @@
+{
+ "interface": "ISteamInventory",
+ "version": "STEAMINVENTORY_INTERFACE_V003",
+ "family": "inventory",
+ "slot_count": 38,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetResultStatus"
+  },
+  {
+   "slot": 1,
+   "method": "GetResultItems"
+  },
+  {
+   "slot": 2,
+   "method": "GetResultItemProperty"
+  },
+  {
+   "slot": 3,
+   "method": "GetResultTimestamp"
+  },
+  {
+   "slot": 4,
+   "method": "CheckResultSteamID"
+  },
+  {
+   "slot": 5,
+   "method": "DestroyResult"
+  },
+  {
+   "slot": 6,
+   "method": "GetAllItems"
+  },
+  {
+   "slot": 7,
+   "method": "GetItemsByID"
+  },
+  {
+   "slot": 8,
+   "method": "SerializeResult"
+  },
+  {
+   "slot": 9,
+   "method": "DeserializeResult"
+  },
+  {
+   "slot": 10,
+   "method": "GenerateItems"
+  },
+  {
+   "slot": 11,
+   "method": "GrantPromoItems"
+  },
+  {
+   "slot": 12,
+   "method": "AddPromoItem"
+  },
+  {
+   "slot": 13,
+   "method": "AddPromoItems"
+  },
+  {
+   "slot": 14,
+   "method": "ConsumeItem"
+  },
+  {
+   "slot": 15,
+   "method": "ExchangeItems"
+  },
+  {
+   "slot": 16,
+   "method": "TransferItemQuantity"
+  },
+  {
+   "slot": 17,
+   "method": "SendItemDropHeartbeat"
+  },
+  {
+   "slot": 18,
+   "method": "TriggerItemDrop"
+  },
+  {
+   "slot": 19,
+   "method": "TradeItems"
+  },
+  {
+   "slot": 20,
+   "method": "LoadItemDefinitions"
+  },
+  {
+   "slot": 21,
+   "method": "GetItemDefinitionIDs"
+  },
+  {
+   "slot": 22,
+   "method": "GetItemDefinitionProperty"
+  },
+  {
+   "slot": 23,
+   "method": "RequestEligiblePromoItemDefinitionsIDs"
+  },
+  {
+   "slot": 24,
+   "method": "GetEligiblePromoItemDefinitionIDs"
+  },
+  {
+   "slot": 25,
+   "method": "StartPurchase"
+  },
+  {
+   "slot": 26,
+   "method": "RequestPrices"
+  },
+  {
+   "slot": 27,
+   "method": "GetNumItemsWithPrices"
+  },
+  {
+   "slot": 28,
+   "method": "GetItemsWithPrices"
+  },
+  {
+   "slot": 29,
+   "method": "GetItemPrice"
+  },
+  {
+   "slot": 30,
+   "method": "StartUpdateProperties"
+  },
+  {
+   "slot": 31,
+   "method": "RemoveProperty"
+  },
+  {
+   "slot": 32,
+   "method": "SetPropertyFloat"
+  },
+  {
+   "slot": 33,
+   "method": "SetPropertyInt64"
+  },
+  {
+   "slot": 34,
+   "method": "SetPropertyBool"
+  },
+  {
+   "slot": 35,
+   "method": "SetPropertyString"
+  },
+  {
+   "slot": 36,
+   "method": "SubmitUpdateProperties"
+  },
+  {
+   "slot": 37,
+   "method": "InspectItem"
+  }
+ ]
+}

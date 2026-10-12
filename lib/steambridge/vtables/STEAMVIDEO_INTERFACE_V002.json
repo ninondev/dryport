@@ -1,0 +1,26 @@
+{
+ "interface": "ISteamVideo",
+ "version": "STEAMVIDEO_INTERFACE_V002",
+ "family": "video",
+ "slot_count": 4,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 ce6f48938493...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "GetVideoURL"
+  },
+  {
+   "slot": 1,
+   "method": "IsBroadcasting"
+  },
+  {
+   "slot": 2,
+   "method": "GetOPFSettings"
+  },
+  {
+   "slot": 3,
+   "method": "GetOPFStringForApp"
+  }
+ ]
+}

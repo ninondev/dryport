@@ -1,0 +1,46 @@
+{
+ "interface": "ISteamMusic",
+ "version": "STEAMMUSIC_INTERFACE_VERSION001",
+ "family": "music",
+ "slot_count": 9,
+ "source": "MSVC vtable slots read from the flat-API wrappers of a 32-bit steam_api.dll (SHA-256 586eaa7a024e...) shipped with a Steam game used as a reference; the version string is the one embedded in that DLL. Extracted with tools/steam-flat-argsizes.py --tables-out on 2026-09-13. Names and slot numbers only, no third-party bytes.",
+ "unresolved_slots": [],
+ "slots": [
+  {
+   "slot": 0,
+   "method": "BIsEnabled"
+  },
+  {
+   "slot": 1,
+   "method": "BIsPlaying"
+  },
+  {
+   "slot": 2,
+   "method": "GetPlaybackStatus"
+  },
+  {
+   "slot": 3,
+   "method": "Play"
+  },
+  {
+   "slot": 4,
+   "method": "Pause"
+  },
+  {
+   "slot": 5,
+   "method": "PlayPrevious"
+  },
+  {
+   "slot": 6,
+   "method": "PlayNext"
+  },
+  {
+   "slot": 7,
+   "method": "SetVolume"
+  },
+  {
+   "slot": 8,
+   "method": "GetVolume"
+  }
+ ]
+}

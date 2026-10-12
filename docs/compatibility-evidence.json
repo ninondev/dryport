@@ -1,0 +1,170 @@
+{
+ "scope": "Recorded summaries transcribed from the existing ledger. Original records are unpublished; these are not new real-game validations.",
+ "context": {
+  "game_build": null,
+  "runtime_version": null,
+  "macos_version": null,
+  "tool_revision": null,
+  "original_record": null,
+  "hardware": "Apple M5, 16 GB"
+ },
+ "records": [
+  {
+   "id": "entry-01",
+   "date": "2026-09-29",
+   "route": "unity",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   }
+  },
+  {
+   "id": "entry-02",
+   "date": "2026-09-14",
+   "route": "unity",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ],
+    "fps": 60.0,
+    "frame_p99_ms": 18.97
+   }
+  },
+  {
+   "id": "entry-03",
+   "date": "2026-09-29",
+   "route": "unity",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-04",
+   "date": "2026-09-29",
+   "route": "unity",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-05",
+   "date": "2026-09-29",
+   "route": "wine",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-06",
+   "date": "2026-09-29",
+   "route": "wine",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-07",
+   "date": "2026-09-29",
+   "route": "wine",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-08",
+   "date": "2026-09-29",
+   "route": "mkxp",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "fps": 60.0,
+    "frame_p99_ms": 19.44
+   }
+  },
+  {
+   "id": "entry-09",
+   "date": "2026-09-29",
+   "route": "nwjs",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ],
+    "fps": 60.01,
+    "frame_p99_ms": 18.81
+   }
+  },
+  {
+   "id": "entry-10",
+   "date": "2026-09-29",
+   "route": "nwjs",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-11",
+   "date": "2026-09-29",
+   "route": "webkit",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-12",
+   "date": "2026-09-29",
+   "route": "renpy-native",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "entry-13",
+   "date": "2026-09-29",
+   "route": "godot",
+   "evidence": "real-machine",
+   "claims": {
+    "chain": [
+     1
+    ]
+   }
+  }
+ ]
+}

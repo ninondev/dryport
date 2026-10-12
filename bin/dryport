@@ -1,0 +1,2107 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-only
+# Copyright (c) 2026 Ninon
+# dryport — 把 Windows-only 的 Steam 游戏配上 macOS 原生运行时,并送进 Steam 库
+#
+#   dryport install <appid> [目录名]   一条龙: 查风险 → 下载 → 识别 → 打包 → 入库
+#                                          --no-add 只到打包为止，不加进 Steam 库（自动验证与不想入库的人用）
+#                                          下载走已登录的 Steam 客户端, 不用密码; 不行才退回 steamcmd
+#   dryport detect <游戏目录>          识别引擎,给出运行时建议
+#   dryport wrap   <游戏目录> [名字]    按引擎打包成原生 .app
+#   dryport add    <.app 路径> [steam_appid]  加进 Steam 库(带官方封面)
+#   dryport batch  <清单文件>          批量: 下载+识别+打包+入库, 一次登录跑完
+#   dryport scan   <目录>              扫一个目录下所有游戏, 报告各自引擎
+#   dryport check  <appid>             查封号风险(能不能改包/只能原样跑/一律不碰)
+#   dryport archive <appid>            归档(可逆): 移除快捷方式,自有 .app 移入 .uninstalled,下载与存档保留
+#   dryport restore <appid>            恢复归档: app 原样放回游戏目录并重新加入 Steam 库,不下载不重建
+#   dryport uninstall <appid> [--saves] 卸载(不可逆): 归档后删下载目录与全部归档 app,只删本工具自己建的
+#   dryport rewrap <appid>             用当前版本的壳重新生成已装 app: 同名同路径,快捷方式不动;旧 app 移入 .uninstalled 可回退
+#                                          确认前逐项列大小;存档默认保留,--saves 才删;--plan-json 只出账单
+#   dryport clean [--go] [--deep]      清这套工具产生的残渣(默认只算账不删)
+#   dryport steam-debug [--status|--enable|--disable]  Steam 本机连接开关: 查状态; --enable/--disable 经确认后创建/只删那个空开关文件
+#   dryport bridge <enable|disable|status> [appid]  Wine 路线的 Steam 桥逐游戏开关, 默认不接; enable 确认前先讲清写的是什么
+#   dryport cloud <enable|disable|status> <appid> [--yes] 云存档逐游戏持久开关，默认关闭；不会在改设置时同步
+#   dryport running [--kill-stale]     列出 run-guard 拉起的进程; 失联的(守护者没了/超时仍活)经确认才收
+#   dryport library                    我库里的游戏各走哪条路(含网页版报告)
+#   dryport survey                     重新算一遍全库判定(不下载任何游戏本体)
+#   dryport doctor                     自证: 这套工具动过你的 Steam 什么(客户端/配置/库/快捷方式/反作弊)
+#
+# 设计原则: 因地制宜。每种引擎配它自己的原生运行时,能零翻译层就不进 Wine。
+# 建立 2026-09-10。真实游戏验证过: RGSS3 → mkxp-z; Unity Mono → unity-retarget(原生 arm64+Metal)。
+# 机制验证过: NW.js / Godot / 吉里吉里。兜底: Wine + DXMT(真实游戏已出完整画面)。
+
+set -uo pipefail
+. "$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}" 2>/dev/null || echo "${BASH_SOURCE[0]:-$0}")")/../lib/paths.sh"
+MKXPZ_APP="$RUNTIMES/mkxp-build/Build/Products/Release/Z-universal.app"
+. "$SN_LIB/repack-gate.sh"
+
+die(){ echo "错: $*" >&2; exit 1; }
+
+# ─────────────────────────────────────────────
+# 引擎识别: 看文件特征,不猜
+# ─────────────────────────────────────────────
+detect_engine(){
+  local d="$1"
+  [ -d "$d" ] || die "目录不存在: $d"
+
+  # 只把逐款验证且完整资源摘要相符的浏览器入口交给 WebKit。
+  # 普通 Electron 包仍需检查 Node、原生模块与生命周期，不能按 HTML 文件名放行。
+  if [ -f "$d/resources/app/release.html" ] \
+      && python3 "$SN_LIB/webkit-inspect.py" "$d" >/dev/null 2>&1; then
+    echo "webkit|Koi Farm 浏览器入口（已验版本）|系统 WebKit 原包直读|原生 arm64，无翻译层|菜单、操作及短时关闭保存已验证，完整体验待验"; return
+  fi
+
+  # RGSS 系 (RPG Maker XP / VX / VX Ace)
+  if [ -f "$d/Game.ini" ]; then
+    local lib
+    lib=$(grep -i '^Library=' "$d/Game.ini" 2>/dev/null | head -1 | tr -d '\r')
+    case "$lib" in
+      *RGSS3*) echo "rgss3|RPG Maker VX Ace|mkxp-z|原生 arm64|已验证"; return;;
+      *RGSS2*) echo "rgss2|RPG Maker VX|mkxp-z|原生 arm64|未验证";  return;;
+      *RGSS1*|*RGSS10*) echo "rgss1|RPG Maker XP|mkxp-z|原生 arm64|未验证"; return;;
+    esac
+  fi
+  # NW.js 系 (RPG Maker MV / MZ)
+  if [ -f "$d/package.json" ] || [ -d "$d/www" ] || [ -f "$d/nw.dll" ]; then
+    echo "nwjs|RPG Maker MV/MZ (NW.js)|arm64 原生 NW.js 换壳|原生 arm64|未验证"; return
+  fi
+  # Construct 2/3 等 Windows 导出把整个应用压成单个 package.nw(zip),旁边是改名的 NW.js 主程序,
+  # 上面三个标记都看不到;NW.js 构建步骤本来就会解包 package.nw,这里只管认出它,路由与其他 NW.js 一致
+  if [ -f "$d/package.nw" ]; then
+    echo "nwjs|NW.js（package.nw 打包）|arm64 原生 NW.js 换壳|原生 arm64|未验证"; return
+  fi
+  if [ -f "$d/love.dll" ] || ls "$d"/*.love >/dev/null 2>&1 \
+      || { [ -f "$d/main.lua" ] && [ -f "$d/conf.lua" ]; }; then
+    echo "love|LÖVE 候选|原包直读，安装时核实版本与扩展|原生 arm64|机制验证，真实游戏待验"; return
+  fi
+  # Ren'Py
+  if [ -d "$d/renpy" ] || ls "$d"/*.rpa >/dev/null 2>&1; then
+    if [ -f "$d/gundog.py" ] && python3 "$SN_LIB/renpy-profile.py" "$d" 2118420 >/dev/null 2>&1; then
+      echo "renpy-native|Gun-Dog（已验版本）|官方 arm64 Ren’Py 引擎|原生 arm64，无翻译层|早期剧情存读档已验证，完整体验待验"; return
+    fi
+    echo "renpy|Ren'Py|官方 macOS SDK 换壳|原生(Python)|未验证"; return
+  fi
+  # Godot
+  if ls "$d"/*.pck >/dev/null 2>&1; then
+    echo "godot|Godot|原生导出模板换壳|原生 arm64|未验证"; return
+  fi
+  # GameMaker
+  if [ -f "$d/data.win" ]; then
+    echo "gamemaker|GameMaker Studio|视版本,可能需 Wine|不定|未验证"; return
+  fi
+  # Unity — 必须分 IL2CPP 和 Mono,两者结局完全不同
+  if [ -f "$d/GameAssembly.dll" ] || ls "$d"/*_Data/il2cpp_data/Metadata/global-metadata.dat >/dev/null 2>&1; then
+    echo "unity-il2cpp|Unity (IL2CPP)|不适用,走 Wine: 游戏逻辑已编成 Windows 本机代码,换 Mac Player 无解|Wine 翻译|未验证"; return
+  fi
+  if [ -f "$d/UnityPlayer.dll" ] && ls "$d"/*_Data/Managed/Assembly-CSharp.dll >/dev/null 2>&1; then
+    # arm64 的 mac 播放器 2020.2 才有; 更老的只有 x86_64, 走 Rosetta
+    local uv ularch ustat; uv=$(unity_build_id "$d" | cut -d' ' -f1)
+    ularch="原生 arm64 Metal"; ustat="已验证"
+    case "${uv:-}" in
+      5.*|2017.*|2018.*|2019.*|2020.0*|2020.1*) ularch="x86_64 播放器走 Rosetta + Metal"; ustat="未验证";;
+    esac
+    echo "unity-mono|Unity ${uv:-版本未知}|unity-retarget|$ularch|$ustat"; return
+  fi
+  if ls "$d"/*_Data/Managed/Assembly-CSharp.dll >/dev/null 2>&1; then
+    # Unity 5.x ~ 2017.1: 引擎编在 exe 里,没有 UnityPlayer.dll。版本号从 exe 取。
+    local uv2; uv2=$(unity_build_id "$d" | cut -d' ' -f1)
+    if [ -n "${uv2:-}" ]; then
+      echo "unity-mono|Unity $uv2 (老形态,引擎编在 exe 里)|unity-retarget|原生 x86_64 走 Rosetta + Metal|未验证"; return
+    fi
+    echo "unity-mono-legacy|Unity (Mono,无 UnityPlayer.dll)|从 exe 也读不到版本号,要人工定版本|不定|未验证"; return
+  fi
+  if ls -d "$d"/*_Data >/dev/null 2>&1 || [ -f "$d/UnityPlayer.dll" ]; then
+    echo "unity|Unity (后端待定)|先分辨 IL2CPP 还是 Mono: 查 GameAssembly.dll 与 Managed/Assembly-CSharp.dll|不定|未验证"; return
+  fi
+  # Unreal — 只有 Windows 包时无通用换 runner 路线
+  if ls "$d"/Binaries/Win64/*.exe >/dev/null 2>&1 || ls "$d"/*/Content/Paks/*.pak >/dev/null 2>&1; then
+    echo "unreal|Unreal Engine|无换 runner 路线,只有 Windows cooked 包时兜底 Wine|Wine 翻译|未验证"; return
+  fi
+  # Adobe AIR — 要在 Flash 之前判,AIR 包里也有 swf
+  if [ -f "$d/META-INF/AIR/application.xml" ] || ls "$d"/*.ane >/dev/null 2>&1; then
+    echo "air|Adobe AIR|HARMAN AIR 的 Mac arm64 runtime 重新封装;ANE 须有 Mac 实现|原生 arm64|未验证"; return
+  fi
+  # Flash / SWF
+  if ls "$d"/*.swf >/dev/null 2>&1; then
+    echo "flash|Flash (SWF)|Ruffle 原生播放器|原生 arm64|未验证"; return
+  fi
+  # 吉里吉里
+  if ls "$d"/*.xp3 >/dev/null 2>&1; then
+    echo "kirikiri|吉里吉里 (KiriKiri)|有开源重实现可试|不定|未验证"; return
+  fi
+  echo "unknown|未识别|需人工判断,兜底 Wine|翻译层|未验证"
+}
+
+cmd_detect(){
+  local d="${1:-}"; [ -n "$d" ] || die "用法: dryport detect <游戏目录>"
+  # 目录检查必须在这里做: detect_engine 是在 $(...) 子 shell 里跑的,
+  # 它内部的 die 只能退出子 shell, 主流程会带着空结果继续往下走。
+  [ -d "$d" ] || die "目录不存在: $d"
+  IFS='|' read -r id name runtime layer status <<<"$(detect_engine "$d")"
+  echo "引擎     : $name"
+  echo "运行时   : $runtime"
+  echo "翻译层   : $layer"
+  echo "本机状态 : $status"
+  case "$id" in
+    rgss3|unity-mono) echo; echo "可直接执行: dryport wrap \"$d\"";;
+  esac
+}
+
+# ─────────────────────────────────────────────
+# Unity Mono (Windows 构建) → macOS arm64 原生 + Metal
+# 配方与边界见 runtimes/unity-retarget/README.md, 2026-09-11 由 A Space for the Unbound 实证。
+# 零翻译层: 游戏的 Mono 程序集和资源原样跑在 Unity 官方 mac 播放器上,
+# 只把 D3D11 着色器翻成 Metal/GLCore, 再补 BuildSettings 的图形 API 列表。
+# ─────────────────────────────────────────────
+UNITY_DIR="$SN_LIB/unity-retarget"
+UNITY_RT="$SN_RUNTIMES/unity-retarget"
+UNITY_PY="${SN_VENV:-$UNITY_RT/venv}/bin/python"
+UNITY_PLAYERS="$RUNTIMES/unity-players"
+
+# 取 <X>_Data 目录名 — 认 Managed/Assembly-CSharp.dll, 不认目录名
+unity_data_dir(){
+  local p
+  for p in "$1"/*_Data; do
+    [ -f "$p/Managed/Assembly-CSharp.dll" ] && { basename "$p"; return 0; }
+  done
+  return 1
+}
+
+# 打印 "<版本> <hash>"。2017.2 起 Unity 把构建号写死在 UnityPlayer.dll 里;
+# 更老的形态(Unity 5.x 到 2017.1)引擎直接编进 exe, 版本号就在 exe 里。
+# 下载对应版本的 Mac 播放器包要用这个 hash 拼 URL。
+UNITY_VER_RE='(5|20[0-9]{2})\.[0-9]+\.[0-9]+[fpab][0-9]+ \([0-9a-f]{12}\)'
+unity_build_id(){
+  local d="$1" f b
+  for f in "$d/UnityPlayer.dll" "$d"/*.exe; do
+    [ -f "$f" ] || continue
+    case "$(basename "$f")" in UnityCrashHandler*) continue;; esac
+    # grep -m1 提前退出会让 strings 吃 SIGPIPE, 本脚本开了 pipefail, 必须兜住
+    b=$(LC_ALL=C strings -n 8 "$f" | grep -m1 -oE "$UNITY_VER_RE" || true)
+    [ -n "$b" ] && { printf '%s %s\n' "${b%% *}" "$(printf '%s' "$b" | tr -d '()' | awk '{print $2}')"; return 0; }
+  done
+  return 1
+}
+
+# 取(必要时下载)官方 Mac 播放器模板, 打印 Variations 目录。
+# 两种官方包, 按 Unity 版本走不同 URL:
+#   a) 2019.3 起 : MacEditorTargetInstaller/UnitySetup-Mac-Mono-Support-for-Editor-<v>.pkg  约 480MB, pkgutil 解
+#   b) 更老的    : TargetSupportInstaller/UnitySetup-Mac-Support-for-Editor-<v>.exe        约 28MB, NSIS 自解压, 7zz 解
+# 老版本(2019.2 及更早, 含 Unity 5.x)根本没出过独立的 Mac 播放器 pkg —— 播放器藏在
+# Windows 编辑器的「Mac 支持」安装器里。对老版本请求 (a) 一律 404, 这是老版本长期卡住的原因。
+UNITY_DL="https://download.unity3d.com/download_unity"
+
+# 已解包的缓存: 新包在 expanded/TargetSupport.pkg.tmp/Payload/Variations,
+# 老包在 expanded/$INSTDIR$_<n>_/Variations, 目录名按版本变, 所以直接 find。
+unity_cached_vars(){
+  local v
+  v=$(find "$1/expanded" -maxdepth 5 -type d -name Variations 2>/dev/null | head -1)
+  [ -n "$v" ] || return 1
+  # 缓存里必须真有 mac 变体：2022.3.62f3 的目录曾被解成只有 win32/win64 变体的包（来源不明），拿它当模板会在选变体那步死
+  local hit="" cand
+  for cand in "$v"/macos*_mono; do [ -d "$cand" ] && { hit=1; break; }; done
+  [ -n "$hit" ] || { echo "  缓存的 $1 里没有 mac 变体（只有 $(ls "$v" | tr '\n' ' ')），当没缓存重取" >&2; return 1; }
+  echo "$v"
+}
+
+# HEAD 拿 Content-Length。拿不到或小得离谱就当这个 URL 不存在。
+unity_head_len(){
+  curl -sIL --max-time 30 "$1" | tr -d '\r' | awk 'tolower($1)=="content-length:"{v=$2}END{print v+0}'
+}
+
+# 下载 $1 到 $2, $3 是 HEAD 报的大小。nohup + curl -C - 续传, 边下边报进度。
+unity_download(){
+  local url="$1" out="$2" len="$3" log
+  log="$(dirname "$out")/dl.log"
+  nohup curl -sS -C - -L -o "$out" "$url" > "$log" 2>&1 &
+  local pid=$! now
+  while kill -0 "$pid" 2>/dev/null; do
+    now=$(stat -f%z "$out" 2>/dev/null || echo 0)
+    printf "\r  已下载 %s / %s 字节 (%d%%)  " "$now" "$len" $(( now * 100 / len )) >&2
+    sleep 5
+  done
+  printf "\n" >&2
+  now=$(stat -f%z "$out" 2>/dev/null || echo 0)
+  # 判据是「不小于 HEAD 值的 99%」, 不是严格相等: 实测 2017.3.1f1 那个 exe
+  # HEAD 报 28102656 字节, 落盘 28103200 字节, 两者不等是正常的。
+  if [ "$now" -lt $(( len / 100 * 99 )) ]; then
+        echo "  下载不完整: $now 字节, HEAD 报 ${len}。重跑 wrap 会续传, 日志 $log" >&2
+    return 1
+  fi
+  echo "  落盘 $now 字节 (HEAD 报 $len)" >&2
+}
+
+unity_fetch_player(){
+  local ver="$1" hash="$2" dir="$UNITY_PLAYERS/$ver" v len
+  v=$(unity_cached_vars "$dir") && { echo "$v"; return 0; }
+  # 批量自动验证不去 CDN 拉播放器包（一批可能几十个版本、每个 28 到 480 MB）；SN_UNITY_NO_FETCH=1 时缓存未命中直接失败。
+  [ "${SN_UNITY_NO_FETCH:-0}" = 1 ] && die "本机没有 Unity $ver 的 Mac 播放器模板，SN_UNITY_NO_FETCH=1 下不下载 (unity_player_missing)"
+  mkdir -p "$dir"
+  local url_pkg="$UNITY_DL/$hash/MacEditorTargetInstaller/UnitySetup-Mac-Mono-Support-for-Editor-$ver.pkg"
+  local url_exe="$UNITY_DL/$hash/TargetSupportInstaller/UnitySetup-Mac-Support-for-Editor-$ver.exe"
+  echo "  本机没有 Unity $ver 的 Mac 播放器模板, 去官方 CDN 取" >&2
+
+  len=$(unity_head_len "$url_pkg")
+  # 游戏 UnityPlayer.dll 里的 hash 与官方发布的 shortRevision 可以不一样（Iron Lung 2021.1.15f1：DLL 写 86235bd3171b，官方是 e767a7370072，
+  # 两个按 hash 拼的 URL 都 404）。这时问 Unity 官方发布接口要真正的 hash 再拼一次；接口不通就照旧报错。
+  if [ "${len:-0}" -le 1000000 ]; then
+    local api_hash
+    api_hash=$(curl -s --max-time 30 "https://services.api.unity.com/unity/editor/release/v1/releases?version=$ver&limit=1" 2>/dev/null \
+      | python3 -c 'import json,sys
+try:
+    r = json.load(sys.stdin)["results"][0]
+    print(r["shortRevision"] if r.get("version") == sys.argv[1] else "")
+except Exception:
+    print("")' "$ver" 2>/dev/null)
+    if [ -n "$api_hash" ] && [ "$api_hash" != "$hash" ]; then
+      echo "  官方发布接口给的 hash 是 ${api_hash}（游戏 DLL 里写的 ${hash}），按它重拼 URL" >&2
+      hash="$api_hash"
+      url_pkg="$UNITY_DL/$hash/MacEditorTargetInstaller/UnitySetup-Mac-Mono-Support-for-Editor-$ver.pkg"
+      url_exe="$UNITY_DL/$hash/TargetSupportInstaller/UnitySetup-Mac-Support-for-Editor-$ver.exe"
+      len=$(unity_head_len "$url_pkg")
+    fi
+  fi
+  if [ "${len:-0}" -gt 1000000 ]; then
+    echo "  新式包(独立 Mac Mono Support): $url_pkg" >&2
+    echo "  远端大小: $len 字节" >&2
+    unity_download "$url_pkg" "$dir/mac-mono-support.pkg" "$len" || die "下载失败, 重跑 wrap 会 curl -C - 续传"
+    echo "  解包 (pkgutil --expand-full)" >&2
+    rm -rf "$dir/expanded"
+    pkgutil --expand-full "$dir/mac-mono-support.pkg" "$dir/expanded" > "$dir/expand.log" 2>&1 \
+      || die "pkgutil 解包失败, 见 $dir/expand.log"
+  else
+    echo "  没有新式包(HEAD 拿不到 Content-Length), 退到老式包" >&2
+    len=$(unity_head_len "$url_exe")
+    [ "${len:-0}" -gt 1000000 ] || die "Unity $ver ($hash) 的 Mac 播放器两个官方 URL 都取不到:
+    (新) $url_pkg
+    (老) $url_exe
+  新式包 2019.3 起才有; 老版本的播放器在 Windows 编辑器的 Mac 支持安装器里。两个都没有,
+  多半是版本号或 hash 不对(hash 取自游戏的 UnityPlayer.dll 或 exe)。核对办法:
+    curl -s 'https://services.api.unity.com/unity/editor/release/v1/releases?version=$ver&limit=1'
+  返回里的 shortRevision 就是 URL 里的 hash。"
+    echo "  老式包(Windows 编辑器的 Mac 支持安装器, NSIS 自解压): $url_exe" >&2
+    echo "  远端大小: $len 字节" >&2
+    unity_download "$url_exe" "$dir/mac-support.exe" "$len" || die "下载失败, 重跑 wrap 会 curl -C - 续传"
+    command -v 7zz >/dev/null 2>&1 || die "缺 7zz(解 NSIS 自解压包要它): brew install sevenzip"
+    echo "  解包 (7zz x)" >&2
+    rm -rf "$dir/expanded"
+    7zz x -y -bso0 -bsp0 -o"$dir/expanded" "$dir/mac-support.exe" > "$dir/expand.log" 2>&1 \
+      || die "7zz 解包失败, 见 $dir/expand.log"
+  fi
+  # 解包后只留装配要用的那个变体：一版 2 GB 多，其中 dSYM、开发版、别的架构占九成（2026-09-14 一批冒烟把这目录撑到 25 GB）
+  python3 -B "$SN_HOME/tools/prune-unity-players.py" "$ver" >/dev/null 2>&1 || true
+  v=$(unity_cached_vars "$dir") || die "解包后找不到 Variations 目录, 见 $dir/expanded"
+  echo "$v"
+}
+
+wrap_unity_mono(){
+  local d="$1" name="${2:-}"
+  local data ver hash
+  data=$(unity_data_dir "$d") || die "找不到 <游戏>_Data/Managed/Assembly-CSharp.dll, 这不是 Unity Mono 构建"
+  read -r ver hash <<<"$(unity_build_id "$d" || echo)"
+  if [ -z "${ver:-}" ] || [ -z "${hash:-}" ]; then
+    # 读不到标准版本号（2026-09-13 anonymous-title：UnityPlayer.dll 里是中国版 2020.3.14f1c1，官方下载点没有对应的 mac 播放器）：
+    # 原生重定向要的是同版本播放器，拿不到就不硬装，改走 Wine 兜底（32 位 Unity Mono 走 Steamworks.NET 扁平 API，桥能接）。
+    echo "  从 ${d}/UnityPlayer.dll 里读不到标准 Unity 版本号（中国版 c1 一类构建没有可下载的 mac 播放器），原生重定向不做，改走 Wine 兜底。"
+    local wappid="${STEAM_APPID:-}" wdisp="$name" udata
+    udata=$(unity_data_dir "$d" 2>/dev/null || true)
+    if [ -z "$wdisp" ] && [ -n "$udata" ] && [ -f "$d/$udata/app.info" ]; then wdisp=$(sed -n '2p' "$d/$udata/app.info" | tr -d '\r'); fi
+    [ -n "$wdisp" ] || wdisp=$(basename "$d")
+    wrap_wine "$d" "$wdisp" "$wappid" "unity-mono-legacy" "Unity Mono（版本不明）"; return $?
+  fi
+
+  # 显示名: <X>_Data/app.info 第二行是产品名, 比目录名准
+  local disp="$name"
+  if [ -z "$disp" ] && [ -f "$d/$data/app.info" ]; then disp=$(sed -n '2p' "$d/$data/app.info" | tr -d '\r'); fi
+  [ -n "$disp" ] || disp="${data%_Data}"
+
+  # appid: 先认环境变量, 再认游戏自带的 steamapps/appmanifest
+  local appid="${STEAM_APPID:-}" acf
+  if [ -z "$appid" ]; then
+    acf=$(ls "$d"/steamapps/appmanifest_*.acf 2>/dev/null | head -1)
+    [ -n "$acf" ] && appid=$(basename "$acf" | tr -cd '0-9')
+  fi
+
+  # 具体是 arm64 还是 x86_64 要看这个 Unity 版本出没出 arm64 播放器, 下面「播放器」那行才报得准
+  echo "引擎 Unity $ver ($hash) Mono → macOS 原生播放器 + Metal (unity-retarget, 零翻译层)"
+  echo "  数据目录 : $data"
+  echo "  显示名   : $disp"
+  if [ -n "$appid" ]; then echo "  Steam id : $appid"
+  else echo "  Steam id : 未知 — Steam 功能(成就/好友)不会启用, 可 STEAM_APPID=<id> 重跑"; fi
+
+  [ -x "$UNITY_PY" ] || die "缺 Python 环境 $UNITY_PY
+  补法: bash \"$SN_HOME/bin/install.sh\""
+  [ -x "$UNITY_RT/hlslcc-cli" ] || die "缺着色器翻译器 $UNITY_RT/hlslcc-cli"
+
+  # 1. 官方 mac 播放器模板
+  #    变体目录名分三代: 2021.3 起 macos_arm64_player_nondevelopment_mono（多了 _player_，2026-09-14 7 Days to End with You 2021.3.45f2 冒烟才发现），
+  #    2020.x macos_arm64/x64_nondevelopment_mono, 老包 macosx64_nondevelopment_mono。arm64 优先, 再 universal, 没有就退 x86_64(走 Rosetta)。
+  local vars variation arch managed vdir
+  vars=$(unity_fetch_player "$ver" "$hash") || die "拿不到 Unity $ver 的 Mac 播放器模板"
+  # 模板真身是 <变体>/UnityPlayer.app, 不是变体目录本身
+  variation=""
+  for vdir in macos_arm64_player_nondevelopment_mono macos_arm64_nondevelopment_mono \
+              macos_x64arm64_player_nondevelopment_mono \
+              macos_x64_player_nondevelopment_mono macos_x64_nondevelopment_mono \
+              macosx64_nondevelopment_mono macosxintel64_nondevelopment_mono \
+              macosx32_nondevelopment_mono macosxintel_nondevelopment_mono; do
+    [ -d "$vars/$vdir/UnityPlayer.app" ] || continue
+    variation="$vars/$vdir/UnityPlayer.app"; break
+  done
+  [ -n "$variation" ] || die "播放器包里找不到 mac 非开发版 mono 变体(试过 macos_arm64/macos_x64/macosx64 等命名): $vars"
+  case "$variation" in
+    *arm64*) arch="arm64 原生";;
+    *) arch="x86_64 走 Rosetta (这个 Unity 版本没出 arm64 播放器)";;
+  esac
+  # mac 版 UnityEngine*.dll: 新包放在 Variations/mono/Managed, 老包放在 <变体>/Data/Managed
+  if [ -d "$vars/mono/Managed" ]; then managed="$vars/mono/Managed"
+  elif [ -d "$(dirname "$variation")/Data/Managed" ]; then managed="$(dirname "$variation")/Data/Managed"
+  else die "播放器包里找不到 mac 版 Managed(试过 $vars/mono/Managed 和 $(dirname "$variation")/Data/Managed)"
+  fi
+  echo "  播放器   : $(basename "$(dirname "$variation")")  [$arch]"
+
+  # 2. 着色器 D3D11 → Metal/GLCore
+  local work="$SN_GAMES/.unity-work/$(printf '%s' "$disp" | tr -c 'A-Za-z0-9._-' '_')"
+  local overlay="$work/retargeted"
+  mkdir -p "$work"; rm -rf "$overlay"
+  echo "  着色器重定向中 (百来个着色器约半分钟, 日志 $work/retarget.log)"
+  "$UNITY_PY" "$UNITY_DIR/retarget.py" "$d/$data" "$overlay" > "$work/retarget.log" 2>&1 \
+    || die "retarget.py 失败, 见 $work/retarget.log"
+  grep -E '^(done|errors) ' "$work/retarget.log" | sed 's/^/    /'
+  [ -d "$overlay" ] || die "retarget 一个文件都没产出, 见 $work/retarget.log"
+  # 一个 Metal 子程序都没生成 = 这个 Unity 版本的着色器 blob 格式 retarget.py 还不认。
+  # app 照样能拼出来、能起来, 但画面会整片品红(播放器回退到错误着色器), 得说清楚。
+  if ! grep -q "'mtl_ok': [1-9]" "$work/retarget.log"; then
+    echo "  [警告] 这个 Unity 版本的着色器 blob 格式还没接通, 一个 Metal 子程序都没生成。"
+    echo "         app 能起来也能走 Metal, 但画面大概率整片品红。5.6.0f3 实测就是这样(61 个 pass 全跳过)。"
+  fi
+
+  # 3. 图标: 从 exe 的资源段抽
+  local icns="" exe="$d/${data%_Data}.exe"
+  [ -f "$exe" ] || exe=$(ls "$d"/*.exe 2>/dev/null | grep -v UnityCrashHandler | head -1)
+  if [ -n "$exe" ] && [ -f "$exe" ] && "$UNITY_DIR/exe-icon.sh" "$exe" "$work/icon.icns" >/dev/null 2>&1; then
+    icns="$work/icon.icns"; echo "  图标     : 已从 $(basename "$exe") 抽出"
+  else
+    echo "  图标     : 抽不出来, 用系统默认图标"
+  fi
+
+  # 4. 拼 .app
+  local out="$SN_GAMES/$disp.app"
+  # 自动验证（smoke）在用户的 SN_GAMES 里跑，产物名下载前不可知；SN_WRAP_NO_CLOBBER=1 时同名 app 已存在就停，不覆盖别人的东西。
+  [ "${SN_WRAP_NO_CLOBBER:-0}" = 1 ] && [ -e "$out" ] && die "已存在同名 app，SN_WRAP_NO_CLOBBER=1 下不覆盖: $out"
+  local bid="com.unity-retarget.$(printf '%s' "$disp" | tr 'A-Z' 'a-z' | tr -cd 'a-z0-9')"
+  WORK_DIR="$work" "$UNITY_DIR/assemble-mac-app.sh" "$d" "$data" "$variation" "$managed" "$overlay" \
+      "$out" "$disp" "$bid" "$appid" "$icns" 2>&1 | sed 's/^/  /' || die "assemble-mac-app.sh 失败"
+  [ -d "$out" ] || die "没生成 $out"
+
+  # 5. 原生插件: Windows 的 .dll 在 mac 上一个都用不了, 逐个交代。
+  # FMOD 与 Wwise 由 assemble-mac-app.sh 在签名前处理(上面 FMOD:/Wwise: 那几行),
+  # 这里不重复动 PlugIns, 也就不需要再签一次。
+  local p b
+  echo "  原生插件 :"
+  for p in "$d/$data/Plugins"/*.dll "$d/$data/Plugins"/*/*.dll; do
+    [ -f "$p" ] || continue
+    b=$(basename "$p")
+    case "$b" in
+      steam_api.dll|steam_api64.dll) echo "    $b → 已换成原生 libsteam_api.dylib (Steamworks.NET 走它, 实测可加载 Steam 客户端)";;
+      fmodstudio.dll|fmodstudioL.dll|fmod.dll) echo "    $b → 见上面 FMOD: 那行(assemble 已按有无真库分流)";;
+      *) echo "    $b → 没有 mac 版, 缺失; 是否致命需实测(手柄/输入类通常只是功能缺失)";;
+    esac
+  done
+
+  wrap_done "$out" || return $?
+  echo "已生成: $out"
+  echo "自测:   \"$out/Contents/MacOS/launcher\" -logFile /tmp/unity-player.log"
+  [ -n "$appid" ] && echo "入库:   dryport add \"$out\" $appid"
+  return 0
+}
+
+# 把 NW.js / Godot / 吉里吉里 三条路线接到各自已有的换壳脚本上。
+# 每款游戏单独验收；一款游戏的菜单与开场不能代表整个引擎已经可玩。
+wrap_wine(){ # <目录> <显示名> <appid> <引擎id> <引擎名>：Wine + DXMT 兜底（有翻译层），带 steam_api64.dll 的游戏接桥
+  local d="$1" wname="$2" appid="$3" eid="$4" ename="$5" exe out
+  [ -x "$SN_RUNTIMES/wine-cx/bin/wine" ] || die "Wine 兜底需要 wine-cx 运行时：有发布包时 tools/runtime-bundle.py install --from <目录或 URL>，否则 tools/build-wine.sh 本地构建（小时级）"
+  [ -f "$SN_RUNTIMES/wine-cx/lib/wine/x86_64-unix/winemetal.so" ] || echo "  注意：wine-cx 里没有 DXMT（winemetal.so），DirectX 11 游戏会出不了画面；见 tools/install-dxmt.sh" >&2
+  exe="${SN_WINE_EXE:-}"
+  local launch_args='[]' workdir=''
+  if [ -z "$exe" ]; then
+    # 先照 Steam 的启动配置（入口、参数、工作目录；GOG 老游戏的 run.bat 也解），没有再启发式挑 exe
+    local sel
+    sel=$(python3 -B "$SN_LIB/wine_exe.py" "$d" --appid "$appid" --json) || die "找不到主程序 exe；用 SN_WINE_EXE=<相对路径> 指定后重跑"
+    exe=$(printf '%s' "$sel" | python3 -c 'import json,sys; print(json.load(sys.stdin)["exe"] or "")')
+    [ -n "$exe" ] || die "找不到主程序 exe；用 SN_WINE_EXE=<相对路径> 指定后重跑"
+    launch_args=$(printf '%s' "$sel" | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin)["args"], ensure_ascii=False))')
+    workdir=$(printf '%s' "$sel" | python3 -c 'import json,sys; print(json.load(sys.stdin)["workdir"] or "")')
+    echo "  主程序：${exe}（$(printf '%s' "$sel" | python3 -c 'import json,sys; print(json.load(sys.stdin)["reason"])')）"
+    [ "$launch_args" != '[]' ] && echo "  参数：${launch_args}"
+    [ -n "$workdir" ] && echo "  工作目录：${workdir}"
+  else
+    echo "  主程序：${exe}（SN_WINE_EXE 指定）"
+  fi
+  echo "引擎 $ename → Wine + DXMT 兜底（有翻译层，Rosetta 之上）"
+  echo "  这款游戏仍需实际验证画面、操作与存档；首次启动会初始化 Wine prefix（约 1 分钟），默认 1280x720 虚拟桌面不独占全屏。"
+  out=$(SN_WINE_ENGINE="$eid" STEAM_APPID="$appid" SN_WINE_LAUNCH_ARGS="$launch_args" SN_WINE_WORKDIR="$workdir" "$SN_LIB/wine-wrap.sh" "$d" "$exe" "$wname" "$appid" 2> >(sed 's/^/  /' >&2)) || {
+    rc=$?
+    [ "$rc" = 3 ] && die "这款主程序带 Steamworks DRM 包装（PE 节 .bind），Wine 路线不打包：它要同一前缀里运行中的 Windows 版 Steam 取票据解密，本工具不绕过 DRM。下载的文件保留在 ${d}"
+    [ "$rc" = 4 ] && die "could not inspect the main executable for DRM；Wine 路线拒绝打包。下载的文件保留在 ${d}"
+    die "wine-wrap.sh 失败"
+  }
+  [ -d "$out" ] || die "没生成 $out"
+  wrap_done "$out" || return $?
+  echo "已生成: $out"
+  [ -n "$appid" ] && echo "入库:   dryport add \"$out\" $appid"
+  return 0
+}
+
+wrap_via_script(){
+  local script="$1" d="$2" wname="$3" appid="$4" label="$5"
+  [ -x "$script" ] || die "缺换壳脚本 $script"
+  local out="$SN_GAMES/$wname.app"
+  [ "${SN_WRAP_NO_CLOBBER:-0}" = 1 ] && [ -e "$out" ] && die "已存在同名 app，SN_WRAP_NO_CLOBBER=1 下不覆盖: $out"
+  echo "引擎 $label → 原生 arm64 换壳"
+  echo "  这款游戏仍需实际验证画面、操作与存档；当前路线证据见 docs/路线状态.md。"
+  "$script" "$d" "$wname" "$out" ${appid:+"$appid"} 2>&1 | sed 's/^/  /'
+  local rc=${PIPESTATUS[0]}
+  [ "$rc" = 0 ] || die "$(basename "$script") 失败(退出码 $rc)"
+  [ -d "$out" ] || die "没生成 $out"
+  wrap_done "$out" || return $?
+  echo "已生成: $out"
+  [ -n "$appid" ] && echo "入库:   dryport add \"$out\" $appid"
+  return 0
+}
+
+# ─────────────────────────────────────────────
+# 打包: 按引擎分流。RGSS → mkxp-z, Unity Mono → unity-retarget,
+#       NW.js → nwjs-wrap.sh, Godot → godot-wrap.sh, 吉里吉里 → krkr-wrap.sh
+# ─────────────────────────────────────────────
+# 每条打包路线收尾都走这里。两件事:
+# 1) 把 appid 盖进 Contents/Resources/steam_appid.txt。各路线的运行时目录不同，
+#    (Unity 写 MacOS、Godot 写 Resources、NW.js 写 app.nw、RGSS 只在游戏自带
+#    steam_api.dll 时才写 Game/), 结果是伴侣 app 的「已装」扫描只认得出 Unity 那一种。
+#    已安装的非 Unity app 也需要这份统一身份牌，避免安装成功却显示未安装。
+#    路线自己那份照写不误, 这里只补一份统一的身份牌。
+# 2) 回报产物路径给调用方。
+wrap_done(){
+  local out="$1"
+  if [ -n "${STEAM_APPID:-}" ] && [ -d "$out/Contents/MacOS" ]; then
+    mkdir -p "$out/Contents/Resources" || return 1
+    printf '%s' "$STEAM_APPID" > "$out/Contents/Resources/steam_appid.txt" || return 1
+  fi
+  # 身份标记也在签名封存范围内，必须在最后一次写入后签名和回读，才可报告产物成功。
+  codesign --force --sign - --preserve-metadata=entitlements,requirements,flags "$out" >/dev/null 2>&1 \
+    || { echo "最终签名失败，产物保留但不报告安装成功: $out" >&2; return 1; }
+  codesign --verify "$out" >/dev/null 2>&1 \
+    || { echo "最终签名验证失败: $out" >&2; return 1; }
+  if [ -n "${WRAP_OUT_FILE:-}" ]; then
+    printf '%s' "$out" > "$WRAP_OUT_FILE" || { echo "无法写入产物记录，未报告安装成功。" >&2; return 1; }
+  fi
+  return 0
+}
+
+cmd_wrap(){
+  local d="${1:-}" name="${2:-}"
+  [ -n "$d" ] || die "用法: dryport wrap <游戏目录> [名字]"
+
+  d="${d%/}"
+  [ -d "$d" ] || die "目录不存在: $d"
+
+  require_repack_permission "$d" || return $?
+  local gate_appid="$STEAM_APPID"
+  IFS='|' read -r id ename runtime layer status <<<"$(detect_engine "$d")"
+  local wname="$name"; [ -n "$wname" ] || wname=$(basename "$d")
+  # 主程序带 Steamworks DRM 包装（PE 节 .bind）就先说清：Wine 路线会在打包前拒绝；原生路线不运行这个 exe，包装器的检查在那些路线上不会执行，
+  # 这算不算规避是法律问题（docs/LEGAL.md「DRM-wrapped executables」），这里只如实告知，不替用户决定。
+  local drm_exe
+  for drm_exe in "$d"/*.exe; do
+    [ -f "$drm_exe" ] || continue
+    case "$(basename "$drm_exe")" in UnityCrashHandler*|UnityPlayer*|*Setup*|*Redist*) continue;; esac
+    if python3 -B "$SN_LIB/steam_drm.py" "$drm_exe" >/dev/null 2>&1; then :; elif [ $? = 3 ]; then
+      echo "  注意：$(basename "$drm_exe") 带 Steamworks DRM 包装（PE 节 .bind）。Wine 路线会拒绝打包；原生路线不运行这个 exe，包装器的检查在原生路线上不会执行，见 docs/LEGAL.md。"
+    fi
+  done
+  case "$id" in
+    rgss1|rgss2|rgss3) ;;
+    unity-mono) wrap_unity_mono "$d" "$name"; return $?;;
+    nwjs)      wrap_via_script "$SN_LIB/nwjs-wrap.sh"  "$d" "$wname" "$gate_appid" "NW.js(RPG Maker MV/MZ)"; return $?;;
+    love)      wrap_via_script "$SN_LIB/love-wrap.sh"  "$d" "$wname" "$gate_appid" "LÖVE 11.5 原包直读"; return $?;;
+    webkit)    wrap_via_script "$SN_LIB/webkit-wrap.sh" "$d" "$wname" "$gate_appid" "系统 WebKit 原包直读"; return $?;;
+    renpy-native) wrap_via_script "$SN_LIB/renpy-wrap.sh" "$d" "$wname" "$gate_appid" "Ren’Py 原包直读（已验版本）"; return $?;;
+    godot)     wrap_via_script "$SN_LIB/godot-wrap.sh" "$d" "$wname" "$gate_appid" "Godot"; return $?;;
+    kirikiri)  wrap_via_script "$SN_LIB/krkr-wrap.sh"  "$d" "$wname" ""            "吉里吉里(krkrsdl2)"; return $?;;
+    unity-il2cpp|unreal|gamemaker|unity-mono-legacy|unknown) wrap_wine "$d" "$wname" "$gate_appid" "$id" "$ename"; return $?;;
+    # 原生路线还没实现的引擎（AIR、Flash、后端认不出的 Unity）不再在下载完之后拒绝，先按 Windows 游戏走 Wine 兜底
+    air|flash|unity) echo "  ${ename} 的原生路线尚未实现，先走 Wine 兜底"; wrap_wine "$d" "$wname" "$gate_appid" "unknown" "$ename"; return $?;;
+    *) die "引擎 [$ename] 的原生打包尚未实现。已接通 RGSS、Unity Mono、NW.js、LÖVE、Godot、吉里吉里与已验版本的 WebKit、Ren’Py 入口，其余走 Wine 兜底；每款仍需验证。";;
+  esac
+  [ -d "$MKXPZ_APP" ] || die "找不到 mkxp-z: $MKXPZ_APP (先构建 mkxp-z)"
+
+  [ -n "$name" ] || name=$(basename "$d")
+  local out="$SN_GAMES/$name.app"
+  [ "${SN_WRAP_NO_CLOBBER:-0}" = 1 ] && [ -e "$out" ] && die "已存在同名 app，SN_WRAP_NO_CLOBBER=1 下不覆盖: $out"
+  echo "引擎 $ename → mkxp-z (原生 arm64 + Metal)"
+
+  # 存档由游戏脚本写在 Contents/Game 里, 重新打包会连同抹掉。
+  # 先抢救出来, 打包完再放回去。
+  local savetmp=""
+  if [ -d "$out/Contents/Game" ]; then
+    savetmp=$(mktemp -d)
+    local nsave=0
+    for sf in "$out/Contents/Game"/Save*.rvdata2 "$out/Contents/Game"/Save*.rvdata \
+              "$out/Contents/Game"/Save*.rxdata "$out/Contents/Game"/*.save; do
+      [ -f "$sf" ] && { cp "$sf" "$savetmp/"; nsave=$((nsave+1)); }
+    done
+    [ "$nsave" -gt 0 ] && echo "已暂存 $nsave 个存档文件" || { rm -rf "$savetmp"; savetmp=""; }
+  fi
+
+  rm -rf "$out"; cp -R "$MKXPZ_APP" "$out" || die "复制运行时失败"
+
+  # mkxp-z 模板的 Z-universal 只是运行时自己的名字。应用窗口与 Dock owner
+  # 必须归属于这款游戏，和 Unity 的组装路线一样把播放器与 bundle 身份改成游戏名。
+  local bundle_id="${STEAM_APPID:-}"
+  if [ -z "$bundle_id" ]; then
+    bundle_id=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]')
+  fi
+  [ -n "$bundle_id" ] || bundle_id=game
+  if [ "$name" != "Z-universal" ]; then
+    mv "$out/Contents/MacOS/Z-universal" "$out/Contents/MacOS/$name" \
+      || die "重命名 mkxp-z 可执行文件失败"
+  fi
+  python3 - "$out/Contents/Info.plist" "$name" "org.dryport.mkxp.$bundle_id" <<'PY'
+import pathlib
+import plistlib
+import sys
+
+plist_path, game_name, bundle_id = sys.argv[1:]
+path = pathlib.Path(plist_path)
+with path.open("rb") as stream:
+    metadata = plistlib.load(stream)
+metadata["CFBundleExecutable"] = game_name
+metadata["CFBundleName"] = game_name
+metadata["CFBundleDisplayName"] = game_name
+metadata["CFBundleIdentifier"] = bundle_id
+path.write_bytes(plistlib.dumps(metadata, fmt=plistlib.FMT_XML))
+PY
+
+  # APFS 克隆游戏资源,不占额外空间;跳过 Steam 自己的杂物
+  local n=0
+  for item in "$d"/*; do
+    local b; b=$(basename "$item")
+    case "$b" in steamapps|installscript*.vdf|*.log) continue;; esac
+    cp -Rc "$item" "$out/Contents/Game/" 2>/dev/null && n=$((n+1))
+  done
+  echo "已挂入 $n 项游戏资源 (APFS 克隆,零额外占用)"
+  # RGSS3A 归档在 mkxp-z 里查不到条目（2026-09-14 一款 RPG Maker 游戏：Data/actors.rvdata2 ENOENT，解成散文件就能启动；
+  # 早先含浊音假名的日文资源也是同一类）。解包只发生在 app 内的工作副本，原件不动；解完把副本里的归档去掉免得重复挂载。
+  if [ -f "$out/Contents/Game/Game.rgss3a" ] && [ -f "$SN_LIB/rgss3a-extract.py" ]; then
+    if python3 "$SN_LIB/rgss3a-extract.py" "$out/Contents/Game/Game.rgss3a" "$out/Contents/Game" >/dev/null 2>&1; then
+      rm -f "$out/Contents/Game/Game.rgss3a"
+      echo "已把 Game.rgss3a 解成散文件 (mkxp-z 直接读目录; 原件保留在下载目录)"
+    else
+      echo "  [注意] Game.rgss3a 解包失败，保留归档由 mkxp-z 自行读取"
+    fi
+  fi
+
+  # Steam 上的 RPG Maker 游戏普遍用 cyanic 的 RGSS_SteamUserStatsLite 做成就,
+  # 它通过 Win32API 加载 steam_api(.dll)。mkxp-z 的 Win32API 底层就是 dlopen,
+  # 所以放一份 macOS 的 Steamworks SDK 库进去, 名字铺齐, 链路就能通,
+  # 不需要动 Steam 二进制。注意必须用游戏侧的 SDK redistributable:
+  # Steam 客户端自带的那份不导出 SteamAPI_Init。
+  if [ -f "$RUNTIMES/libsteam_api.dylib" ] && \
+     { [ -f "$d/steam_api.dll" ] || [ -f "$d/steam_api64.dll" ]; }; then
+    for n in steam_api steam_api64 libsteam_api.dylib steam_api.dylib steam_api64.dylib; do
+      cp "$RUNTIMES/libsteam_api.dylib" "$out/Contents/Game/$n"
+    done
+    echo "已装上 macOS 版 Steamworks 库 (游戏含 steam_api.dll, 成就链路可通)"
+    if [ -n "${STEAM_APPID:-}" ]; then
+      printf '%s' "$STEAM_APPID" > "$out/Contents/Game/steam_appid.txt"
+      echo "  steam_appid.txt = $STEAM_APPID"
+    fi
+  fi
+
+  local ver=3
+  case "$id" in rgss1) ver=1;; rgss2) ver=2;; esac
+
+  # 老 RPG Maker 游戏大量使用 Ruby 1.9 时代的 API(Hash#index、Object#id、TRUE/NIL 等),
+  # 这些在 mkxp-z 用的 Ruby 3.1 里已被移除,不补会在运行中途崩溃。
+  # 例: mkxp-z issue #322,a RPG Maker title 的契约界面因 Hash#index 直接崩。
+  # 这是上游提供的 CC0 兼容垫片,默认装上。
+  local preloads=()
+  if [ -f "$SN_LIB/ruby_classic_wrap.rb" ]; then
+    cp "$SN_LIB/ruby_classic_wrap.rb" "$out/Contents/Game/"
+    preloads+=('"ruby_classic_wrap.rb"')
+    echo "已装上 Ruby 1.9 兼容垫片 (防 Hash#index 一类的运行时崩溃)"
+  else
+    echo "警告: 找不到 ruby_classic_wrap.rb,老游戏可能在运行中途崩溃" >&2
+  fi
+
+  # RGSS 引擎本身没有鼠标, Windows 版的鼠标是脚本用 Win32API 硬做的,
+  # 那套在 mkxp-z 里不存在。这一层用 mkxp-z 的原生鼠标 API 把它补回来。
+  # Steam 扁平 API 改名兼容 + 找不到符号时的桩（2026-09-14，一款 RPG Maker 游戏 在 GetStat 上死）
+  if [ -f "$SN_LIB/mkxp_steam_shim.rb" ]; then
+    cp "$SN_LIB/mkxp_steam_shim.rb" "$out/Contents/Game/"
+    preloads+=('"mkxp_steam_shim.rb"')
+  fi
+  if [ -f "$SN_LIB/mkxp_mouse.rb" ]; then
+    cp "$SN_LIB/mkxp_mouse.rb" "$out/Contents/Game/"
+    preloads+=('"mkxp_mouse.rb"')
+    echo "已装上鼠标层 (左键=确认 右键=取消 移动=高亮 滚轮=翻选项)"
+  fi
+
+  local shim=""
+  if [ ${#preloads[@]} -gt 0 ]; then
+    local joined
+    joined=$(IFS=,; echo "${preloads[*]}")
+    shim="\"preloadScript\": [${joined}],"
+  fi
+
+  # 标题里的非 ASCII 字符（中文名）会让 mkxp-z 报「Failed to parse mkxp.json : Unknown encoding」，整份配置作废、preload 一个都不跑
+  # （2026-09-14 一款 RPG Maker 游戏：Ruby 垫片和 Steam 桩都没装上，游戏死在旧 Steam 函数名上）。统一转成 \u 转义。
+  local title_json; title_json=$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1], ensure_ascii=True))' "$name")
+  cat > "$out/Contents/Game/mkxp.json" <<JSON
+{
+    // generated by dryport on $(date +%Y-%m-%d)
+    "rgssVersion": $ver,
+    $shim
+    "preferMetalRenderer": true,
+    "syncToRefreshrate": true,
+    "smoothScaling": true,
+    "fixedAspectRatio": true,
+    "winResizable": true,
+    "enableSettings": true,
+    "windowTitle": $title_json,
+    "printFPS": false
+}
+JSON
+  if [ -n "$savetmp" ]; then
+    cp "$savetmp"/* "$out/Contents/Game/" 2>/dev/null
+    echo "已恢复存档: $(ls "$savetmp" | wc -l | tr -d ' ') 个文件"
+    rm -rf "$savetmp"
+  fi
+
+  # mkxp-z 自编运行时的 universal dylib 只有 arm64 切片带签名（x86_64 切片没签），整包 ad-hoc 签名会在这些嵌套件上失败
+  # （2026-09-14 冒烟：三款 RGSS 游戏都停在「最终签名失败」）。先把嵌套的 Mach-O 逐个 ad-hoc 签好，两个切片一起签。
+  local nested
+  for nested in "$out"/Contents/Frameworks/*.dylib "$out/Contents/MacOS/$name"; do
+    [ -f "$nested" ] || continue
+    codesign --force --sign - "$nested" >/dev/null 2>&1 || echo "  [注意] 嵌套件签名失败: $(basename "$nested")"
+  done
+
+  wrap_done "$out" || return $?
+  echo "已生成: $out"
+  echo "自测:   \"$out/Contents/MacOS/$name\""
+}
+
+# ─────────────────────────────────────────────
+# 入库: 通过 Steam 的 CDP 接口添加,不手写二进制 vdf
+# ─────────────────────────────────────────────
+cmd_add(){
+  local app="${1:-}" sappid="${2:-}"
+  [ -n "$app" ] || die "用法: dryport add <.app 路径> [该游戏的 steam appid,用于取官方封面]"
+  [ -d "$app" ] || die "找不到: $app"
+  app=$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve(strict=True))' "$app") \
+    || die "无法解析 app 路径，未添加"
+
+  # 先只读查重。同一个 .app 再 add 一次会在库里多出一条重复快捷方式,
+  # 而且那条新 appid 的封面还得重新铺。已有就直接返回, 一个字节都不写。
+  # 真要重加, 先在 Steam 库里把旧条目删掉。
+  local dup dup_code
+  dup=$(python3 "$SN_LIB/steam-shortcut-mirror.py" --find "$app" 2>/dev/null)
+  dup_code=$?
+  [ "$dup_code" -le 1 ] || die "无法确认当前账号的快捷方式，未添加"
+  if [ -n "$dup" ]; then
+    echo "Steam 库里已经有这条了, 不重复添加:"
+    printf '%s\n' "$dup" | while read -r u a n; do
+      echo "  账号 $u  快捷方式 appid=$a  名字 $n"
+      echo "    启动: steam://rungameid/$(python3 -c "print((int('$a') << 32) | 0x02000000)")"
+    done
+    echo "  (要重新添加: 先在 Steam 库里右键删掉旧条目, 再跑一次)"
+    return 0
+  fi
+
+  curl -s --max-time 3 http://localhost:8080/json/version >/dev/null 2>&1 \
+    || die "Steam 的 CDP 端口没开。需要先 touch \"$STEAM/Steam.AppBundle/Steam/Contents/MacOS/.cef-enable-remote-debugging\" 并重启 Steam。"
+
+  local name; name=$(basename "$app" .app)
+  local newid backup
+  backup=$(python3 "$SN_LIB/steam-shortcut-check.py" prepare "$app") || die "入库前备份失败，未添加"
+  newid=$(node "$SN_LIB/steam-add.mjs" "$name" "$app") || die "添加失败"
+  python3 "$SN_LIB/steam-shortcut-check.py" verify "$backup" "$newid" \
+    || die "Steam 添加已请求，但回读核对未通过；备份保留在 $backup"
+  echo "已加入 Steam 库, 快捷方式 appid = $newid"
+
+  if [ -n "$sappid" ]; then
+    local cache="$STEAM/appcache/librarycache/$sappid"
+    local cap hero logo cfg grid
+    cap=$(find "$cache" -name "library_capsule.jpg" 2>/dev/null | head -1)
+    hero=$(find "$cache" -name "library_hero.jpg" 2>/dev/null | head -1)
+    logo=$(find "$cache" -name "logo.png" 2>/dev/null | head -1)
+    # 只铺当前登录的那个账号。多账号的机器上,别因为用了这工具就让另一个账号的库里多出东西
+    local uid current_uid
+    uid=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["uid"])' "$backup") || return 1
+    current_uid=$(python3 "$SN_LIB/steam-shortcut-mirror.py" --active 2>/dev/null) || current_uid=""
+    if [ "$current_uid" != "$uid" ]; then
+      echo "  添加后账号已变化，跳过封面；快捷方式备份保留。"
+      return 1
+    fi
+    for cfg in ${uid:+"$STEAM/userdata/$uid/config"}; do
+      [ -d "$cfg" ] || continue
+      grid="$cfg/grid"; mkdir -p "$grid"
+      [ -n "$cap" ]  && cp "$cap"  "$grid/${newid}p.jpg" && cp "$cap" "$grid/${newid}.jpg"
+      [ -n "$hero" ] && cp "$hero" "$grid/${newid}_hero.jpg"
+      [ -n "$logo" ] && cp "$logo" "$grid/${newid}_logo.png"
+    done
+    [ -n "$cap" ]  && echo "  封面已设" || echo "  封面: librarycache 里没有 library_capsule.jpg, 未设"
+    [ -n "$hero" ] && echo "  大图已设"
+    [ -n "$logo" ] && echo "  Logo 已设"
+    echo "  (封面要重启 Steam 才刷新)"
+  fi
+  echo "启动: steam://rungameid/$(python3 -c "print(($newid << 32) | 0x02000000)")"
+}
+
+# ─────────────────────────────────────────────
+# doctor: 证明这套工具没有动过你的 Steam
+# ─────────────────────────────────────────────
+cmd_doctor(){
+  local fail=0 warn=0
+  local G_OK=$'\033[32m  ✓\033[0m' G_WARN=$'\033[33m  !\033[0m' G_BAD=$'\033[31m  ✗\033[0m'
+  d_ok(){   echo "$G_OK $*"; }
+  d_warn(){ echo "$G_WARN $*"; warn=$((warn+1)); }
+  d_bad(){  echo "$G_BAD $*"; fail=$((fail+1)); }
+  d_hdr(){  printf '\n\033[1m%s\033[0m\n' "$1"; }
+
+  echo "检查这套工具有没有动过 Steam 本身。取数 $(date '+%Y-%m-%d %H:%M')。"
+
+  # ── 1. 客户端二进制
+  d_hdr "1. Steam 客户端二进制"
+  local APP="$STEAM/Steam.AppBundle/Steam" team
+  # 先分清「没装 Steam」和「装了但被改过」。这两件事的处置完全不同,混报会把干净机器
+  # 吓成被篡改。
+  if [ ! -x "$APP/Contents/MacOS/steam_osx" ]; then
+    d_warn "这个账号没装 Steam (找不到 $APP/Contents/MacOS/steam_osx)"
+    echo "      本工具需要你自己已登录的 Steam 客户端; 装好并登录后再跑一次 doctor。"
+    echo "      下面与客户端、配置、游戏库有关的检查这次全部跳过。"
+    d_hdr "结论"
+    echo "  没装 Steam, 无从谈起改没改过。装好 Steam 再跑。"
+    return 0
+  fi
+  team=$(codesign -dv "$APP/Contents/MacOS/steam_osx" 2>&1 | sed -n 's/^TeamIdentifier=//p')
+  if [ "$team" = "MXGJJ98X76" ]; then
+    d_ok "steam_osx 仍是 Valve 签的 (TeamIdentifier=$team)"
+  else
+    d_bad "steam_osx 的签名不是 Valve 的 (读到 '${team:-空}')"
+  fi
+  # 这条判据只在跑的确实是本账号这份 Steam 时才成立
+  local running_bin
+  running_bin=$(pgrep -x steam_osx >/dev/null 2>&1 && ps -o comm= -p "$(pgrep -x steam_osx | head -1)" 2>/dev/null || true)
+  if [ -n "$running_bin" ] && [ "$running_bin" = "$APP/Contents/MacOS/steam_osx" ]; then
+    d_ok "Steam 正在运行 (签名真被改坏, macOS 会直接 SIGKILL)"
+  elif [ -n "$running_bin" ]; then
+    d_warn "有 steam_osx 在运行, 但不是这个 HOME 下的那份, 这条判据这次用不上"
+  else
+    d_warn "Steam 没在运行, 这条判据这次用不上"
+  fi
+  # 基线: 第一次记下核心文件的哈希, 以后比对。Steam 自更新会整批一起变, 单个文件变了才是被人动过。
+  local BASE="$SN_GAMES/.steam-baseline.json"
+  python3 - "$APP" "$BASE" <<'PY'
+import hashlib, json, os, sys, time
+app, base = sys.argv[1], sys.argv[2]
+files = ["Contents/MacOS/steam_osx", "Contents/MacOS/steamclient.dylib",
+         "Contents/MacOS/libsteam_api.dylib" if os.path.exists(os.path.join(app, "Contents/MacOS/libsteam_api.dylib")) else None]
+files = [f for f in files if f and os.path.exists(os.path.join(app, f))]
+now = {}
+for f in files:
+    p = os.path.join(app, f)
+    h = hashlib.sha256(open(p, "rb").read()).hexdigest()
+    now[f] = {"sha256": h, "mtime": int(os.path.getmtime(p)), "size": os.path.getsize(p)}
+old = {}
+if os.path.exists(base):
+    try: old = json.load(open(base)).get("files", {})
+    except Exception: old = {}
+if not old:
+    os.makedirs(os.path.dirname(base), exist_ok=True)
+    json.dump({"recorded": time.strftime("%Y-%m-%d %H:%M:%S"), "files": now}, open(base, "w"), indent=2)
+    print(f"\033[32m  ✓\033[0m 已记下 {len(now)} 个核心文件的基线, 以后每次 doctor 会拿它比对")
+    for f, v in now.items():
+        print(f"      {os.path.basename(f)}  {v['sha256'][:16]}  {time.strftime('%m-%d %H:%M', time.localtime(v['mtime']))}")
+else:
+    changed = [f for f in now if f in old and now[f]["sha256"] != old[f]["sha256"]]
+    if not changed:
+        print(f"\033[32m  ✓\033[0m {len(now)} 个核心文件与基线逐字节一致, 没有被改过")
+    else:
+        # 整批一起变 = Steam 自更新; 只有一两个变 = 被单独动过
+        mt = {int(now[f]["mtime"]) for f in changed}
+        allc = len(changed) == len(now)
+        tag = "整批一起变, 是 Steam 自更新" if allc and len(mt) <= 2 else "只有部分文件变, 要当心"
+        lvl = "\033[33m  !\033[0m" if allc else "\033[31m  ✗\033[0m"
+        print(f"{lvl} {len(changed)}/{len(now)} 个核心文件与基线不同 ({tag})")
+        for f in changed:
+            print(f"      {os.path.basename(f)}  {old[f]['sha256'][:16]} -> {now[f]['sha256'][:16]}"
+                  f"  {time.strftime('%m-%d %H:%M', time.localtime(now[f]['mtime']))}")
+        print("      确认是 Steam 自己更新的, 删掉基线重记: rm " + base)
+PY
+  local junk
+  junk=$(find "$APP/Contents/MacOS" -maxdepth 1 \( -name "*.orig" -o -name "*.bak" -o -name "*.patched" \) 2>/dev/null | head -5)
+  [ -z "$junk" ] && d_ok "客户端目录没有 .orig / .bak / .patched 残留" \
+                 || { d_bad "客户端目录有改动残留:"; echo "$junk" | sed 's/^/      /'; }
+
+  # ── 2. 客户端配置
+  d_hdr "2. Steam 配置文件"
+  [ -d "$STEAM/compatibilitytools.d" ] \
+    && { d_bad "存在 compatibilitytools.d (本工具从不装兼容工具)"; ls "$STEAM/compatibilitytools.d" | sed 's/^/      /'; } \
+    || d_ok "没有 compatibilitytools.d"
+  grep -qi "CompatToolMapping" "$STEAM/config/config.vdf" 2>/dev/null \
+    && d_bad "config.vdf 里有 CompatToolMapping" || d_ok "config.vdf 里没有 CompatToolMapping"
+  local po
+  po=$(grep -rl "platform_overrides" "$STEAM"/userdata/*/config/*.vdf 2>/dev/null | head -3)
+  [ -z "$po" ] && d_ok "没有任何 platform_overrides" \
+               || { d_bad "有 platform_overrides:"; echo "$po" | sed 's/^/      /'; }
+
+  # ── 3. Steam 库本体
+  d_hdr "3. Steam 库里的游戏文件"
+  local touched
+  touched=$(find "$STEAM/steamapps" \( -name "*.orig" -o -name ".dryport-appid" -o -name "*.bridge" \) 2>/dev/null | head -5)
+  [ -z "$touched" ] && d_ok "steamapps 下没有本工具的任何痕迹 (改包一律在 $SN_GAMES 的副本里做)" \
+                    || { d_bad "steamapps 下有本工具的痕迹:"; echo "$touched" | sed 's/^/      /'; }
+  local acf n_acf
+  n_acf=$(ls "$STEAM/steamapps"/appmanifest_*.acf 2>/dev/null | wc -l | tr -d ' ')
+  d_ok "Steam 自己记录的已安装游戏: $n_acf 个 (安装记录只由 Steam 自己写)"
+
+  # ── 4. 非 Steam 快捷方式
+  d_hdr "4. 非 Steam 快捷方式 (官方机制, 写 shortcuts.vdf)"
+  local active
+  active=$(python3 "$SN_LIB/steam-shortcut-mirror.py" --active 2>/dev/null)
+  [ -n "$active" ] && d_ok "当前登录账号: $(python3 -c "
+import importlib.util,sys
+sys.path.insert(0, '$SN_LIB')
+spec=importlib.util.spec_from_file_location('m','$SN_LIB/steam-shortcut-mirror.py')
+m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+print(m.account_label('$active'))" 2>/dev/null || echo "$active")" \
+                   || d_warn "认不出当前登录账号"
+  python3 "$SN_LIB/steam-shortcut-mirror.py" --list --all-accounts 2>/dev/null | sed 's/^/      /'
+  local stray
+  stray=$(python3 - <<PY
+import os, sys, importlib.util
+sys.path.insert(0, "$SN_LIB")
+spec = importlib.util.spec_from_file_location("m", "$SN_LIB/steam-shortcut-mirror.py")
+m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+act = "$active"
+bad = []
+for uid in m.all_accounts():
+    p = os.path.join(m.STEAM, "userdata", uid, "config", "shortcuts.vdf")
+    if not os.path.exists(p): continue
+    try: es = m.load(p)
+    except Exception: continue
+    if es and uid != act:
+        bad.append(f"{m.account_label(uid)} 有 {len(es)} 条")
+print("; ".join(bad))
+PY
+)
+  [ -z "$stray" ] && d_ok "只有当前登录账号有快捷方式 (工具不擅自往你没在用的账号写)" \
+                  || d_warn "你没在用的账号也有快捷方式: $stray\n      要它们就留着, 不要就清: steam-shortcut-mirror.py --purge <uid>"
+
+  # ── 5. 封号面
+  d_hdr "5. 封号风险面"
+  local risky=0 checked=0 appid name
+  for app in "$SN_GAMES"/*.app; do
+    [ -d "$app" ] || continue
+    appid=$(find "$app" -name "steam_appid.txt" -maxdepth 4 2>/dev/null | head -1)
+    [ -n "$appid" ] || continue
+    appid=$(tr -dc '0-9' < "$appid")
+    [ -n "$appid" ] || continue
+    checked=$((checked+1))
+    if python3 "$SN_LIB/risk.py" "$appid" 2>/dev/null | head -1 | grep -q "不碰"; then
+      d_bad "$(basename "$app" .app) (appid $appid) 带反作弊, 不该被打包"
+      risky=$((risky+1))
+    fi
+  done
+  [ "$risky" = 0 ] && d_ok "打包过的 $checked 个游戏全部无反作弊 (闸在 lib/risk.py)" || true
+  d_ok "VAC 只在 VAC 保护的游戏运行时扫描, 这类游戏本工具一律拒绝打包"
+
+  # ── 结论
+  d_hdr "结论"
+  if [ "$fail" = 0 ] && [ "$warn" = 0 ]; then
+    echo "  Steam 客户端、配置、游戏库都没有被这套工具改过。"
+  elif [ "$fail" = 0 ]; then
+    echo "  没有发现改动。有 $warn 处提示, 看上面。"
+  else
+    echo "  有 $fail 处要处理, 看上面标 ✗ 的。"
+  fi
+  echo
+  echo "  这里只能证明本机文件的状态。账号在 Valve 那边有没有标记, 要去 Steam 个人资料页看。"
+  return $((fail > 0))
+}
+
+# ─────────────────────────────────────────────
+# scan: 一次看清一批游戏分别是什么引擎
+# ─────────────────────────────────────────────
+cmd_scan(){
+  local root="${1:-$SN_GAMES}"
+  [ -d "$root" ] || die "目录不存在: $root"
+  printf "%-34s %-26s %-14s %s\n" "游戏目录" "引擎" "翻译层" "状态"
+  printf "%s\n" "$(printf '─%.0s' $(seq 1 92))"
+  local n_native=0 n_wine=0 n_unknown=0
+  for g in "$root"/*/; do
+    g="${g%/}"
+    [ -d "$g" ] || continue
+    case "$(basename "$g")" in runtimes|patches|*.app) continue;; esac
+    IFS='|' read -r id name runtime layer status <<<"$(detect_engine "$g")"
+    printf "%-34s %-26s %-14s %s\n" "$(basename "$g" | cut -c1-33)" "$(echo "$name" | cut -c1-25)" "$layer" "$status"
+    case "$layer" in
+      原生*) n_native=$((n_native+1));;
+      Wine*) n_wine=$((n_wine+1));;
+      *)     n_unknown=$((n_unknown+1));;
+    esac
+  done
+  echo
+  echo "可原生: $n_native   只能 Wine: $n_wine   待定: $n_unknown"
+}
+
+# ─────────────────────────────────────────────
+# batch: 清单驱动, 一次登录跑完整条流水线
+#   清单格式(每行): <appid> <显示名>
+#   以 # 开头的行是注释
+# ─────────────────────────────────────────────
+cmd_batch(){
+  local list="${1:-}"
+  [ -f "$list" ] || die "用法: dryport batch <清单文件>
+清单每行:  <appid> <显示名>
+例:        42 a RPG Maker title"
+  command -v steamcmd >/dev/null || die "找不到 steamcmd (brew install --cask steamcmd)"
+
+  local -a ids names
+  while read -r id nm; do
+    [ -z "$id" ] && continue
+    case "$id" in \#*) continue;; esac
+    [ -z "$nm" ] && nm="app_$id"
+    ids+=("$id"); names+=("$nm")
+  done < "$list"
+  [ ${#ids[@]} -gt 0 ] || die "清单里没有有效条目"
+
+  echo "共 ${#ids[@]} 个游戏待处理:"
+  local i
+  for i in "${!ids[@]}"; do printf "  %s  %s\n" "${ids[$i]}" "${names[$i]}"; done
+  echo
+
+  # 拼一条 steamcmd 命令, 一次登录连续下载全部
+  printf "第 1 步: 下载。steamcmd 会问你一次密码, 之后连续下完全部。\n\n"
+  local -a args
+  args+=("+@sSteamCmdForcePlatformType" "windows")
+  read -r -p "Steam 登录名: " acct
+  [ -n "$acct" ] || die "没输账号"
+  args+=("+login" "$acct")
+  for i in "${!ids[@]}"; do
+    args+=("+force_install_dir" "$SN_GAMES/${names[$i]// /_}")
+    args+=("+app_update" "${ids[$i]}" "validate")
+  done
+  args+=("+quit")
+  steamcmd "${args[@]}"
+
+  echo
+  echo "第 2 步: 逐个识别与打包"
+  for i in "${!ids[@]}"; do
+    local dir="$SN_GAMES/${names[$i]// /_}"
+    echo
+    echo "── ${names[$i]} (${ids[$i]}) ──"
+    if [ ! -d "$dir" ]; then echo "  下载目录不存在, 跳过"; continue; fi
+    IFS='|' read -r eid ename _ elayer _ <<<"$(detect_engine "$dir")"
+    echo "  引擎: $ename   翻译层: $elayer"
+    case "$eid" in
+      rgss1|rgss2|rgss3|unity-mono)
+        STEAM_APPID="${ids[$i]}" cmd_wrap "$dir" "${names[$i]}" || echo "  打包失败"
+        ;;
+      *)
+        echo "  该引擎的原生打包尚未实现, 已跳过打包(文件已下好, 可手动处理)"
+        continue;;
+    esac
+    if [ -d "$SN_GAMES/${names[$i]}.app" ]; then
+      cmd_add "$SN_GAMES/${names[$i]}.app" "${ids[$i]}" || echo "  入库失败(Steam CDP 可能没开)"
+    fi
+  done
+  echo
+  echo "全部处理完毕。封面需重启 Steam 才刷新。"
+}
+
+# ─────────────────────────────────────────────
+# install: 一条命令装好一个游戏
+#   dryport install <appid> [目录名]
+# 查反作弊 → (需要时)给出下载命令 → 识别引擎 → 打包 → 进 Steam 库。
+# 密码永远由你直接输给 steamcmd, 本脚本不经手、不代输、不存。
+# ─────────────────────────────────────────────
+
+# 在 ~/Games 下找这个 appid 已经下好的目录: 先认 appmanifest, 再认给定的名字
+find_game_dir(){
+  local appid="$1" want="${2:-}" g acf
+  if [ -n "$want" ]; then
+    case "$want" in /*) [ -d "$want" ] && { echo "$want"; return 0; };;
+                     *) [ -d "$SN_GAMES/$want" ] && { echo "$SN_GAMES/$want"; return 0; };;
+    esac
+  fi
+  for g in "$SN_GAMES"/*/; do
+    g="${g%/}"
+    case "$(basename "$g")" in runtimes|patches|.*|*.app) continue;; esac
+    # steamcmd 下的目录带 appmanifest; 走已登录客户端下的没有, 认我们自己留的身份牌。
+    acf="$g/steamapps/appmanifest_${appid}.acf"
+    [ -f "$acf" ] && { echo "$g"; return 0; }
+    if [ -f "$g/.dryport-appid" ] && [ "$(tr -cd '0-9' < "$g/.dryport-appid")" = "$appid" ]; then
+      [ -n "$(ls -A "$g" 2>/dev/null | grep -v '^\.dryport-appid$')" ] && { echo "$g"; return 0; }
+    fi
+  done
+  return 1
+}
+
+verify_game_delivery(){
+  local appid="$1" directory="$2" receipt
+  receipt=$(node "$SN_LIB/steam-download.mjs" --verify-delivery "$appid" "$directory") || return $?
+  python3 - "$appid" "$receipt" <<'PY'
+import json, sys
+try:
+    value = json.loads(sys.argv[2])
+    if (type(value.get('protocol')) is not int or value['protocol'] != 1
+            or str(value.get('appid')) != sys.argv[1] or value.get('complete') is not True
+            or value.get('scope') != 'base_game'):
+        raise ValueError('只确认了部分内容包，尚未确认完整基础游戏。')
+except (ValueError, TypeError, AttributeError) as error:
+    print('下载完整性回执未通过：' + str(error), file=sys.stderr)
+    raise SystemExit(3)
+PY
+}
+
+# 把下载器 steam-download.mjs 的终局退出码翻成一句能照做的停机说明; 认识的码打一行返回 0,
+# 不认识的什么都不说返回 1, 由调用方自己决定后续。磁盘满/Steam 没准备好/断网这三类重下也不会好, 只能等用户处理。
+download_stop_hint(){
+  local rc="$1" appid="$2"
+  case "$rc" in
+    4) echo "      停在第 2/5 步（下载）：磁盘空间不够，上面是原因。腾出空间后重跑：dryport install $appid";;
+    5) echo "      停在第 2/5 步（下载）：Steam 没准备好，上面是原因。打开 Steam 并登录后重跑：dryport install $appid";;
+    6) echo "      停在第 2/5 步（下载）：网络断了，已下的部分留着。联网后重跑：dryport install $appid";;
+    *) return 1;;
+  esac
+}
+
+cmd_install(){
+  # --no-add：走完风险、下载、识别、打包四步就停，不写 Steam 快捷方式。给自动验证（tools/smoke-run.py）和不想入库的人用；
+  # 位置参数的语义不变（appid、目录名）。
+  local appid="" want="" no_add=0 a
+  for a in "$@"; do
+    case "$a" in
+      --no-add) no_add=1;;
+      -*) die "不认识的参数: ${a}（install 只认 --no-add）";;
+      *) if [ -z "$appid" ]; then appid="$a"; elif [ -z "$want" ]; then want="$a"; else die "多余的参数: $a"; fi;;
+    esac
+  done
+  case "$appid" in ''|*[!0-9]*) die "用法: dryport install <appid> [目录名] [--no-add]
+例:      dryport install 1201270
+appid 在 Steam 商店页网址里, store.steampowered.com/app/<appid>/
+--no-add 只到打包为止，不加进 Steam 库";; esac
+
+  # 目录名默认用库里的真名, 不用 app_<appid>。2026-09-12 之前一律 app_42 这种,
+  # 下完之后用户在访达和 Steam 库里都认不出是哪个游戏。
+  local dirname_default="${want:-}"
+  if [ -z "$dirname_default" ]; then
+    dirname_default=$(python3 "$SN_LIB/api.py" name "$appid" 2>/dev/null | head -1)
+    case "$dirname_default" in ''|*/*) dirname_default="app_$appid";; esac
+  fi
+  local target="$SN_GAMES/$dirname_default"
+  case "$want" in /*) target="$want";; esac
+
+  echo "═══ dryport install $appid ═══"
+  echo
+  if [ ! -f "$SN_RUNTIMES/anticheat-db.json" ]; then
+    echo "首次使用：准备风险判定资料…"
+    "$SN_HOME/bin/install.sh" || return $?
+  fi
+
+  # ── 第 1 步 反作弊闸 ──
+  echo "[1/5] 检查本地风险资料"
+  echo "      带 Valve 反作弊、第三方反作弊或联机的游戏不改包。不是跑不起来, 是有封号风险。"
+  require_repack_permission "" "$appid" || return $?
+  echo
+
+  # ── 第 2 步 下载 ──
+  echo "[2/5] 游戏文件"
+  local d=""
+  d=$(find_game_dir "$appid" "$want" || true)
+  if [ -n "$d" ]; then
+    command -v node >/dev/null || die "核验已有下载需要 Node.js；安装后重跑。目录已保留：$d"
+    if ! verify_game_delivery "$appid" "$d"; then
+      echo "      现有目录尚不能确认完整，已保留：$d" >&2
+      echo "      可指定一个新目录重新安装：dryport install $appid <新目录名>" >&2
+      return 3
+    fi
+    echo "      完整性回读通过: $d  ($(du -sh "$d" 2>/dev/null | cut -f1))  跳过下载"
+  else
+    if [ ! -f "$SN_GAMES/owned-windows.json" ] && [ ! -L "$SN_GAMES/.dryport-catalog/current" ]; then
+      echo "      首次使用：读取当前 Steam 账号的游戏资料。"
+      cmd_survey || return $?
+      if [ -z "$want" ]; then
+        dirname_default=$(python3 "$SN_LIB/api.py" name "$appid" 2>/dev/null | head -1)
+        case "$dirname_default" in ''|*/*) dirname_default="app_$appid";; esac
+        target="$SN_GAMES/$dirname_default"
+      fi
+    fi
+    # 优先用已登录的 Steam 客户端下载（不需要密码、不需要 steamcmd、不碰已装游戏）。
+    if pgrep -x steam_osx >/dev/null && command -v node >/dev/null \
+        && { [ -f "$SN_GAMES/owned-windows.json" ] || [ -L "$SN_GAMES/.dryport-catalog/current" ]; }; then
+      echo "      用你已经登录的 Steam 客户端下载, 不需要密码。"
+      local rc=0
+      node "$SN_LIB/steam-download.mjs" "$appid" "" "" "$target" || rc=$?
+      if [ "$rc" = 0 ]; then
+        verify_game_delivery "$appid" "$target" || return $?
+        d="$target"
+      elif download_stop_hint "$rc" "$appid"; then
+        # 磁盘满/Steam 没准备好/断网重下也不会好: 原因上面刚说过, 按码停住, 别空转一遍 steamcmd。
+        return "$rc"
+      else
+        echo "      客户端下载没成, 退回 steamcmd 的老办法。"
+      fi
+    elif command -v node >/dev/null \
+        && { [ -f "$SN_GAMES/owned-windows.json" ] || [ -L "$SN_GAMES/.dryport-catalog/current" ]; }; then
+      # node 和清单都在, 唯独 Steam 没开: 开着 Steam 这条免密码的路就能走, 别把人引去要密码的 steamcmd。
+      echo "      停在第 2/5 步（下载）：Steam 没有打开。打开 Steam 并登录后重跑：dryport install $appid"
+      return 5
+    fi
+    if [ -z "$d" ]; then
+    command -v steamcmd >/dev/null || echo "      [注意] 本机没有 steamcmd, 先 brew install --cask steamcmd"
+    cat <<'CMD'
+      本机尚无完整下载。可在终端用 steamcmd 手动下载，密码由 Steam 接收。
+      将下面命令里的登录名替换为你的 Steam 登录名：
+CMD
+    printf '  steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir %s +login %s +app_update %s validate +quit\n' "$(sn_quote_argument "$target")" "$(sn_quote_argument '<你的Steam登录名>')" "$appid"
+    echo
+    echo "      手动下载目录暂不自动视为完整安装。下载完成后可单独检查与打包："
+    printf '  STEAM_APPID=%s %s wrap %s\n' "$appid" "$(sn_quote_argument "$SN_HOME/bin/dryport")" "$(sn_quote_argument "$target")"
+    echo "      家庭共享游戏同样交给 Steam 确认当前下载许可。"
+    return 3
+    fi
+  fi
+  echo
+
+  # ── 第 3 步 识别 ──
+  echo "[3/5] 读取文件特征，识别引擎"
+  local eid ename elayer estatus
+  IFS='|' read -r eid ename _ elayer estatus <<<"$(detect_engine "$d")"
+  echo "      引擎: $ename"
+  echo "      翻译层: $elayer     本机状态: $estatus"
+  # 路线分层提示（open=预览版承诺 / experimental=实验）只是标注，不改变这条路线做什么。
+  # 识别出的引擎 id 要翻译成分层表里的 route 名；表或脚本缺了也不能挡安装，所以 || true。
+  local tier_route=""
+  case "$eid" in
+    unity-mono) tier_route="unity";;
+    rgss1|rgss2|rgss3) tier_route="mkxp";;
+    nwjs|love|webkit|renpy-native|godot) tier_route="$eid";;
+    kirikiri) tier_route="krkr";;
+    unity-il2cpp|unreal|gamemaker|unity-mono-legacy|unknown|air|flash|unity) tier_route="wine";;
+  esac
+  if [ -n "$tier_route" ]; then
+    python3 "$SN_LIB/route_tiers.py" --route "$tier_route" --engine "$ename" || true
+  fi
+  case "$eid" in
+    rgss1|rgss2|rgss3|unity-mono|nwjs|love|webkit|renpy-native|godot|kirikiri) ;;
+    unity-il2cpp|unreal|gamemaker|unity-mono-legacy|unknown|air|flash|unity)
+       echo "      没有原生路线，走 Wine + DXMT 兜底（有翻译层）。"
+       [ -x "$SN_RUNTIMES/wine-cx/bin/wine" ] || { echo "      缺 wine-cx 运行时：有发布包时 tools/runtime-bundle.py install --from <目录或 URL>，否则 tools/build-wine.sh 本地构建。游戏文件已在 ${d}。"; return 1; };;
+    *) echo
+       echo "      这个引擎还没有打包路线。游戏文件已经在 $d, 可以手工处理。"
+       echo "      兜底(有翻译层, Rosetta 死线): $SN_LIB/wine-wrap.sh \"$d\" <主exe> <显示名>"
+       return 1;;
+  esac
+  echo
+
+  # ── 第 4 步 打包 ──
+  echo "[4/5] 打包成原生 .app"
+  case "$eid" in
+    unity-mono)
+      "$SN_HOME/bin/install.sh" --runtime-only --with-unity || return $?
+      echo "      转换着色器；首次遇到这个 Unity 版本还需要取得官方 mac 播放器。";;
+    nwjs)
+      "$SN_HOME/bin/install.sh" --runtime-only --with-nwjs || return $?
+      echo "      准备 NW.js 原生启动包。";;
+    love)
+      python3 "$SN_LIB/love-inspect.py" "$d" >/dev/null || return $?
+      "$SN_HOME/bin/install.sh" --runtime-only --with-love || return $?
+      echo "      使用原厂 LÖVE 11.5 直接读取原游戏；真实游玩表现仍待验证。";;
+    webkit)
+      python3 "$SN_LIB/webkit-inspect.py" "$d" "$appid" >/dev/null || return $?
+      echo "      使用系统 WebKit，构建自有启动壳；完整原游戏保持不变。";;
+    renpy-native)
+      python3 "$SN_LIB/renpy-profile.py" "$d" "$appid" >/dev/null || return $?
+      "$SN_HOME/bin/install.sh" --runtime-only --with-renpy || return $?
+      echo "      使用已验版本的原厂 Ren’Py 引擎，保留完整原游戏；全剧情体验仍待验证。";;
+    rgss1|rgss2|rgss3) echo "      RGSS 路线只做文件组装, 几秒到几十秒(看游戏体积)。";;
+    unity-il2cpp|unreal|gamemaker|unity-mono-legacy|unknown|air|flash|unity) echo "      Wine 兜底只拷文件与签名(APFS 克隆), 几十秒；首次启动再初始化 prefix。";;
+    *) echo "      换壳路线主要是拷文件与签名, 几十秒(看游戏体积)。";;
+  esac
+  # 调用方给了 WRAP_OUT_FILE 就往它写、不删（smoke-run.py 靠它拿产物路径）；没给才用临时文件。
+  local outfile own_outfile=0
+  if [ -n "${WRAP_OUT_FILE:-}" ]; then outfile="$WRAP_OUT_FILE"; else outfile=$(mktemp -t snwrap); own_outfile=1; fi
+  # 第二个参数是「下载到哪个目录」, 不是显示名; 显示名交给各路线自己定
+  # (Unity 走 <X>_Data/app.info 的产品名, 比目录名准; 其余用目录名)。
+  WRAP_OUT_FILE="$outfile" STEAM_APPID="$appid" cmd_wrap "$d" "" || { [ "$own_outfile" = 1 ] && rm -f "$outfile"; die "打包失败, 到此为止。"; }
+  local app; app=$(cat "$outfile" 2>/dev/null); [ "$own_outfile" = 1 ] && rm -f "$outfile"
+  [ -n "$app" ] && [ -d "$app" ] || die "打包脚本没有回报产物路径, 请手工执行 dryport add"
+  echo
+
+  # ── 第 5 步 入库 ──
+  if [ "$no_add" = 1 ]; then
+    echo "[5/5] 跳过入库（--no-add）"
+    echo "  产物: $app"
+    echo "  之后要入库: dryport add \"$app\" $appid"
+    echo "  打包已完成；窗口、画面、操作与存档仍需按这款游戏验证。"
+    return 0
+  fi
+  echo "[5/5] 加进 Steam 库 (几秒; 封面要重启 Steam 才刷新)"
+  if cmd_add "$app" "$appid"; then
+    echo
+    echo "═══ 完成 ═══"
+    echo "  产物: $app"
+    printf '  直接跑: open %s\n' "$(sn_quote_argument "$app")"
+    echo "  打包已完成；窗口、画面、操作与存档仍需按这款游戏验证。"
+  else
+    echo
+    echo "═══ 打包完成, 入库没成 ═══"
+    echo "  产物: $app  (可直接打开试运行，游玩表现仍需验证)"
+    echo "  入库失败多半是 Steam 的 CDP 端口没开。开法:"
+    echo "    touch \"$STEAM/Steam.AppBundle/Steam/Contents/MacOS/.cef-enable-remote-debugging\" 然后重启 Steam"
+    echo "  再执行: dryport add \"$app\" $appid"
+    return 1
+  fi
+}
+
+cmd_check(){
+  [ $# -gt 0 ] || die "用法: dryport check <appid> [appid...]"
+  python3 "$SN_LIB/risk.py" "$@"
+}
+
+# library — 我库里的 Windows 专属游戏各走哪条路、哪些有封号风险
+cmd_library(){
+  local html="$SN_GAMES/library-report.html"
+  python3 "$SN_LIB/library-report.py" --html "$html" "$@" || return $?
+  echo
+  echo "网页版: $html   （open \"$html\" 打开）"
+}
+
+# survey — 重新算一遍：拥有的游戏 → 封号风险 → 路线。不下载任何游戏本体。
+cmd_survey(){
+  command -v node >/dev/null || die "需要 node"
+  echo "读取当前账号可访问的游戏，并核对已有文件清单…"
+  # 缓存过期后立即重识别本机清单，避免刷新把已有引擎重新变成待定。
+  # --deep 仍先查有效缓存；只读已经存在的清单，不下载游戏或请求新清单。
+  python3 "$SN_LIB/library_discovery.py" --write --human --deep "$@"
+}
+
+# ─────────────────────────────────────────────
+# 卸载: 按游戏，不是按整套工具
+# 整套工具的卸载在 bin/uninstall.sh，那个是把本机痕迹全撤掉。
+# ─────────────────────────────────────────────
+reg_get(){ # 直接只读发现，不能要求用户先运行某个会偷偷写 installed.json 的界面。
+  python3 - "$1" "$2" <<'PYREG'
+import os, sys
+from pathlib import Path
+sys.path.insert(0, os.environ["SN_LIB"])
+import api
+from paths import SN_HOME, SN_GAMES, SN_RUNTIMES, STEAM
+
+appid, field = sys.argv[1:]
+value = api.scan_installed().get(appid, {}).get(field, "")
+if value is None:
+    value = ""
+if not isinstance(value, str):
+    raise ValueError(f"安装记录的 {field} 必须是字符串或空值")
+if field in ("app", "folder") and value:
+    path = Path(value)
+    if not path.is_absolute() or any(c in value for c in "\0\r\n"):
+        raise ValueError(f"安装记录的 {field} 必须是无换行的绝对路径: {value!r}")
+    if field == "app":
+        games = SN_GAMES.resolve()
+        resolved = path.resolve()
+        protected = [root.resolve() for root in (SN_HOME, SN_RUNTIMES, STEAM)]
+        if (path.is_symlink() or not path.is_dir() or path.suffix != ".app"
+                or resolved.parent != games
+                or any(resolved == root or root in resolved.parents or resolved in root.parents for root in protected)):
+            raise ValueError(f"拒绝移动这个 app 路径；只处理游戏目录直属的自有 app: {value}")
+        marker = path / "Contents/Resources/steam_appid.txt"
+        if not marker.exists() and not marker.is_symlink():
+            marker = path / "Contents/MacOS/steam_appid.txt"
+        if marker.is_symlink() or not marker.is_file() or marker.read_text().strip() != appid:
+            raise ValueError(f"app 缺少与 {appid} 匹配的自有安装标记: {value}")
+        archive = games / ".uninstalled"
+        if archive.is_symlink() or (archive.exists() and not archive.is_dir()):
+            raise ValueError(f"归档路径不是普通目录: {archive}")
+print(value)
+PYREG
+}
+
+# ── 归档（可逆）/ 恢复 / 卸载（不可逆） ─────────────────────────────
+# 归档必须可逆（restore 能原样放回并重新入库）；卸载不可逆，只删本工具自己创建的东西，
+# 确认前逐项列大小，存档单独一行默认不删，释放量按磁盘可用空间前后差报。
+
+archive_app(){ # <appid> <app>：经官方接口移除快捷方式，再把 app 原样移入 $SN_GAMES/.uninstalled/<appid>-*/；结果放 ARCHIVED
+  local appid="$1" app="$2" checked
+  ARCHIVED=""
+  checked=$(reg_get "$appid" app) || die "安装状态已变化，未开始归档。"
+  [ "$checked" = "$app" ] || die "app 路径已变化，未开始归档。请重新查看预演。"
+  node "$SN_LIB/steam-shortcut-remove.mjs" "$app" 2>&1 | sed 's/^/  /' \
+    || die "快捷方式处理失败，app 未移动，下载文件保留。请检查上面的错误。"
+  ARCHIVED=$(python3 - "$app" "$appid" "$SN_GAMES" "$SN_HOME" "$SN_RUNTIMES" "$STEAM" <<'PYARCHIVE'
+import sys, tempfile
+from pathlib import Path
+
+source, appid, games, *protected = sys.argv[1:]
+source, games = Path(source), Path(games).resolve()
+resolved = source.resolve()
+roots = [Path(p).resolve() for p in protected]
+marker = source / "Contents/Resources/steam_appid.txt"
+if not marker.exists() and not marker.is_symlink():
+    marker = source / "Contents/MacOS/steam_appid.txt"
+# 实际移动前重查标记与目录，避免确认等待期间换了目标。
+if (not source.is_absolute() or source.is_symlink() or not source.is_dir() or source.suffix != ".app"
+        or resolved.parent != games
+        or any(resolved == root or root in resolved.parents or resolved in root.parents for root in roots)
+        or marker.is_symlink() or not marker.is_file() or marker.read_text().strip() != appid):
+    raise ValueError("app 的路径或安装标记已变化，未移动文件")
+archive = games / ".uninstalled"
+if archive.is_symlink() or (archive.exists() and not archive.is_dir()):
+    raise ValueError(f"归档路径不是普通目录: {archive}")
+archive.mkdir(mode=0o700, exist_ok=True)
+container = Path(tempfile.mkdtemp(prefix=appid + "-", dir=archive))
+destination = container / source.name
+try:
+    source.rename(destination)
+except OSError:
+    container.rmdir()
+    raise
+print(destination)
+PYARCHIVE
+  ) || die "快捷方式已处理，但 app 归档失败。文件未删除，请检查上面的路径错误。"
+  echo "  app 已归档：$ARCHIVED"
+  python3 "$SN_LIB/api.py" forget "$appid" >/dev/null \
+    || die "app 已归档在 ${ARCHIVED}，但安装记录更新失败。请检查上面的错误。"
+}
+
+confirm_or_preview(){ # <提示语>：终端里问一次；非终端且没 --yes 只预演。返回 1 表示不继续
+  if [ -t 0 ]; then
+    printf "  %s [y/N] " "$1"
+    local ans; read -r ans </dev/tty || ans=n
+    case "$ans" in y|Y|yes|YES) return 0;; *) echo "  未改动。"; return 1;; esac
+  fi
+  echo "  预演，未改动文件。要执行加 --yes。"; return 1
+}
+
+cmd_archive(){
+  local appid="" yes=0 a
+  for a in "$@"; do
+    case "$a" in
+      --yes|-y) yes=1;;
+      --keep-download|--keep) :;;   # 旧参数；归档本来就保留下载
+      -*) die "不认识的参数: $a";;
+      *) appid="$a";;
+    esac
+  done
+  case "$appid" in ''|*[!0-9]*) die "用法: dryport archive <appid> [--yes]
+  归档（可逆）：经已登录的 Steam 客户端移除快捷方式，自有 app 原样移入 $SN_GAMES/.uninstalled/；下载文件与存档保留。
+  恢复：dryport restore <appid>    真要删文件：dryport uninstall <appid>";; esac
+
+  local app folder name
+  app=$(reg_get "$appid" app) || die "无法读取安装状态，未开始归档。请检查上面的文件错误。"
+  folder=$(reg_get "$appid" folder) || die "无法读取下载目录，未开始归档。"
+  name=$(reg_get "$appid" name) || die "无法读取游戏名称，未开始归档。"
+  [ -n "$name" ] || name="appid $appid"
+  if [ -z "$app" ]; then
+    echo "$name ($appid) 没有可归档的游戏 app。"
+    [ -z "$folder" ] || echo "  下载文件已保留：$folder"
+    return 0
+  fi
+
+  echo "═══ 归档 $name ($appid) ═══"
+  echo
+  echo "  通过已登录的 Steam 客户端移除快捷方式；请保持 Steam 开启。"
+  echo "  app 将原样移入 $SN_GAMES/.uninstalled/ 下的独立目录：$app"
+  [ -z "$folder" ] || echo "  下载文件保留：$folder"
+  echo "  app 内的资源和存档一并保留，其他位置的存档不改动。归档可逆（dryport restore ${appid}），不释放磁盘空间。"
+  echo
+  [ "$yes" = 1 ] || confirm_or_preview "移除快捷方式并归档 app？" || return 0
+
+  archive_app "$appid" "$app"
+  echo
+  echo "═══ 已归档（可逆），游戏文件和存档均保留 ═══"
+  echo "  app 归档：$ARCHIVED"
+  [ -z "$folder" ] || echo "  下载目录：$folder"
+  echo "  想恢复：dryport restore $appid    想重装：dryport install $appid    想删文件：dryport uninstall $appid"
+}
+
+cmd_rewrap(){ # <appid> [--yes]：用当前版本的壳重新生成已装 app（同名同路径，Steam 快捷方式不动）；旧 app 移入 .uninstalled 可回退
+  local appid="" yes=0 a
+  for a in "$@"; do
+    case "$a" in
+      --yes|-y) yes=1;;
+      -*) die "不认识的参数: $a";;
+      *) appid="$a";;
+    esac
+  done
+  case "$appid" in ''|*[!0-9]*) die "用法: dryport rewrap <appid> [--yes]
+  用当前版本的壳重新生成已装好的 app：同名同路径，Steam 快捷方式不动，不下载；旧 app 移入 ${SN_GAMES}/.uninstalled/ 可回退。
+  改了打包脚本之后已生成的 app 不会自己变（壳住在每个 app 里），这条命令就是升级它们的路。";; esac
+  local app folder stem backup
+  app=$(reg_get "$appid" app) || die "无法读取安装状态，未开始重打包。"
+  folder=$(reg_get "$appid" folder) || die "无法读取下载目录，未开始重打包。"
+  [ -n "$app" ] && [ -d "$app" ] || die "$appid 没有装着的 app；要装：dryport install $appid"
+  [ -n "$folder" ] && [ -d "$folder" ] || die "$appid 的下载目录不在了，重打包需要它；要重装：dryport install $appid"
+  stem=$(basename "$app" .app)
+  echo "═══ 重打包 $stem ($appid) ═══"
+  echo
+  echo "  旧 app 移入：$SN_GAMES/.uninstalled/${appid}-rewrap-<时间>/（可回退，dryport clean 会列出来）"
+  echo "  从下载目录重新生成：$folder"
+  echo "  路径与名字不变，Steam 快捷方式照旧；存档在 app 外，不受影响。"
+  echo
+  [ "$yes" = 1 ] || confirm_or_preview "用当前版本的壳重新生成这个 app？" || return 0
+  backup=$(python3 -B - "$appid" "$app" "$SN_GAMES" <<'PYMOVE'
+import os, sys, time
+appid, app, games = sys.argv[1:]
+dest = os.path.join(games, ".uninstalled", f"{appid}-rewrap-{time.strftime('%Y%m%d-%H%M%S')}")
+os.makedirs(dest, exist_ok=False)
+target = os.path.join(dest, os.path.basename(app))
+os.rename(app, target)          # 同一卷内原样搬走，不复制不删除
+print(target)
+PYMOVE
+  ) || die "旧 app 挪不开，未开始重打包。"
+  # cmd_wrap 失败时 die 会退出，所以放进子 shell；失败就把旧 app 放回原处
+  if ( cmd_wrap "$folder" "$stem" ); then
+    echo
+    echo "═══ 已重打包：$app ═══"
+    echo "  旧 app 留在：${backup}（新 app 确认正常后可用 dryport clean 收掉）"
+    return 0
+  fi
+  echo "重打包失败，把旧 app 放回原处。" >&2
+  if [ -e "$app" ]; then
+    echo "  新 app 已部分生成，保留在 ${app}；旧 app 仍在 ${backup}" >&2
+  else
+    mv "$backup" "$app" && rmdir "$(dirname "$backup")" 2>/dev/null
+  fi
+  die "重打包失败，旧 app 在 $app"
+}
+
+cmd_restore(){
+  local appid="" yes=0 a
+  for a in "$@"; do
+    case "$a" in
+      --yes|-y) yes=1;;
+      -*) die "不认识的参数: $a";;
+      *) appid="$a";;
+    esac
+  done
+  case "$appid" in ''|*[!0-9]*) die "用法: dryport restore <appid> [--yes]
+  归档的反操作：把最近一次归档的 app 原样放回 ${SN_GAMES}，再经官方接口加回当前 Steam 账号的库；不下载不重建。";; esac
+
+  local app name found candidate older target
+  app=$(reg_get "$appid" app) || die "无法读取安装状态，未开始恢复。"
+  [ -z "$app" ] || die "$appid 已经装着：${app}。不需要恢复。"
+  found=$(python3 -B - "$appid" <<'PYFIND'
+import os, sys
+sys.path.insert(0, os.environ["SN_LIB"])
+import uninstall_purge
+rows = uninstall_purge.archives(sys.argv[1])
+if not rows:
+    raise SystemExit(f"错: {sys.argv[1]} 没有归档的 app。想装回来：dryport install {sys.argv[1]}")
+print(rows[0]["app"])      # 最新的一份
+print(len(rows) - 1)
+PYFIND
+  ) || exit 1
+  candidate=$(printf '%s\n' "$found" | sed -n 1p); older=$(printf '%s\n' "$found" | sed -n 2p)
+  target="$SN_GAMES/$(basename "$candidate")"
+  name=$(reg_get "$appid" name) || name=""          # 下载目录还在时安装记录里有真名
+  [ -n "$name" ] || name=$(python3 "$SN_LIB/api.py" name "$appid" 2>/dev/null) || name="appid $appid"
+  if [ -e "$target" ] || [ -L "$target" ]; then die "游戏目录里已经有 ${target}，不覆盖。请先处理它再恢复。"; fi
+
+  echo "═══ 恢复 $name ($appid) ═══"
+  echo
+  echo "  归档的 app 原样移回：$candidate"
+  echo "    → $target"
+  echo "  然后经已登录的 Steam 客户端重新加入库（请保持 Steam 开启）。不下载、不重建。"
+  [ "$older" = 0 ] || echo "  还有 $older 份更早的归档不动；卸载时会一并删除。"
+  echo
+  [ "$yes" = 1 ] || confirm_or_preview "恢复并重新加入 Steam 库？" || return 0
+
+  python3 -B - "$appid" "$candidate" "$target" <<'PYRESTORE' || die "恢复失败，归档未改动。"
+import os, sys
+from pathlib import Path
+sys.path.insert(0, os.environ["SN_LIB"])
+import uninstall_purge
+appid, source, target = sys.argv[1], Path(sys.argv[2]), Path(sys.argv[3])
+if str(source) not in [r["app"] for r in uninstall_purge.archives(appid)]:   # 确认等待期间归档可能变了
+    raise SystemExit("错: 归档内容已变化，未移动")
+if target.exists() or target.is_symlink():
+    raise SystemExit(f"错: 目标已存在，未移动: {target}")
+source.rename(target)
+try:
+    source.parent.rmdir()        # 容器目录只装这一个 app
+except OSError:
+    pass
+print(f"  app 已放回：{target}")
+PYRESTORE
+  if cmd_add "$target" "$appid"; then
+    echo
+    echo "═══ 已恢复 ═══"
+    echo "  app：$target"
+  else
+    echo
+    echo "═══ app 已放回，但加入 Steam 库没成功 ═══"
+    echo "  app 在 ${target}；Steam 开着并已登录后再执行：dryport add \"$target\" $appid"
+    return 1
+  fi
+}
+
+cmd_uninstall(){
+  local appid="" yes=0 saves=0 plan_json=0 keep=0 a
+  for a in "$@"; do
+    case "$a" in
+      --yes|-y) yes=1;;
+      --saves|--purge-saves) saves=1;;
+      --purge) :;;                       # 旧名；卸载现在就是删文件
+      --keep-download|--keep) keep=1;;   # 旧用法 = 归档
+      --plan-json) plan_json=1;;
+      -*) die "不认识的参数: $a";;
+      *) appid="$a";;
+    esac
+  done
+  case "$appid" in ''|*[!0-9]*) die "用法: dryport uninstall <appid> [--saves] [--plan-json] [--yes]
+  卸载（不可逆）：先经官方接口移除快捷方式并归档 app，再删掉下载目录与这个游戏的全部归档 app（只删本工具自己创建的）。
+  存档默认保留；--saves 连本工具管理的存档状态目录（Ren'Py / WebKit）也删。--plan-json 只打印账单。
+  只想暂时下架、以后能原样放回：dryport archive <appid>
+  想把整套工具从本机撤掉是另一条: $SN_HOME/bin/uninstall.sh";; esac
+
+  if [ "$keep" = 1 ]; then
+    echo "  --keep-download 已改名：可逆的下架叫 archive，这里按归档执行。"
+    if [ "$yes" = 1 ]; then cmd_archive "$appid" --yes; else cmd_archive "$appid"; fi
+    return $?
+  fi
+  if [ "$plan_json" = 1 ]; then
+    python3 -B "$SN_LIB/uninstall_purge.py" plan "$appid" --json; return $?
+  fi
+
+  local app folder name planjson count
+  app=$(reg_get "$appid" app) || die "无法读取安装状态，未开始卸载。请检查上面的文件错误。"
+  folder=$(reg_get "$appid" folder) || die "无法读取下载目录，未开始卸载。"
+  name=$(reg_get "$appid" name) || die "无法读取游戏名称，未开始卸载。"
+  [ -n "$name" ] || name="appid $appid"
+  planjson=$(python3 -B "$SN_LIB/uninstall_purge.py" plan "$appid" --json) || die "算账失败，未改动。"
+  count=$(python3 -c 'import json,sys; print(len(json.loads(sys.argv[1])["items"]))' "$planjson") || die "账单读不出来，未改动。"
+  if [ "$count" = 0 ]; then
+    echo "$name ($appid) 没有本工具创建的文件可删。"
+    return 0
+  fi
+
+  echo "═══ 卸载 $name ($appid)（不可逆）═══"
+  echo
+  if [ -n "$app" ]; then
+    echo "  先通过已登录的 Steam 客户端移除快捷方式并归档 app（请保持 Steam 开启），然后删除下面这些："
+  else
+    echo "  没有装着的 app；删除下面这些："
+  fi
+  python3 -B "$SN_LIB/uninstall_purge.py" render "$planjson" | sed 's/^/  /'
+  [ "$saves" = 1 ] && echo "  存档状态目录这次也删（--saves）。" || echo "  存档状态目录保留（要删加 --saves）。"
+  echo "  只删本工具自己创建的；其它位置的存档、Steam 自己的文件一律不动。删完无法恢复；只想下架用 dryport archive ${appid}。"
+  echo
+  [ "$yes" = 1 ] || confirm_or_preview "删除上面列出的项？此操作不可逆" || return 0
+
+  if [ -n "$app" ]; then
+    archive_app "$appid" "$app"
+    echo
+  fi
+  uninstall_purge_run "$appid" "$saves"
+}
+
+uninstall_purge_run(){ # <appid> <saves 0|1>：真删，只删本工具自己创建的；按磁盘可用空间前后差报实际释放
+  local appid="$1" saves="$2" out rc result
+  echo "═══ 删除 $appid 的文件 ═══"
+  if [ "$saves" = 1 ]; then
+    out=$(python3 -B "$SN_LIB/uninstall_purge.py" apply "$appid" --saves --yes); rc=$?
+  else
+    out=$(python3 -B "$SN_LIB/uninstall_purge.py" apply "$appid" --yes); rc=$?
+  fi
+  result=$(printf '%s\n' "$out" | tail -1)
+  case "$result" in
+    '{'*) ;;
+    *) printf '%s\n' "$out"; echo "  删除段没有返回结果（退出码 ${rc}）。"; return 1;;
+  esac
+  python3 - "$result" <<'PYSUM'
+import json, sys
+r = json.loads(sys.argv[1])
+for d in r["deleted"]:
+    print(f"  已删除：{d['path']}（账面 {d['bytes'] / 1e6:.0f} MB）")
+for x in r["refused"]:
+    print(f"  未删：{x['path']}：{x['why']}")
+print(f"  实际释放：{r['freed_bytes'] / 1e6:.0f} MB（磁盘可用空间前后差；账面是上限，APFS 克隆会重复计）")
+print("═══ 卸载完成 ═══" if r["ok"] else "═══ 卸载未全部完成，见上面未删项 ═══")
+PYSUM
+  return $rc
+}
+
+# ─────────────────────────────────────────────
+# 清垃圾: 只清这套工具自己产生的残渣
+# ─────────────────────────────────────────────
+_kb(){ du -sk "$@" 2>/dev/null | awk '{s+=$1} END{print s+0}'; }
+_human(){ awk -v k="$1" 'BEGIN{ if(k>=1048576) printf "%.1f GB", k/1048576; else if(k>=1024) printf "%d MB", k/1024; else printf "%d KB", k }'; }
+
+_clean_path_in_use(){
+  command -v lsof >/dev/null 2>&1 || return 1
+  # lsof 在找到打开项时可能返回 1；先捕获输出，避免本脚本的 pipefail 丢掉占用证据。
+  local listing
+  listing=$(lsof -nP +D "$1" 2>/dev/null || true)
+  printf '%s\n' "$listing" | awk 'NR > 1 {found=1} END {exit(found ? 0 : 1)}'
+}
+
+_clean_busy(){ # <标题> <为什么跳过> <文件...>
+  local title="$1" why="$2"; shift 2
+  local -a items=(); local p
+  for p in "$@"; do [ -e "$p" ] && items+=("$p"); done
+  [ "${#items[@]}" -gt 0 ] || return 0
+  local kb; kb=$(_kb "${items[@]}")
+  printf "\n  \033[1m%s\033[0m  %s  (%d 项)\n" "$title" "$(_human "$kb")" "${#items[@]}"
+  printf "    %s\n" "$why"
+  for p in "${items[@]}"; do
+    printf "      %s  (%s)\n" "${p/#$HOME/~}" "$(_human "$(_kb "$p")")"
+  done
+}
+
+CLEAN_GO=0 CLEAN_TOTAL=0
+_cat(){ # _cat [--all] <标题> <为什么能删> <文件...>
+  local all=0
+  [ "${1:-}" = --all ] && { all=1; shift; }
+  local title="$1" why="$2"; shift 2
+  local -a items=(); local p
+  for p in "$@"; do [ -e "$p" ] && items+=("$p"); done
+  [ "${#items[@]}" -gt 0 ] || return 0
+  local kb; kb=$(_kb "${items[@]}")
+  CLEAN_TOTAL=$((CLEAN_TOTAL+kb))
+  printf "\n  \033[1m%s\033[0m  %s  (%d 项)\n" "$title" "$(_human "$kb")" "${#items[@]}"
+  printf "    %s\n" "$why"
+  local i=0
+  for p in "${items[@]}"; do
+    i=$((i+1)); { [ "$all" = 1 ] || [ "$i" -le 4 ]; } \
+      && printf "      %s  (%s)\n" "${p/#$HOME/~}" "$(_human "$(_kb "$p")")"
+  done
+  [ "$all" = 0 ] && [ "${#items[@]}" -gt 4 ] \
+    && printf "      … 另外 %d 项\n" "$(( ${#items[@]} - 4 ))"
+  if [ "$CLEAN_GO" = 1 ]; then
+    local ans
+    if [ -t 0 ]; then
+      printf "    → 删这一类? [y/N] "; read -r ans </dev/tty || ans=n
+    else
+      printf "    → 删这一类? [y/N] "
+      read -r ans || ans=n
+    fi
+    case "$ans" in y|Y|yes|YES) rm -rf "${items[@]}" && printf "    已删, 腾出 %s\n" "$(_human "$kb")";;
+                   *) printf "    跳过\n"; CLEAN_TOTAL=$((CLEAN_TOTAL-kb));; esac
+  fi
+}
+
+cmd_steam_debug(){ # 允许在用户确认后创建 .cef-enable-remote-debugging；仍不改任何 Steam 二进制或配置内容
+  # --disable 经确认只删除本工具创建的空开关文件，删后要重启 Steam 端点才关；--status 只读。
+  local enable=0 disable=0 yes=0 a st r
+  for a in "$@"; do
+    case "$a" in
+      --enable) enable=1;;
+      --disable) disable=1;;
+      --status) :;;
+      --yes|-y) yes=1;;
+      *) die "用法: dryport steam-debug [--status | --enable | --disable [--yes]]";;
+    esac
+  done
+  [ "$enable" = 0 ] || [ "$disable" = 0 ] || die "用法: dryport steam-debug [--status | --enable | --disable [--yes]]"
+  st=$(python3 "$SN_LIB/api.py" steam-debug status) || die "读不到 Steam 状态"
+  python3 - "$st" <<'PY'
+import json, sys
+d = json.loads(sys.argv[1])
+print(f"  Steam 客户端包：{'有' if d['bundle_present'] else '没找到'}；开关文件：{'有' if d['flag_exists'] else '无'}；"
+      f"Steam 运行：{'是' if d['steam_running'] else '否'}；本机连接端点：{'可读' if d['endpoint_ok'] else '不可读'}")
+print(f"  开关文件位置：{d['path']}")
+PY
+  if [ "$enable" != 1 ] && [ "$disable" != 1 ]; then
+    echo "  开关开着且 Steam 在跑时，任何本机程序都能经这个端点控制你的 Steam 客户端：装游戏时开，装完就关。"
+    echo "  开启：dryport steam-debug --enable（会问一次）    关闭：dryport steam-debug --disable（会问一次）"
+    return 0
+  fi
+  if [ "$enable" = 1 ]; then
+    echo "  将在 Steam 客户端包内创建一个空文件 .cef-enable-remote-debugging。这是 Valve 自己的调试开关，不改任何 Steam 二进制或配置内容；"
+    echo "  开启后 Steam 在本机 8080 端口开一个只对本机的调试端点，本工具用它经已登录的客户端下载与添加快捷方式；开着期间任何本机程序都能经它控制你的 Steam 客户端，装完游戏应关掉。创建后要退出并重新打开 Steam。"
+    [ "$yes" = 1 ] || confirm_or_preview "创建开关文件？" || return 0
+    r=$(python3 "$SN_LIB/api.py" steam-debug enable) || { printf '%s\n' "$r"; die "创建失败"; }
+    python3 - "$r" <<'PY'
+import json, sys
+d = json.loads(sys.argv[1])
+if d.get("event") == "error":
+    raise SystemExit("错: " + d["msg"])
+print(("  已创建：" if d.get("created") else "  开关文件早就在：") + d["path"])
+print("  现在退出并重新打开 Steam，然后再跑 dryport steam-debug 复查端点。" if d.get("restart_needed") else "  端点已可读，不用重启。")
+PY
+    return 0
+  fi
+  echo "  将删除这个开关文件（只删本工具创建的空文件，包里其他东西一概不动）。开关开着且 Steam 在跑时，"
+  echo "  任何本机程序都能经这个端点控制你的 Steam 客户端：装游戏时开，装完就关。删除后要退出并重新打开 Steam，端点才关闭。"
+  [ "$yes" = 1 ] || confirm_or_preview "删除开关文件？" || return 0
+  r=$(python3 "$SN_LIB/api.py" steam-debug disable) || { printf '%s\n' "$r"; die "删除失败"; }
+  python3 - "$r" <<'PY'
+import json, sys
+d = json.loads(sys.argv[1])
+if d.get("event") == "error":
+    raise SystemExit("错: " + d["msg"])
+print(("  已删除开关文件：" if d.get("removed") else "  开关文件本来就不在：") + d["path"])
+print("  现在退出并重新打开 Steam，端点才关闭。" if d.get("restart_needed") else "  端点本来就没开。")
+PY
+}
+
+# ─────────────────────────────────────────────
+# 桥的逐游戏选择：Wine 路线的 Steam 桥默认不接，用户按游戏打开。
+# 选择文件是 <状态目录>/bridge-choice（enabled/disabled），启动器启动时读它（wine-wrap.sh 的 bridge_wanted）。
+# ─────────────────────────────────────────────
+bridge_state_dir(){ # <appid>：装着的 Wine app 用它 wine-launch.json 里的 state；没装就落到按 appid 的默认状态目录。
+  # 三行输出：状态目录、装着 app 的桥能力（1/0/空=没装）、装着 app 的路径。json 里的 state 只认 .wine-state 直属子目录，被改过就拒绝。
+  python3 -B - "$1" <<'PYB'
+import json, os, sys
+from pathlib import Path
+sys.path.insert(0, os.environ["SN_LIB"])
+import api
+from paths import SN_GAMES
+appid = sys.argv[1]
+state, bridge = "", ""
+app = api.scan_installed().get(appid, {}).get("app") or ""
+if app:
+    try:
+        config = json.loads((Path(app) / "Contents/Resources/wine-launch.json").read_text())
+        state = config.get("state") or ""
+        bridge = "1" if config.get("bridge") else "0"
+    except (OSError, ValueError):
+        state, bridge = "", ""
+root = (Path(SN_GAMES) / ".wine-state").resolve()
+target = Path(state) if state else (Path(SN_GAMES) / ".wine-state" / appid)
+if target.is_symlink() or target.resolve().parent != root:
+    sys.exit(f"状态目录不合法（只认 .wine-state 的直属子目录）：{target}")
+print(target.resolve())
+print(bridge)
+print(app)
+PYB
+}
+
+write_bridge_choice(){ # <状态目录> <enabled|disabled>：拒绝符号链接/异占的 bridge-choice；同目录临时文件原子改名
+  # printf > 符号链接会写穿到链接目标；前置检查拒绝，rename 落位也不跟随目标符号链接。
+  local sdir="$1" value="$2" choice tmp
+  choice="$sdir/bridge-choice"
+  mkdir -p "$sdir" || die "建不了状态目录 $sdir"
+  if [ -L "$choice" ]; then
+    die "bridge-choice 是符号链接，未改动：$choice"
+  fi
+  if [ -e "$choice" ] && [ ! -f "$choice" ]; then
+    die "bridge-choice 不是普通文件，未改动：$choice"
+  fi
+  tmp=$(mktemp "$sdir/.bridge-choice.XXXXXX") || die "建不了临时文件：$sdir"
+  printf '%s\n' "$value" > "$tmp" || { rm -f "$tmp"; die "写不进临时文件：$tmp"; }
+  mv -f "$tmp" "$choice" || { rm -f "$tmp"; die "bridge-choice 落不了位：$choice"; }
+}
+
+cmd_bridge(){ # <status|enable|disable> [appid] [--yes]：Wine 路线 Steam 桥的逐游戏开关
+  local mode="${1:-}" appid="" yes=0 a
+  for a in "$@"; do
+    case "$a" in
+      --yes|-y) yes=1;;
+      status|enable|disable) mode="$a";;
+      -*) die "不认识的参数: $a";;
+      *) if [ -n "$appid" ]; then die "用法: dryport bridge <status|enable|disable> [appid] [--yes]"; fi
+         appid="$a";;
+    esac
+  done
+  case "$mode" in
+    enable|disable)
+      case "$appid" in ''|*[!0-9]*) die "用法: dryport bridge <enable|disable> <appid> [--yes]";; esac;;
+    status) ;;
+    *) die "用法: dryport bridge <status|enable|disable> [appid] [--yes]
+  Wine 路线的 Steam 功能（steambridge）默认不接；这里按游戏打开或关闭，下次启动生效。
+  status [appid]     看各游戏（或一个游戏）当前的选择
+  enable <appid>     确认后打开（确认前先讲清这座桥写的是什么）
+  disable <appid>    关闭
+  手工单次开关：启动时设 SN_WINE_BRIDGE=1（开）或 =0（关），压过这里的选择。";;
+  esac
+
+  if [ "$mode" = status ]; then
+    python3 -B - "$appid" <<'PYB'
+import json, os, sys
+from pathlib import Path
+sys.path.insert(0, os.environ["SN_LIB"])
+import api
+from paths import SN_GAMES
+want = sys.argv[1]
+root = (Path(SN_GAMES) / ".wine-state").resolve()
+choices = {}
+if root.is_dir():
+    for d in root.iterdir():
+        if d.is_dir() and not d.is_symlink():
+            f = d / "bridge-choice"
+            if f.is_symlink() or (f.exists() and not f.is_file()):
+                # 符号链接/异占按未开启处理并提示一次，绝不顺着链接读
+                print(f"appid {d.name}：bridge-choice 不是普通文件（符号链接或异占），按未开启处理", file=sys.stderr)
+                choices[d.name] = ""
+            elif f.is_file():
+                choices[d.name] = f.read_text(errors="replace").strip()
+reg = api.scan_installed()
+rows = {}
+for appid, entry in reg.items():
+    app = entry.get("app") or ""
+    if not app:
+        continue
+    try:
+        state = json.loads((Path(app) / "Contents/Resources/wine-launch.json").read_text()).get("state") or ""
+    except (OSError, ValueError):
+        continue                      # 不是 Wine 路线的 app（没有 wine-launch.json）
+    choices.setdefault(appid, "")      # 装着但没写过选择 → 未选择
+    rows[appid] = entry.get("name") or f"appid {appid}"
+for appid in choices:
+    rows.setdefault(appid, "（没有装着的 app）")
+for appid in sorted(rows):
+    if want and appid != want:
+        continue
+    choice = choices.get(appid, "")
+    label = "已开启" if choice == "enabled" else "已关闭" if choice == "disabled" else "未选择（默认不接桥）"
+    print(f"  appid {appid}  {rows[appid]}  {label}")
+if want and want not in rows:
+    print(f"  appid {want}：没有记录（未装、未打包，或不是 Wine 路线）")
+PYB
+    return 0
+  fi
+
+  local out sdir json_bridge installed_app
+  if ! out=$(bridge_state_dir "$appid"); then printf '%s\n' "$out" >&2; die "读不到 appid $appid 的状态目录"; fi
+  { IFS= read -r sdir; IFS= read -r json_bridge; IFS= read -r installed_app; } <<< "$out"
+
+  if [ "$mode" = enable ]; then
+    echo "═══ 为 appid $appid 打开 Steam 桥（steambridge）═══"
+    echo
+    echo "  打开后，这个游戏会使用你现在登录的 Steam 客户端的身份、统计与成就。"
+    echo "  成就与统计会写入这个 Steam 账号。"
+    echo "  多人游戏、会话票据、物品相关接口永不转发（桥不实现它们）。"
+    echo "  账号安全性尚未证实。"
+    echo
+    echo "  记录：$sdir/bridge-choice；dryport bridge disable $appid 随时关闭；下次启动生效。"
+    [ -z "$installed_app" ] && echo "  这个 appid 还没有装着的 app；选择会在下次 install/wrap 时生效。"
+    [ -n "$installed_app" ] && [ "$json_bridge" = 0 ] && echo "  注意：这个 app 打包时桥被关（SN_WINE_BRIDGE=0）或游戏没有 steam_api；dryport rewrap $appid 后重试。"
+    echo
+    [ "$yes" = 1 ] || confirm_or_preview "为 appid $appid 打开 Steam 桥？" || return 0
+    write_bridge_choice "$sdir" enabled
+    echo "已开启：appid ${appid}（下次启动生效）"
+  else
+    write_bridge_choice "$sdir" disabled
+    echo "已关闭：appid ${appid}（下次启动生效；要再开：dryport bridge enable ${appid}）"
+  fi
+}
+
+cmd_running(){ # 2026-09-13：会话中断后游戏成孤儿跑了 25 分钟（the runtime notes）。记录由 tools/run-guard.py 落，这里只读，收要确认。
+  local kill=0 yes=0 a
+  for a in "$@"; do
+    case "$a" in
+      --kill-stale) kill=1;;
+      --yes|-y) yes=1;;
+      *) die "用法: dryport running [--kill-stale [--yes]]";;
+    esac
+  done
+  local listing
+  listing=$(python3 - <<'PY'
+import os, sys, json
+sys.path.insert(0, os.environ["SN_LIB"])
+import running
+rows = running.records()
+strays = running.stray_wine_processes(rows)   # 记录之外的 Wine 进程也要看得见（2026-09-13：四个 9 月 11 日的 services.exe 躲了两天）
+if not rows:
+    print("  没有 run-guard 记录。")
+for r in rows:
+    state = "失联" if r["stale"] else ("在跑" if r["alive"] else ("已退出（残留记录，已清理）" if r["gone"] else "已退出（残留记录）"))
+    print(f"  [{state}] {r['name']}  pid {r['pid']}  跑了 {r['age_seconds']:.0f} 秒 / 上限 {r['max_seconds']:.0f}  守护者 {'在' if r['guard_alive'] else '没了'}  {' '.join(map(str, r['command']))[:80]}")
+running.prune_gone(rows)   # 守护者被强杀时 finally 到不了，记录会留下；进程与守护者都不在的记录只是文件，直接收掉
+if strays:
+    print(f"  另外发现 {len(strays)} 个不在记录里的 Wine 进程（比 run-guard 早、或别的工具起的）：")
+    for s in strays:
+        print(f"    pid {s['pid']}  已运行 {s['etime']}  {s['command']}")
+    print("  这些不归本工具的记录管，确认不是你正在玩的东西后可用它们所在 prefix 的 wineserver -k 收掉，或直接 kill。")
+print("STALE=" + str(sum(1 for r in rows if r["stale"])))
+PY
+  ) || die "读不到记录"
+  printf '%s\n' "$listing" | grep -v '^STALE='
+  local stale; stale=$(printf '%s\n' "$listing" | sed -n 's/^STALE=//p'); stale="${stale:-0}"
+  [ "$kill" = 1 ] || { [ "$stale" = 0 ] || echo "  收掉失联的：dryport running --kill-stale（会问一次）"; return 0; }
+  [ "$stale" != 0 ] || { echo "  没有失联的进程。"; return 0; }
+  [ "$yes" = 1 ] || confirm_or_preview "收掉 ${stale} 个失联进程（先 TERM 后 KILL，连同进程组）？" || return 0
+  python3 - <<'PY'
+import os, sys
+sys.path.insert(0, os.environ["SN_LIB"])
+import running
+bad = 0
+for r in running.records():
+    if not r["stale"]: continue
+    ok, why = running.kill_record(r)
+    print(f"  {r['name']} pid {r['pid']}：{why}")
+    bad += 0 if ok else 1
+raise SystemExit(1 if bad else 0)
+PY
+}
+
+cmd_clean(){
+  local deep=0 a
+  for a in "$@"; do
+    case "$a" in
+      --go|--yes) CLEAN_GO=1;;
+      --deep) deep=1;;
+      --dry-run) CLEAN_GO=0;;
+      *) die "用法: dryport clean [--go] [--deep]
+  不加 --go 只看不删。--deep 连可重下的源码树与构建中间件一起列(删了要重编)。";;
+    esac
+  done
+  echo "═══ 清垃圾 ═══"
+  [ "$CLEAN_GO" = 1 ] && echo "  逐类问你, 你答 y 才删。" || echo "  预演: 只算账, 一个字节都不动。要真删: dryport clean --go"
+
+  # 1. Steam depot 暂存区。download_depot 把内容放这里, 我们拷走之后就是残渣。
+  #    半小时内动过的不碰(可能正在下)。
+  local -a stale=()
+  local c
+  for c in "$STEAM/Steam.AppBundle/Steam/Contents/MacOS/steamapps/content" "$STEAM/steamapps/content"; do
+    [ -d "$c" ] || continue
+    while IFS= read -r p; do stale+=("$p"); done < <(find "$c" -maxdepth 1 -name 'app_*' -type d -mmin +30 2>/dev/null)
+  done
+  _cat "Steam depot 暂存区残渣" \
+       "download_depot 的落点。游戏本体早拷到 $SN_GAMES 了, 这里是拷完没清掉的。Steam 不认它们, 删了不影响任何已装游戏。" \
+       ${stale[@]+"${stale[@]}"}
+
+  # 2. 跑出来的日志与截图
+  local -a junk=()
+  while IFS= read -r p; do junk+=("$p"); done < <(find "$SN_RUNTIMES" -maxdepth 1 \( -name '*.log' -o -name '*.png' -o -name '*.out' \) -type f 2>/dev/null)
+  _cat "跑出来的日志与截图" "调试时留下的, 没有代码读它们。" ${junk[@]+"${junk[@]}"}
+
+  # 3. 测试用的 Wine prefix
+  local -a prefixes=()
+  while IFS= read -r p; do prefixes+=("$p"); done < <(find "$SN_RUNTIMES" -maxdepth 1 -name 'prefix-*' -type d 2>/dev/null)
+  _cat "测试用的 Wine prefix" "每个游戏跑起来会自己建 prefix, 这些是调试时手建的。" ${prefixes[@]+"${prefixes[@]}"}
+
+  # 4. 一次性 Wine prefix。它们是试跑或路线实验的隔离目录，不是已编好的运行时。
+  local -a one_off_prefixes=()
+  local -a busy_prefixes=()
+  local prefix prefix_name
+  local -a private_prefixes=()
+  while IFS= read -r -d "" prefix; do private_prefixes+=("$prefix"); done < <(python3 - "$SN_HOME/docs/internal/cleanup.json" "$SN_RUNTIMES" <<'PY'
+import json, sys
+from pathlib import Path
+config, root = map(Path, sys.argv[1:])
+if config.is_file():
+    for pattern in json.loads(config.read_text())["cleanup_prefixes"]:
+        if "/" in pattern or not pattern.startswith("sn-") or ".." in pattern:
+            raise ValueError("Private cleanup patterns must stay directly below the runtime directory")
+        for path in root.glob(pattern):
+            sys.stdout.buffer.write(str(path).encode() + b"\0")
+PY
+  )
+  for prefix in "$SN_RUNTIMES"/sn-wine-* "$SN_RUNTIMES"/sn-steambridge-* \
+                "$SN_RUNTIMES"/sn-trial-* \
+                "$SN_RUNTIMES"/sn-unbound-* ${private_prefixes[@]+"${private_prefixes[@]}"}; do
+    [ -d "$prefix" ] && [ ! -L "$prefix" ] || continue
+    prefix_name=$(basename "$prefix")
+    if [[ "$prefix_name" == sn-trial-* ]] && _clean_path_in_use "$prefix"; then
+      busy_prefixes+=("$prefix")
+    else
+      one_off_prefixes+=("$prefix")
+    fi
+  done
+  _clean_busy "一次性 Wine prefix（正在使用，跳过）" \
+      "lsof 检出有进程打开这些目录中的文件；本次不进入删除确认，--go 也不删。" \
+      ${busy_prefixes[@]+"${busy_prefixes[@]}"}
+  _cat --all "一次性 Wine prefix" "试跑与路线实验留下的隔离目录；删后只影响这些一次性试验。" \
+       ${one_off_prefixes[@]+"${one_off_prefixes[@]}"}
+
+  # 5. 目录旧 generation。current 是原子发布的当前目录，永远保留它指向的那一份。
+  local catalog="$SN_GAMES/.dryport-catalog"
+  local current="$catalog/current" current_resolved=""
+  if [ -L "$current" ] || [ -d "$current" ]; then
+    current_resolved=$(cd -P "$current" 2>/dev/null && pwd) || current_resolved=""
+  fi
+  local -a old_generations=()
+  local generation generation_resolved
+  for generation in "$catalog"/generation-*; do
+    [ -d "$generation" ] && [ ! -L "$generation" ] || continue
+    generation_resolved=$(cd -P "$generation" 2>/dev/null && pwd) || continue
+    [ -n "$current_resolved" ] && [ "$generation_resolved" = "$current_resolved" ] && continue
+    old_generations+=("$generation")
+  done
+  _cat --all "目录旧 generation" "只清理没有被 $current 指向的旧私人清单版本；current 指向的版本保留。" \
+       ${old_generations[@]+"${old_generations[@]}"}
+
+  # 6. 已经解包完的安装器原件
+  local -a pkgs=()
+  while IFS= read -r p; do pkgs+=("$p"); done < <(find "$SN_RUNTIMES/unity-players" -maxdepth 2 \( -name '*.pkg' -o -name '*.exe' -o -name '*.tar.xz' \) -type f 2>/dev/null)
+  _cat "已解包的 Unity 安装器原件" "播放器已经解到同目录的 expanded/ 了, 原件只是重下才用得上。" ${pkgs[@]+"${pkgs[@]}"}
+
+  # 7. 坏掉的 .app（没有可执行文件的空壳）
+  local -a broken=() app exe
+  for app in "$SN_GAMES"/*.app; do
+    [ -d "$app" ] || continue
+    exe=$(find "$app/Contents/MacOS" -maxdepth 1 -type f -perm -u+x 2>/dev/null | head -1)
+    [ -z "$exe" ] && broken+=("$app")
+  done
+  _cat "打包失败留下的空壳 app" "Contents/MacOS 里没有可执行文件, 双击也起不来。" ${broken[@]+"${broken[@]}"}
+
+  # 7b. 伴侣 app 的旧版备份：app/build.sh 每次构建留一份，self-update.sh 每次升级留一份；最新的那份留着能回退，更早的是残渣。
+  local -a old_apps=() d
+  for pattern in ".dryport-backup" ".dryport-previous"; do
+    local -a same=()
+    while IFS= read -r d; do [ -n "$d" ] && same+=("$d"); done < <(ls -dt "$SN_GAMES/$pattern".* 2>/dev/null)
+    [ "${#same[@]}" -gt 1 ] && old_apps+=("${same[@]:1}")
+  done
+  while IFS= read -r d; do [ -n "$d" ] && old_apps+=("$d"); done < <(ls -d "$SN_GAMES"/.dryport-rolledback.* 2>/dev/null)
+  _cat --all "伴侣 app 的旧版备份" "app/build.sh 与 self-update.sh 留下的旧 Dryport.app；每类最新一份保留可回退, 这些是更早的。" \
+       ${old_apps[@]+"${old_apps[@]}"}
+
+  if [ "$deep" = 1 ]; then
+    # 8. 源码树与构建中间件: 删了功能不受影响, 但要重新编译就得重下。
+    _cat "构建中间件与源码树 (--deep)" \
+         "运行时已经编好装好了, 这些只有重编才用得上。删了跑游戏不受影响, 重编要重下。" \
+         "$SN_RUNTIMES/wine-build" "$SN_RUNTIMES/cx-src" "$SN_RUNTIMES/cx-sources.tar.gz" \
+         "$SN_RUNTIMES/wine-staging.tar.xz" "$SN_RUNTIMES/wine3shain" "$SN_RUNTIMES/wine-build-x64"
+    _cat "用不上的旧运行时 (--deep)" \
+         "wine-cx + DXMT 上线后就没代码引用它们了。" \
+         "$SN_RUNTIMES/Wine Staging.app" "$SN_RUNTIMES/dxvk-1.10.3" "$SN_RUNTIMES/dxvk-2.7.1" \
+         "$SN_RUNTIMES/dxvk-3.1" "$SN_RUNTIMES/depotdownloader"
+    _cat "回滚掉的实验 (--deep)" \
+         "改 Steam 客户端那条路线, 2026-09-11 已整套回滚。里面有当时的备份, 确认机器正常再删。" \
+         "$SN_RUNTIMES/steam-play-mac"
+    _cat "机制验证用的样例工程 (--deep)" "验证 Godot/吉里吉里路线时造的测试工程。" \
+         "$SN_RUNTIMES/godot-sample" "$SN_RUNTIMES/krkr-sample"
+    _cat "可重取的发布包缓存与变体 DLL (--deep)" "runtime-bundle / self-update 下过的归档, 以及普查取出的 steam_api64.dll 变体; 都能重取。" \
+         "$SN_RUNTIMES/build/bundles" "$SN_RUNTIMES/build/updates" "$SN_GAMES/.sdk-variants"
+  fi
+
+  echo
+  if [ "$CLEAN_GO" = 1 ]; then
+    echo "═══ 共腾出 $(_human "$CLEAN_TOTAL") ═══"
+  else
+    echo "═══ 可回收 $(_human "$CLEAN_TOTAL") ═══"
+    [ "$deep" = 0 ] && echo "  加 --deep 还能列出源码树与构建中间件(删了要重编)。"
+    echo "  真删: dryport clean --go$([ "$deep" = 1 ] && echo ' --deep')"
+  fi
+  echo "  不碰: 游戏本体、存档、编好的运行时(mkxp-z / wine-cx / Unity 播放器 / NW.js / Godot / 吉里吉里)。"
+}
+
+case "${1:-}" in
+  install) shift; cmd_install "$@";;
+  check)  shift; cmd_check "$@";;
+  scan)   shift; cmd_scan "$@";;
+  batch)  shift; cmd_batch "$@";;
+  detect) shift; cmd_detect "$@";;
+  wrap)   shift; cmd_wrap "$@";;
+  rewrap) shift; cmd_rewrap "$@";;
+  add)    shift; cmd_add "$@";;
+  library) shift; cmd_library "$@";;
+  survey) shift; cmd_survey "$@";;
+  archive) shift; cmd_archive "$@";;
+  restore) shift; cmd_restore "$@";;
+  uninstall) shift; cmd_uninstall "$@";;
+  clean)  shift; cmd_clean "$@";;
+  steam-debug) shift; cmd_steam_debug "$@";;
+  bridge) shift; cmd_bridge "$@";;
+  cloud) shift; python3 "$SN_LIB/savebridge/settings.py" "$@";;
+  running) shift; cmd_running "$@";;
+  doctor) shift; cmd_doctor "$@";;
+  *) sed -n '2,24p' "$0";;
+esac

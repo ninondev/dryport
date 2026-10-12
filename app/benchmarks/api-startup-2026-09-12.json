@@ -1,0 +1,63 @@
+{
+  "time": "2026-09-12T09:49:21-0700",
+  "machine": "arm64",
+  "chip": "Apple M5",
+  "memory_bytes": 17179869184,
+  "python": "3.9.6",
+  "rows": 5251,
+  "confirmed": 4852,
+  "samples": 15,
+  "conditions": "fresh Python process, warm filesystem, synthetic data, no game launch",
+  "source_sha256": {
+    "baseline": "34957a08e09c4677fe227d79a1aabb476441760369ab224f661ad63daa7f8cd4",
+    "current": "862fd813cd7fde4f225f1667667a1019808bb41e5a40d09e098d9ee497050545"
+  },
+  "results": {
+    "baseline": {
+      "median_ms": 428.541,
+      "min_ms": 404.986,
+      "max_ms": 533.892,
+      "payload_bytes": 1838340,
+      "samples_ms": [
+        533.892,
+        480.836,
+        407.755,
+        428.652,
+        414.764,
+        407.02,
+        517.364,
+        406.06,
+        467.221,
+        404.986,
+        409.248,
+        446.114,
+        437.006,
+        414.994,
+        428.541
+      ]
+    },
+    "current": {
+      "median_ms": 202.681,
+      "min_ms": 178.508,
+      "max_ms": 375.201,
+      "payload_bytes": 1831203,
+      "samples_ms": [
+        195.355,
+        200.146,
+        199.193,
+        202.681,
+        200.39,
+        242.348,
+        178.508,
+        322.357,
+        206.73,
+        196.235,
+        196.741,
+        212.47,
+        232.141,
+        309.806,
+        375.201
+      ]
+    }
+  }
+}
