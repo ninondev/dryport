@@ -12,7 +12,6 @@
 | Ren'Py（Gun-Dog 固定版本）、Godot、LÖVE 11.5、吉里吉里、Koi Farm | 各引擎对应运行时；Koi Farm 用系统 WebKit | 实验 |
 | 其他符合条件的 Windows 游戏 | Wine + DXMT，或不带 D3D11 的 Wine Staging | 实验 |
 
-计划仓库地址为 https://github.com/ninondev/dryport；当前仅在本机暂存，尚未上传。
 干净 Mac 的完整首次安装尚未验证。mkxp-z 和吉里吉里需要预先准备本地构建。
 运行时清单须匹配 `lib/runtimes.json` 登记的 SHA256；明确信任的本地目录可使用 `--untrusted-local`。
 准备步骤与二进制发布限制见[使用说明](docs/usage.zh.md)。

@@ -32,7 +32,7 @@ A complete first installation on a clean Mac is unverified. mkxp-z and KiriKiri 
 
 ## How to try it
 
-The intended repository address is `https://github.com/ninondev/dryport`; this preview is staged on local disk and has not been uploaded. Once source is available at that address:
+Clone the repository and start with the read-only check:
 
 ```bash
 git clone https://github.com/ninondev/dryport && cd dryport
