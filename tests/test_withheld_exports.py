@@ -47,6 +47,8 @@ class WithheldExportTests(unittest.TestCase):
         entries, _ = export.snapshot(ROOT)
         found = []
         for name, (content, _) in entries.items():
+            if name.endswith(tuple(export.DOC_IMAGES)):
+                continue
             text = (name + "\n" + content.decode("utf8")).casefold()
             for title in ("A Space for the Unbound", "Stories from Sol: The Gun-Dog", "Koi Farm", "Star Sky 3"):
                 text = text.replace(title.casefold(), "")

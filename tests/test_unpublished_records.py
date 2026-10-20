@@ -23,7 +23,8 @@ class UnpublishedRecordTests(unittest.TestCase):
     def test_all_exports_describe_original_records_as_unpublished(self):
         entries, _ = release.snapshot(ROOT)
         pattern = misleading_record_wording()
-        bad = [name for name, (data, _) in entries.items() if pattern.search(data.decode("utf8"))]
+        bad = [name for name, (data, _) in entries.items()
+               if not name.endswith(tuple(release.DOC_IMAGES)) and pattern.search(data.decode("utf8"))]
         self.assertEqual(bad, [])
 
     def test_wording_guard_distinguishes_records_from_api_status(self):

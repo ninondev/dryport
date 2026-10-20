@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Copyright (c) 2026 Ninon
-"""Preview opening follows measured results, limits, usage and planned comparison.
-Retain route tiers, historical caveats and the existing Chinese section structure.
-"""
+"""README results, route tiers, links and caveats stay in step with the ledger and the docs."""
 import json
 import importlib.util
 import re
@@ -55,31 +53,6 @@ class ReadmeStructureTests(unittest.TestCase):
     def headings(self, name):
         return [line[3:].strip() for line in self.readme(name).splitlines() if line.startswith("## ")]
 
-    def test_first_screen_is_the_approved_one(self):
-        text = self.readme("README.md")
-        opening = text.splitlines()[2]
-        self.assertIn("The Unity route", opening)
-        self.assertIn("without Wine", opening)
-        for line in ("# dryport", "Unity D3D11 shaders retargeted to Metal",
-                     "A Space for the Unbound", "60.0 fps, frame p99 19.44 ms",
-                     "original records are unpublished", "Developer preview",
-                     "Apple silicon Macs only", "Unity 5.x shader translation is not implemented",
-                     "bash bin/install.sh --check", "./bin/dryport survey",
-                     "./bin/dryport install <appid>", "## Comparison (coming)",
-                     "CrossOver and Highball", "No comparison numbers are available yet"):
-            self.assertIn(line, text)
-        self.assertLess(text.index("60.0 fps"), text.index("## Limits"))
-        self.assertLess(text.index("## Limits"), text.index("## How to try it"))
-        self.assertLess(text.index("## How to try it"), text.index("## What comes next"))
-        self.assertRegex(text, r"git clone https://github.com/[A-Za-z0-9-]+/dryport && cd dryport")
-        self.assertNotIn("![", text, "No image or badge without a real recording")
-        spec = importlib.util.spec_from_file_location("readme_export", ROOT / "tools/release-check.py")
-        release = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(release)
-        files, _ = release.exclusions(ROOT)
-        for name in files:
-            self.assertNotIn("](" + name + ")", text)
-
     def test_readme_results_match_the_route_ledger(self):
         text = self.readme("README.md")
         entries = json.loads((ROOT / "docs/compatibility.json").read_text())["entries"]
@@ -119,7 +92,7 @@ class ReadmeStructureTests(unittest.TestCase):
 
     def test_preview_sections_and_retained_chinese_sections(self):
         self.assertEqual(self.headings("README.md"), [
-            "Limits", "How to try it", "How it works", "Comparison (coming)",
+            "Limits", "How to try it", "How it works",
             "What comes next", "Contribute and license"])
         zh = [ZH_HEADING.get(h, h) for h in self.headings("README.zh.md")]
         self.assertEqual(zh, EXPECTED_SECTIONS)

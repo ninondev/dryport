@@ -62,6 +62,10 @@ PATTERNS = [
 PUBLIC_CONSTANTS = {"76561197960265728"}  # SteamID64 的公开基数，不是用户账号。
 
 
+# Images for the README and docs are the only binary files the source export may carry.
+DOC_IMAGES = {".png", ".jpg", ".gif"}
+
+
 def issues_for(name, content, symlink=False):
     issues = []
     path = PurePosixPath(name)
@@ -73,6 +77,8 @@ def issues_for(name, content, symlink=False):
         issues.append({"file": name, "line": 0, "reason": "运行时、构建产物或个人数据"})
     if path.suffix in {".json", ".jsonl"} and name not in SOURCE_JSON and not name.startswith(SOURCE_JSON_PREFIXES):
         issues.append({"file": name, "line": 0, "reason": "JSON 数据尚未确认可分发"})
+    if path.parts[0] == "docs" and path.suffix.lower() in DOC_IMAGES:
+        return issues
     try:
         text = content.decode("utf-8")
         if "\0" in text:

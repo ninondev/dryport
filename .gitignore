@@ -29,6 +29,7 @@ lib/*/libsteam_api.dylib
 # 跑出来的东西
 *.log
 *.png
+!docs/*.png
 __pycache__/
 *.pyc
 .DS_Store
