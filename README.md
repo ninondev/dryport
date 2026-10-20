@@ -1,10 +1,10 @@
 # dryport
 
-**The Unity route runs selected Windows-only Unity games without Wine on a macOS player on Apple silicon, with Unity D3D11 shaders retargeted to Metal.**
+dryport runs some Windows-only games on Apple silicon Macs. For Unity games built with Mono it skips Wine: it reads the game's own D3D11 shaders, rewrites them as Metal, and runs the game on a matching macOS Unity player. Other engines get their own routes, listed under [How it works](#how-it-works). This is an early preview.
 
-The recorded Unity result for **A Space for the Unbound** reached all five verification stages on 2026-09-29, including byte-identical reload after force quit. An anonymous RPG Maker VX Ace result also reached all five stages, at a recorded **60.0 fps, frame p99 19.44 ms**. Hardware: Apple M5, 16 GB.
+On 2026-09-29, **A Space for the Unbound** passed all five checks on an Apple M5 Mac with 16 GB, including byte-identical reload after force quit. An anonymous RPG Maker VX Ace game also passed all five, at **60.0 fps, frame p99 19.44 ms**.
 
-These are historical summaries: original records are unpublished, version fields are incomplete, and these games have not been rerun for this preview. The [per-route ledger](docs/compatibility.md) and [summary records](docs/compatibility-evidence.json) retain the dates, stages and gaps. Stage 1 means a picture and operation were reported; stages 2 to 5 check in-game saving, normal reload, force-quit reload and preservation of original files and saves. Stage 1 alone does not establish save safety or a playable whole game. Frame p99 is the recorded 99th percentile of frame time; the [benchmark tool](tools/bench-game.py) samples frame presentation. Original sampling receipts and exact measurement settings are unpublished.
+These numbers come from my own test records. The original records are unpublished, some version fields are missing, and these games were not rerun for this preview. The [per-route ledger](docs/compatibility.md) and [summary records](docs/compatibility-evidence.json) keep the dates, stages and gaps. The five checks are: a picture with working controls, saving in the game, a normal reload, a reload after force quit, and original files and saves left untouched. A game at stage 1 only has a picture and controls; that says nothing about saves or the whole game. Frame p99 is the 99th percentile of frame time, sampled by the [benchmark tool](tools/bench-game.py). The sampling settings are unpublished too.
 
 | Title or anonymous entry | Route | Recorded stages | Recorded performance |
 |---|---|---|---|
@@ -61,20 +61,14 @@ Other engine routes remain in the preview:
 | Ren'Py (pinned Gun-Dog), Godot, LÖVE 11.5, KiriKiri, Koi Farm | engine-specific runtimes; Koi Farm uses system WebKit | experimental |
 | Other eligible Windows games | Wine + DXMT, or Wine Staging without D3D11 | experimental |
 
-Unsupported Ren'Py versions are refused. Local patches change mkxp-z and dependency build files. Route details: [how it works](docs/how-it-works.md). Generated apps can be rebuilt with `rewrap`; `clean` previews cleanup. Operational commands: [usage](docs/usage.md). The existing [Chinese README](README.zh.md) describes the broader engine routes; its opening has not been rewritten for this preview.
-
-## Comparison (coming)
-
-A same-machine comparison against CrossOver and Highball is planned. No comparison has been run for this preview. The table will record the same game builds, Mac, macOS, resolution, settings, route, frame rate, frame-time percentiles and save/reload results. No comparison numbers are available yet.
+Unsupported Ren'Py versions are refused. Local patches change mkxp-z and dependency build files. Route details: [how it works](docs/how-it-works.md). Generated apps can be rebuilt with `rewrap`; `clean` previews cleanup. Operational commands: [usage](docs/usage.md). The [Chinese README](README.zh.md) is older and describes the broader engine routes.
 
 ## What comes next
 
-Publish sanitized original measurement receipts and fill in the missing game, player, macOS and tool versions. Recheck rendering, audio and the five-stage save chain on more Unity games. Verify setup on a clean Mac, then run the same-machine comparison.
+Publish sanitized original measurement receipts and fill in the missing game, player, macOS and tool versions. Recheck rendering, audio and the five-stage save chain on more Unity games. Verify setup on a clean Mac. Then compare dryport with CrossOver and Highball on the same Mac, with the same game builds and settings, on frame rate, frame-time percentiles and save/reload results. No comparison numbers are available yet.
 
 ## Contribute and license
 
-PRs welcome. Issues are read by the maintainer. Follow [CONTRIBUTING.md](CONTRIBUTING.md), including the required [CLA](CLA.md) comment before merge. Do not attach game files, saves, account identifiers or private library exports.
+PRs are welcome. Follow [CONTRIBUTING.md](CONTRIBUTING.md), including the required [CLA](CLA.md) comment before merge. Do not attach game files, saves, account identifiers or private library exports.
 
 Copyright (c) 2026 Ninon. Project source is [GPL-3.0-only](LICENSE). Third-party components keep their own licenses. No games, proprietary runtime binaries, Steam components or SDKs are bundled. dryport is not affiliated with Valve, Unity or any game publisher. See [LEGAL.md](LEGAL.md) and the [runtime inventory](docs/LEGAL.md).
-
-If this was useful to you, a star helps other people find it.
