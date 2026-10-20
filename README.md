@@ -1,5 +1,7 @@
 # dryport
 
+<img src="docs/dryport-header.png" width="100%" alt="A D3D11 shader as A Space for the Unbound ships it, the Metal version HLSLcc wrote from it, and the game's title screen running on an Apple silicon Mac. 5,854 D3D11 programs in, 5,955 Metal programs out, 31 seconds, on 11 Sep 2026. All five checks passed on 29 Sep 2026.">
+
 dryport runs some Windows-only games on Apple silicon Macs. For Unity games built with Mono it skips Wine: it reads the game's own D3D11 shaders, rewrites them as Metal, and runs the game on a matching macOS Unity player. Other engines get their own routes, listed under [How it works](#how-it-works). This is an early preview.
 
 On 2026-09-29, **A Space for the Unbound** passed all five checks on an Apple M5 Mac with 16 GB, including byte-identical reload after force quit. An anonymous RPG Maker VX Ace game also passed all five, at **60.0 fps, frame p99 19.44 ms**.

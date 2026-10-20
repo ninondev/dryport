@@ -48,7 +48,7 @@ class FactualDocTests(unittest.TestCase):
 
     def test_historical_results_are_qualified_and_not_a_complete_inventory(self):
         cases = (("README.md", "original records are unpublished", "Every other tested game"),
-                 ("README.zh.md", "原始记录未公开", "其余每款测过的游戏"),
+                 ("README.zh.md", "原始记录没有公开", "其余每款测过的游戏"),
                  ("docs/release-notes-preview.md", "original records are unpublished", "Everything below comes"),
                  ("docs/release-notes-preview.zh.md", "原始记录未公开", "以下全部来自"))
         for name, required, old in cases:

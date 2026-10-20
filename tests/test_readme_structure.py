@@ -9,11 +9,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-ZH_HEADING = {"已验证什么": "What is verified", "工作原理": "How it works",
+ZH_HEADING = {"工作原理": "How it works",
               "它会在你的机器与账号上碰什么": "What it touches on your machine and your account",
               "安装、更新、清理": "Install, update, clean up", "参与贡献": "Contribute",
               "许可证与第三方运行时": "Licence and third-party runtimes"}
-EXPECTED_SECTIONS = ["What is verified", "How it works", "What it touches on your machine and your account",
+EXPECTED_SECTIONS = ["How it works", "What it touches on your machine and your account",
                      "Install, update, clean up", "Contribute", "Licence and third-party runtimes"]
 
 # Historical caveats retain the same normalized comparison; private link targets are omitted.

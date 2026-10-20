@@ -1,6 +1,10 @@
 # dryport
 
-**把 Steam 库里只有 Windows 版的游戏，在 Apple Silicon 上用其引擎对应的运行时跑起来。** 引擎允许就原生，Wine 只做兜底。
+dryport 能让一部分只有 Windows 版的游戏在 Apple 芯片的 Mac 上跑起来。用 Mono 打包的 Unity 游戏不走 Wine：它读取游戏自带的 D3D11 shader，改写成 Metal，再用同版本的 macOS Unity 播放器来跑。其他引擎各有各的路线，见[工作原理](#工作原理)。现在还是早期预览版。
+
+2026-09-29，**A Space for the Unbound** 在一台 16 GB 内存的 Apple M5 Mac 上通过了全部五项检查，包括强退后重新读档、数据逐字节一致。一款匿名的 RPG Maker VX Ace 游戏也通过了全部五项，**60.0 fps，帧时间 p99 19.44 ms**。
+
+这些数字来自我自己的测试记录。原始记录没有公开，有些版本字段缺失，这次预览也没有重跑这些游戏。[各路线记录表](docs/compatibility.zh.md)和[汇总记录](docs/compatibility-evidence.json)保留了日期、阶段和缺口。五项检查是：有画面且能操作、游戏内存档、正常读档、强退后读档、原文件和存档不被改动。只到第 1 阶段的游戏只说明有画面、能操作，说明不了存档，也说明不了能不能玩通。帧时间 p99 是帧时间的第 99 百分位，由[测速工具](tools/bench-game.py)采样，采样设置也还没公开。
 
 > **开发预览，与 Valve 无关、未经其认可。** 识别出引擎不代表游戏能玩：[兼容性页面](docs/compatibility.zh.md)选录了历史结果摘要，等待原始证据复核。可选的 Steam 集成通过其调试接口控制你已登录的客户端，可能写入统计与成就；账号安全性未证实。游戏与运行时的许可证各不相同。
 
@@ -26,16 +30,6 @@ bash bin/install.sh --check          # 只读：什么就绪、什么缺
 它用你已登录的 Steam 客户端。绝不接触密码，绝不给 Steam 打补丁。检出已知反作弊的游戏一律拒绝。游戏原件保持原样。
 
 [English](README.md)
-
-## 已验证什么
-
-以下是选录的历史摘要，原始记录未公开。
-
-- A Space for the Unbound（Unity Mono）2026-09-29 通过全部五步验证链。
-- 一款 RPG Maker VX Ace 游戏通过同一验证链；2026-09-29 实测 60.0 fps，帧 p99 19.44 ms。
-- 其他选录结果保留了旧记录的通过步骤与限制。
-
-选录结果见[兼容性页面](docs/compatibility.zh.md)。
 
 ## 工作原理
 
