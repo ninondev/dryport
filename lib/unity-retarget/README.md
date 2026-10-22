@@ -1,6 +1,6 @@
 # unity-retarget
 
-把只带 D3D11 着色器的 Windows 版 Unity 游戏，原地改成能被 macOS arm64 原生 Unity 播放器加载的 Metal / OpenGL Core 版本。零翻译层：不是 Wine，不是转译，游戏的 Mono 程序集、资源、脚本原样运行在 Unity 官方的 macOS arm64 播放器上。
+把只带 D3D11 着色器的 Windows 版 Unity 游戏，原地改成能被 macOS arm64 原生 Unity 播放器加载的 Metal / OpenGL Core 版本。不走 Wine，也不转译游戏代码：游戏的 Mono 程序集、资源、脚本原样运行在 Unity 官方的 macOS arm64 播放器上，要翻译的只有着色器。
 
 ## 原理
 
